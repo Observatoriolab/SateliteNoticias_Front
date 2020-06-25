@@ -9,6 +9,7 @@
 <script>
 // @ is an alias to /src
 import axios from "axios";
+import { apiService } from "@/common/api.service.js";
 
 export default {
   name: "Home",
@@ -18,17 +19,10 @@ export default {
   methods:{
     callingAxios(){
       alert("me apretaron owo")
-       axios.get('https://satelite-de-noticias.herokuapp.com/api/news/', {
-            headers: {
-              'Authorization': '511689fa91844a15910736215dcf0ac07cbce4ad'
-            }
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+      apiService('https://satelite-de-noticias.herokuapp.com/api/news/').then(data => {
+        console.log(data)
+      });
+    
     }
   }
 };
