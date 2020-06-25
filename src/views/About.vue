@@ -8,7 +8,6 @@
 </template>
 <script>
 // @ is an alias to /src
-import axios from "axios";
 import { apiService } from "@/common/api.service.js";
 
 export default {
