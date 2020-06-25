@@ -18,7 +18,7 @@ export default {
   methods:{
     callingAxios(){
       alert("me apretaron owo")
-      apiService('https://satelite-de-noticias.herokuapp.com/api/news/').then(data => {
+      apiService('https://satelite-de-noticias.herokuapp.com/api/news/','GET','511689fa91844a15910736215dcf0ac07cbce4ad').then(data => {
         console.log(data)
       });
     

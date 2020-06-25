@@ -10,13 +10,14 @@ function handleResponse(response) {
   }
 }
 //SE PODRIA USAR EL PAQUETE AXIOS
-function apiService(endpoint, method, data) {
+function apiService(endpoint, method, credentials, data ) {
   const config = {
     method: method || "GET",
     body: data !== undefined ? JSON.stringify(data) : null,
     headers: {
       "content-type": "application/json",
-      "X-CSRFTOKEN": CSRF_TOKEN
+      "X-CSRFTOKEN": CSRF_TOKEN,
+      "authorization": credentials
     }
   };
   return fetch(endpoint, config)
