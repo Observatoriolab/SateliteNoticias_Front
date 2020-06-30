@@ -1,93 +1,26 @@
 <template>
   <v-app>
-    <v-app-bar id="home-app-bar" app color="white" elevation="1" height="80">
-      <v-spacer />
-
-      <div>
-        <v-menu bottom :offset-y="true" :close-on-content-click="false">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark v-bind="attrs" v-on="on">
-              Dropdown
-            </v-btn>
-          </template>
-          <v-tabs vertical>
-            <v-tab>
-              <v-icon left>mdi-account</v-icon>
-              Option 1
-            </v-tab>
-            <v-tab>
-              <v-icon left>mdi-lock</v-icon>
-              Option 2
-            </v-tab>
-            <v-tab>
-              <v-icon left>mdi-access-point</v-icon>
-              Option 3
-            </v-tab>
-
-            <v-tab-item>
-              <v-card flat>
-                <v-card-text>
-                  <p>
-                    Contenido, botones, etc
-                  </p>
-                </v-card-text>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
-              <v-card flat>
-                <v-card-text>
-                  <p>
-                    Contenido, botones, etc
-                  </p>
-                </v-card-text>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
-              <v-card flat>
-                <v-card-text>
-                  <p>
-                    Contenido, botones, etc
-                  </p>
-                </v-card-text>
-              </v-card>
-            </v-tab-item>
-          </v-tabs>
-        </v-menu>
-      </div>
-      <v-spacer />
-
-      <v-menu transition="slide-y-transition" bottom :offset-y="true">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn class="purple" color="primary" dark v-bind="attrs" v-on="on">
-            <v-icon>mdi-account</v-icon>
-            {{ requestUser }}
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="item in accountItems" :key="item.title">
-            <v-btn @click="logout(item.title)"
-              ><v-icon> {{ item.icon }} </v-icon> {{ item.title }}
-            </v-btn>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWord />
-    </v-main>
+      <v-app-bar id="home-app-bar" app
+                 color="white" elevation="1" 
+                 height="80" width="100vw">  
+                         
+                   <AppBar />    
+      </v-app-bar>
+      <v-main>
+          <router-view />
+      </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWord from "@/components/HelloWorld";
+import AppBar from "@/components/Banner/AppBar.vue"
 import { apiService } from "@/common/api.service.js";
 
 export default {
   name: "App",
 
   components: {
-    HelloWord
+    AppBar
   },
 
   data: () => ({

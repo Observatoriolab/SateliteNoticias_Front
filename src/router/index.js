@@ -1,9 +1,18 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+import MainFeed from '@/views/MainFeed.vue'
 Vue.use(VueRouter);
 
-const routes = [];
+const routes = [
+
+  {
+    path: "/",
+    name: "MainFeed",
+    component: MainFeed
+  },
+
+
+];
 
 const router = new VueRouter({
   mode: "history",
