@@ -1,6 +1,6 @@
 <template>
   <v-app>
-      <v-app-bar id="home-app-bar" app
+      <v-app-bar v-show="this.$router.currentRoute.name !== 'Login' && this.$router.currentRoute.name !== 'Registration' "  id="home-app-bar" app
                  color="white" elevation="1" 
                  height="80" width="100vw">  
                          
@@ -23,32 +23,35 @@ export default {
     AppBar
   },
 
-  data: () => ({
-    categories: [
-      "Big Data",
-      "Pagos Digitales",
-      "CBCD",
-      "Criptoactivos",
-      "Banca abierta",
-      "Ciberseguridad",
-      "Monitoreo tecnologico",
-      "DLT"
-    ],
-    accountToggle: false,
-    accountItems: [
-      { title: "My Account", icon: "mdi-account", ref: "" },
-      { title: "Log in", icon: "mdi-logout", ref: "" },
-      { title: "Log out", icon: "mdi-logout", ref: "" }
-    ],
-    items: [
-      { title: "Configuracion", icon: "mdi-cog-outline" },
-      { title: "Logout", icon: "mdi-logout-variant" }
-    ],
-    requestUser: null,
-    credential: null
+  data(){
+    return{
 
-    //
-  }),
+        categories: [
+          "Big Data",
+          "Pagos Digitales",
+          "CBCD",
+          "Criptoactivos",
+          "Banca abierta",
+          "Ciberseguridad",
+          "Monitoreo tecnologico",
+          "DLT"
+        ],
+        accountToggle: false,
+        accountItems: [
+          { title: "My Account", icon: "mdi-account", ref: "" },
+          { title: "Log in", icon: "mdi-logout", ref: "" },
+          { title: "Log out", icon: "mdi-logout", ref: "" }
+        ],
+        items: [
+          { title: "Configuracion", icon: "mdi-cog-outline" },
+          { title: "Logout", icon: "mdi-logout-variant" }
+        ],
+        requestUser: null,
+        credential: null
+
+    }
+    
+  },
   methods: {
     //En ves de usar .then, dejarlo asincrono
     async setUserInfo() {
@@ -100,7 +103,8 @@ export default {
     }
   },
   created() {
-    this.setUserInfo();
+    console.log(this.$router)
+    //this.setUserInfo();
   }
 };
 </script>

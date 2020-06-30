@@ -69,7 +69,7 @@ import NewsFeed from '@/components/News/NewsFeed.vue'
 import Edition from '@/components/Edition/Edition.vue'
 
 export default {
-  name: "MainPage",
+  name: "MainFeed",
   components:{
         NewsFeed,
         Edition
@@ -189,18 +189,13 @@ export default {
     },
     closeEditionChild(closingDrawer) {
         console.log(closingDrawer)
-      this.edition = closingDrawer;
-      console.log(closingDrawer)
-      console.log(this.actualIndex);
-      this.newsFeedColumn = 12;
-
-      if (this.drawer || closingDrawer) {
-        this.$set(this.selected2, this.actualIndex, false);
-        this.$set(this.disabling2, this.actualIndex, false);
-      } else {
+        this.edition = closingDrawer;
+        console.log(closingDrawer)
+        console.log(this.actualIndex);
+        this.newsFeedColumn = 12;
         this.$set(this.selected, this.actualIndex, false);
         this.$set(this.disabling, this.actualIndex, false);
-      }
+      
     },
     trendingDrawerOpen() {
       this.drawer = true;
@@ -213,24 +208,7 @@ export default {
       this.closeEditionChild(true);
     },
     
-    /*async setUserInfo() {
-      let endpoint ="http://satelite-de-noticias.herokuapp.com/api/rest-auth/login/ "
-      await apiService(endpoint, "POST", {
-          username:"admin",
-          password:"adminpass"
-
-      }).then(data => {
-
-        this.credential = data["key"]; 
-        console.log(this.credential)
-
-        //Lo deje en el local storage del browser para ser usado y corroborar que es el usuario
-        window.localStorage.setItem("credential", this.credential);
-        this.getUsername()
-     
-      });
-
-    },
+    /*
     async logout(title){
       var endpoint;
       if(title == "Log out"){

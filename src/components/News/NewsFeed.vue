@@ -4,11 +4,12 @@
         <h1 class="display-2 font-weight-bold mb-7 acolor">
           {{title}}
         </h1>
+          <!-- v-for="(item, i) in news" -->
 
         <v-card
           class="flex-column mx-auto mt-6 mb-6 elevation-12"
           width="60%"
-          v-for="(item, i) in news"
+          v-for="(item, i) in localNews"
           :key="i"
         >
           <v-container :class="{ highlight: selected[i] }">
@@ -199,14 +200,14 @@
           </v-container>
         </v-card>
         <div class="text-center">
-          <v-btn
+         <!--  <v-btn
             rounded
             color="primary"
             dark
             @click="getnewsLoadMore"
             :disabled="disableButton"
             >Cargar mas</v-btn
-          >
+          > -->
         </div>
     </div>
 </template>
@@ -264,7 +265,25 @@ export default {
   },
 
   data: () => ({
-
+    localNews: [
+        {
+            title:"1",
+            content:"content1"
+        },
+        {
+            title:"2",
+            content:"content2"
+        },
+         {
+            title:"3",
+            content:"content3"
+        },
+         {
+            title:"4",
+            content:"content4"
+        }
+        
+    ],
     search: null,
     show: [],
     rating: null,
@@ -340,13 +359,10 @@ export default {
     date1: new Date().toISOString().substr(0, 10),
 
     itemIndexPrior: -1,
-    itemIndexActual: 0,
-
-    itemIndexPrior2: -1,
-    itemIndexActual2: 0,
-    actualIndex: -1,
-    selected: [],
-    disabling: [],
+    /* selected: [],
+    disabling: [], */
+    selected: [false,false,false,false],
+    disabling: [false,false,false,false],
   }),
 
   methods: {
@@ -361,10 +377,12 @@ export default {
         this.$set(this.selected, this.itemIndexPrior, false);
         this.$set(this.disabling, this.itemIndexPrior, false);
       }
+      this.itemIndexPrior = index
     },
     openEdition(item, index) {
       console.log("abri la edicion");
       this.$emit('open-edition',item)
+
       this.highlighter(index);
     },
   
@@ -469,7 +487,7 @@ export default {
     }
   },
   created() {
-    this.getnewsLoadMore();
+    //this.getnewsLoadMore();
     document.title = "Satelite de Noticias";
   }
 };

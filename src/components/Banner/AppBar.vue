@@ -155,7 +155,7 @@ export default {
     }
   },
   created() {
-    this.setUserInfo();
+    //this.setUserInfo();
   }
 };
 </script>
