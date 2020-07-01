@@ -9,7 +9,7 @@
         <v-card
           class="flex-column mx-auto mt-6 mb-6 elevation-12"
           width="60%"
-          v-for="(item, i) in localNews"
+          v-for="(item, i) in news"
           :key="i"
         >
           <v-container :class="{ highlight: selected[i] }">
@@ -487,7 +487,7 @@ export default {
     }
   },
   created() {
-    //this.getnewsLoadMore();
+    this.getnewsLoadMore();
     document.title = "Satelite de Noticias";
   }
 };

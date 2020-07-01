@@ -59,8 +59,8 @@
             </v-btn>
             </template>
             <v-list>
-            <v-list-item v-for="item in accountItems" :key="item.title">
-                <v-btn @click="logout(item.title)"
+            <v-list-item v-for="item in items" :key="item.title">
+                <v-btn @click="logout"
                 ><v-icon> {{ item.icon }} </v-icon> {{ item.title }}
                 </v-btn>
             </v-list-item>
@@ -89,12 +89,7 @@ export default {
       "Monitoreo tecnologico",
       "DLT"
     ],
-    accountToggle: false,
-    accountItems: [
-      { title: "My Account", icon: "mdi-account", ref: "" },
-      { title: "Log in", icon: "mdi-logout", ref: "" },
-      { title: "Log out", icon: "mdi-logout", ref: "" }
-    ],
+    accountToggle: false,  
     items: [
       { title: "Configuracion", icon: "mdi-cog-outline" },
       { title: "Logout", icon: "mdi-logout-variant" }
@@ -105,57 +100,29 @@ export default {
     //
   }),
   methods: {
-    //En ves de usar .then, dejarlo asincrono
-    async setUserInfo() {
-       let endpoint =
-        "http://satelite-de-noticias.herokuapp.com/api/rest-auth/login/ ";
-      await apiService(endpoint, "POST", {
-        username: "admin",
-        password: "adminpass"
-      }).then(data => {
-        this.credential = data["key"];
-        console.log(this.credential);
+    async logout() {
+      var endpoint ="http://satelite-de-noticias.herokuapp.com/api/rest-auth/logout/";
+      await apiService(endpoint, "POST", undefined, this.credential).then(
+          data => {
+            console.log("me sali", data);
+            this.$router.push('/')
 
-        //Lo deje en el local storage del browser para ser usado y corroborar que es el usuario
-        window.localStorage.setItem("credential", this.credential);
-        this.getUsername();
-      });
+        }
+      );     
     },
-    async logout(title) {
-      var endpoint;
-      if (title == "Log out") {
-        endpoint =
-          "http://satelite-de-noticias.herokuapp.com/api/rest-auth/logout/";
-        await apiService(endpoint, "POST", undefined, this.credential).then(
-          data => {
-            console.log("me sali chavos ", data);
-          }
-        );
-      } else if (title == "Log in") {
-        this.setUserInfo();
-      } else {
-        endpoint = "http://satelite-de-noticias.herokuapp.com/api/news/";
-        await apiService(endpoint, "GET", undefined, this.credential).then(
-          data => {
-            console.log("la data v8");
-            console.log(data);
-          }
-        );
-      }
-    },
-    async getUsername() {
+    async setUserInfo() {
       const data = await apiService(
         "http://satelite-de-noticias.herokuapp.com/api/user/",
         false,
         undefined,
-        this.credential
+        window.localStorage.getItem("credential")
       );
       this.requestUser = data["username"];
       console.log("este es el username: ", this.requestUser);
     }
   },
   created() {
-    //this.setUserInfo();
+    this.setUserInfo();
   }
 };
 </script>

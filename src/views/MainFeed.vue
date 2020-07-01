@@ -206,38 +206,9 @@ export default {
     trendingDrawerClose() {
       this.drawer = false;
       this.closeEditionChild(true);
-    },
+    }
     
-    /*
-    async logout(title){
-      var endpoint;
-      if(title == "Log out"){
-        endpoint = "http://satelite-de-noticias.herokuapp.com/api/rest-auth/logout/"
-         await apiService(endpoint, "POST", undefined, this.credential).then(data => {
-          
-            console.log("me sali chavos ", data)
-          });
-      }
-      else if(title == "Log in"){
-          this.setUserInfo()
-      }
-      else{
-        endpoint = "http://satelite-de-noticias.herokuapp.com/api/news/"
-         await apiService(endpoint, "GET", undefined, this.credential).then(data => {
-          
-            console.log("la data v8")
-            console.log(data)
-          });
-      }
-     
-
-    },
-    async getUsername(){
-        const data = await apiService("http://satelite-de-noticias.herokuapp.com/api/user/",false, undefined, this.credential);
-        this.requestUser = data["username"]
-        console.log('este es el username: ',this.requestUser)
-        
-    } */
+   
   },
   created() {
     

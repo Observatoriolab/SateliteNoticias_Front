@@ -49,6 +49,9 @@
 </template>
 
 <script>
+import { apiService } from "@/common/api.service.js";
+
+
 export default {
     name: 'Registration',
 
@@ -87,18 +90,18 @@ export default {
     },
     methods:{
 
-        registerAccount(){
+        async registerAccount(){
             alert(this.name)
             alert(this.email)
             alert(this.pass)
             alert(this.pass2)
 
-        /* 
+         
             let endpoint ="http://satelite-de-noticias.herokuapp.com/api/rest-auth/register/ "
             await apiService(endpoint, "POST", {
                 username: this.name,
                 email: this.email,
-                password: this.pass
+                password: this.pass,
                 password2: this.pass2,
                 is_staff: false
 
@@ -107,12 +110,10 @@ export default {
                 this.credential = data["key"]; 
                 console.log(this.credential)
                 window.localStorage.setItem("credential", this.credential);
-                this.$router.push({ path: 'main-feed' })
-            
+                this.$router.push({ path: 'main-feed' })            
             });
 
-            */
-            this.$router.push({ path: 'main-feed' })
+            
         }
     }
 
