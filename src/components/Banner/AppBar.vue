@@ -4,13 +4,13 @@
         <v-menu bottom :offset-y="true" :close-on-content-click="false">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark v-bind="attrs" v-on="on">
-              Dropdown
+              Dropdowns
             </v-btn>
           </template>
           <v-tabs vertical>
             <v-tab>
               <v-icon left>mdi-account</v-icon>
-              Option 1
+              <a href="/">Option 1</a> 
             </v-tab>
             <v-tab>
               <v-icon left>mdi-lock</v-icon>
@@ -107,7 +107,7 @@ export default {
   methods: {
     //En ves de usar .then, dejarlo asincrono
     async setUserInfo() {
-      let endpoint =
+       let endpoint =
         "http://satelite-de-noticias.herokuapp.com/api/rest-auth/login/ ";
       await apiService(endpoint, "POST", {
         username: "admin",

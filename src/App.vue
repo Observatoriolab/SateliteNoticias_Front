@@ -1,10 +1,12 @@
 <template>
   <v-app>
-      <v-app-bar v-show="this.$router.currentRoute.name !== 'Login' && this.$router.currentRoute.name !== 'Registration' "  id="home-app-bar" app
-                 color="white" elevation="1" 
-                 height="80" width="100vw">  
-                         
-                   <AppBar />    
+      <v-app-bar v-show="this.$router.currentRoute.name !== 'Login' &&
+                         this.$router.currentRoute.name !== 'Registration' "  
+                  id="home-app-bar" app
+                  color="white" elevation="1" 
+                  height="80" width="100vw">  
+                                
+      <AppBar />    
       </v-app-bar>
       <v-main>
           <router-view />
@@ -101,10 +103,6 @@ export default {
       this.requestUser = data["username"];
       console.log("este es el username: ", this.requestUser);
     }
-  },
-  created() {
-    console.log(this.$router)
-    //this.setUserInfo();
   }
 };
 </script>

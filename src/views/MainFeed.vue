@@ -240,8 +240,10 @@ export default {
     } */
   },
   created() {
+    
     document.title = "Satelite de Noticias";
   }
+ 
 };
 </script>
 <style lang="scss">
