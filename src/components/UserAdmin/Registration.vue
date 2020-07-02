@@ -91,10 +91,7 @@ export default {
     methods:{
 
         async registerAccount(){
-            alert(this.name)
-            alert(this.email)
-            alert(this.pass)
-            alert(this.pass2)
+           
 
          
             let endpoint ="http://satelite-de-noticias.herokuapp.com/api/rest-auth/register/ "

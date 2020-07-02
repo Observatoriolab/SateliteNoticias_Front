@@ -366,7 +366,6 @@ export default {
     },
     methods:{
         closeEdition() {
-            alert("asddasasdads")
             this.$emit('close-edition-child', false)
         
         },

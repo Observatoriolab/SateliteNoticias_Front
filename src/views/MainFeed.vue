@@ -211,7 +211,7 @@ export default {
    
   },
   created() {
-    alert('alert2')
+   
     document.title = "Satelite de Noticias";
   }
  

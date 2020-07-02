@@ -76,7 +76,7 @@ export default {
             }
             await this.checkLogin(userData)
             if(this.userErrorState){
-                alert('alert1')
+                
                 this.$router.push('/main-feed')
             }
             else{
