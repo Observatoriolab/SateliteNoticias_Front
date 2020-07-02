@@ -39,7 +39,7 @@
                 class="input-group--focused"
                 @click:append="showPassword2 = !showPassword2"
             ></v-text-field>
-            <v-btn color="primary" type="submit" @click="registerAccount" >Crear cuenta</v-btn>
+            <v-btn color="primary" type="submit" @click="registerAccountLocal" >Crear cuenta</v-btn>
             <p class="mt-2"> O  <a href="/">Devuelvete al login</a></p>
         </v-form>
         <br>
@@ -49,8 +49,7 @@
 </template>
 
 <script>
-import { apiService } from "@/common/api.service.js";
-
+import { mapActions } from 'vuex'
 
 export default {
     name: 'Registration',
@@ -89,27 +88,18 @@ export default {
     computed:{
     },
     methods:{
-
-        async registerAccount(){
-           
-
-         
-            let endpoint ="http://satelite-de-noticias.herokuapp.com/api/rest-auth/register/ "
-            await apiService(endpoint, "POST", {
-                username: this.name,
-                email: this.email,
-                password: this.pass,
-                password2: this.pass2,
-                is_staff: false
-
-            }).then(data => {
-
-                this.credential = data["key"]; 
-                console.log(this.credential)
-                window.localStorage.setItem("credential", this.credential);
-                this.$router.push({ path: 'main-feed' })            
-            });
-
+        ...mapActions([
+            'registerAccount'
+        ]),
+        registerAccountLocal(){
+            const user = {
+                username:this.name,
+                email:this.email,
+                password:this.pass,
+                password2:this.pass2
+            }
+            this.registerAccount(user)
+            this.$router.push({ path: '/' })        
             
         }
     }

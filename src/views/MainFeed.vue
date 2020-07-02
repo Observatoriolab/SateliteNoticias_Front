@@ -49,7 +49,7 @@
       </v-col>
 
       <v-col
-        v-show="(!drawer && !edition) || (!drawer && edition)"
+        v-if="(!drawer && !edition) || (!drawer && edition)"
         :cols="newsFeedColumn"
         class="text-center mb-4"
       >
@@ -57,7 +57,7 @@
            <NewsFeed :title="'NEWS FEED'" v-on:open-edition="openEditionNews" />
         
       </v-col>
-      <v-col v-show="edition" class="text-center" cols="6">
+      <v-col v-if="edition" class="text-center" cols="6">
           <Edition :editionInfo="item"  v-on:close-edition-child="closeEditionChild" />      
       </v-col>
     </v-row>

@@ -1,7 +1,7 @@
 <template>
   <v-app>
-      <v-app-bar v-if="this.$router.currentRoute.name !== 'Login' &&
-                         this.$router.currentRoute.name !== 'Registration' "  
+      <v-app-bar v-show="this.$router.currentRoute.name !== 'Login' &&
+                         this.$router.currentRoute.name !== 'Registration' "   
                   id="home-app-bar" app
                   color="white" elevation="1" 
                   height="80" width="100vw">  

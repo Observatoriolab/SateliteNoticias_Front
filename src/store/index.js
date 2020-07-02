@@ -13,18 +13,19 @@ export default new Vuex.Store({
     USER_NAME_URL:'/api/user/',
     NEWS_FIRST_PAGE_URL:'/api/news/',
     NEWS_GENERAL_PAGE_URL:'/api/news/?page=',
+    endpointRegister:"https://satelite-de-noticias.herokuapp.com/api/rest-auth/registration/",
 
+    endpointNews: 'http://satelite-de-noticias.herokuapp.com/api/news/',
 
 
     credential: null,
     errorUser:false,
     username:'',
-    endpointNews: 'http://satelite-de-noticias.herokuapp.com/api/news/',
     pageNumbersNews: [],
     newsFeedNews:[],
-    selectedNews:[false,false,false,false],
-    disableButtonEdit:[false,false,false,false],
-    nextPageNews:null,
+    selectedNews:[],
+    disableButtonEdit:[],
+    nextPageNews:'',
     disableButtonLoadMore:false,
     lastPageNumber: 0
   },
@@ -37,18 +38,36 @@ export default new Vuex.Store({
     },
     last_digit_news_page(payload) {
       let regex = /=+\d*/.exec(payload);
-      let newPage = /\d+$/.exec(regex[0]);
-      return parseInt(newPage[0]) - 1;
+        let newPage = /\d+$/.exec(regex[0]);
+        return parseInt(newPage[0])-1
+      
     },
 
   },
   mutations: {
-    
+    RESET_ALL(state){
+      state.credential= null,
+      state.errorUser=false,
+      state.username='',
+      state.pageNumbersNews= [],
+      state.newsFeedNews=[],
+      state.selectedNews=[],
+      state.disableButtonEdit=[],
+      state.nextPageNews='',
+      state.disableButtonLoadMore=false,
+      state.lastPageNumber= 0,
+      state.endpointNews = 'http://satelite-de-noticias.herokuapp.com/api/news/'
+      sessionStorage.clear();
+
+    },    
     STORE_CREDENTIAL (state,payload) {
       state.credential = payload
     },
     ERROR_USER_SET (state) {
       state.errorUser = !state.errorUser
+    },
+    USERNAME_USER_SET (state,payload) {
+      state.username = payload
     },
     ENDPOINT_NEWS_SET (state,payload) {
       state.endpointNews =  payload
@@ -68,11 +87,8 @@ export default new Vuex.Store({
         state.disableButtonEdit.push(false);
       }
     },
-    NEWS_LAST_PAGE(state,payload){
-      state.lastPageNumber = payload
-    },
-    NEWS_NEXT_PAGE(state,payload) {
-      state.pageNumbersNews.push(state.NEWS_GENERAL_PAGE_URL+payload)
+    NEWS_PAGENUMBERS_ARRAY(state,payload) {
+      state.pageNumbersNews.push(payload)
     },
   },
   actions: {
@@ -81,6 +97,7 @@ export default new Vuex.Store({
             username: payload.user,
             password: payload.pass
         }).then(data => {
+
           dispatch('setUserInfo',data["key"])
             
         });
@@ -92,14 +109,31 @@ export default new Vuex.Store({
       else{
         commit('ERROR_USER_SET')
       }
-      const data = await apiService(state.BASE_URL+state.USER_NAME_URL,false,undefined,state.credential)         
+      const data = await apiService(state.BASE_URL+state.USER_NAME_URL,false,undefined,payload)       
+      commit('USERNAME_USER_SET',data['username'])
       window.sessionStorage.setItem('username',data['username'])
     },
-    logout ({state}) {      
+    logout ({state,commit}) {      
       apiService(state.BASE_URL+state.LOGOUT_URL, "POST", undefined, state.credential)
+      commit('RESET_ALL')
+
      
     },    
-    async getnewsLoadMore({commit,state,dispatch}) {
+    async registerAccount({state},payload){
+      console.log(payload)
+      await apiService(state.endpointRegister, "POST", {
+
+          username: payload.username,
+          email: payload.email,
+          password1: payload.password,
+          password2: payload.password2,
+          is_staff: false
+
+      })
+
+      
+    },
+    async getnewsLoadMore({commit,state}) {
       console.log(state.credential)
       commit('DISABLE_LOAD_MORE_NEWS',true)
       if(state.nextPageNews){
@@ -111,28 +145,14 @@ export default new Vuex.Store({
                 commit('NEWS_SELECTED_STATES')
                 if (data.next) {
                   commit('NEWS_PAGE_SET', data.next)
-                  dispatch('pushPageNumberURLS',true)                  
+                  commit('NEWS_PAGENUMBERS_ARRAY',data.next)
                   commit('DISABLE_LOAD_MORE_NEWS',false)
-                } 
-                else if (data.count <= 4) {
-                    dispatch('pushPageNumberURLS',false)
-                } else {
-                  commit('NEWS_PAGE_SET', null)
+                }
+                else {
+                  commit('NEWS_PAGE_SET', state.BASE_URL+state.NEWS_GENERAL_PAGE_URL+'1')
                 }
 
       });
-    },
-    pushPageNumberURLS({commit,state,getters},payload){
-      var pageNumber;
-      if(payload){
-        pageNumber = getters['last_digit_news_page', state.nextPageNews]
-      }
-      else{
-        pageNumber='1'
-      }
-      commit('NEWS_NEXT_PAGE', pageNumber)
-      commit('NEWS_LAST_PAGE', pageNumber)
-
     }
 
   },

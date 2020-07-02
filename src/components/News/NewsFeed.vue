@@ -501,7 +501,7 @@ export default {
     
   },
   created() {
-    console.log
+    console.log(window.sessionStorage.getItem('credential'))
     if(window.sessionStorage.getItem('credential') === null){
       window.sessionStorage.setItem('credential',this.credential)     
       this.getnewsLoadMore() 

@@ -55,7 +55,7 @@
             <template v-slot:activator="{ on, attrs }">
             <v-btn class="purple" color="primary" dark v-bind="attrs" v-on="on">
                 <v-icon>mdi-account</v-icon>
-                {{ requestUser  }}
+                {{ username  }}
             </v-btn>
             </template>
             <v-list>
@@ -123,7 +123,10 @@ export default {
   },
   
   created(){
-    this.requestUser = window.sessionStorage.getItem('username')
+    if(window.sessionStorage.getItem('credential') === null){
+      
+      this.requestUser = window.sessionStorage.getItem('username')
+    }
   }
 };
 </script>
