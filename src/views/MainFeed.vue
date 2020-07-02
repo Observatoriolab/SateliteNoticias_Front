@@ -67,7 +67,7 @@
 <script>
 import NewsFeed from '@/components/News/NewsFeed.vue'
 import Edition from '@/components/Edition/Edition.vue'
-
+import {mapState, mapMutations} from 'vuex'
 export default {
   name: "MainFeed",
   components:{
@@ -173,11 +173,18 @@ export default {
     itemIndexPrior2: -1,
     itemIndexActual2: 0,
     actualIndex: -1,
-    trendingScrollingPosition: 0,
-    normalFeedScrollingPosition: 0
   }),
+  computed:{
+      ...mapState([
+        'newsHighlighterIndex'
+      ])
+    
+  },
 
   methods: {
+    ...mapMutations({
+        unhighlightNews: 'SET_HIGHLIGHTER'
+    }),
     openEditionNews: function(itemData){
         console.log("paso por aqui")
         console.log(itemData)
@@ -193,8 +200,9 @@ export default {
         console.log(closingDrawer)
         console.log(this.actualIndex);
         this.newsFeedColumn = 12;
-        this.$set(this.selected, this.actualIndex, false);
-        this.$set(this.disabling, this.actualIndex, false);
+        this.unhighlightNews({index:this.newsHighlighterIndex,truth:false})
+        //this.$set(this.selected, this.actualIndex, false);
+        //this.$set(this.disabling, this.actualIndex, false);
       
     },
     trendingDrawerOpen() {

@@ -12,7 +12,7 @@
           v-for="(item, i) in newsFeedNews"
           :key="i"
         >
-          <v-container :class="{ highlight: selected[i] }">
+          <v-container :class="{ highlight: selectedNews[i] }" :key="reRenderNews">
             <v-row>
               <v-col cols="12" class="text-center pl-0 px-0 py-0">
                 <v-row
@@ -50,7 +50,7 @@
                       <v-btn
                         color="blue"
                         @click="openEdition(item, i)"
-                        :disabled="disabling[i]"
+                        :disabled="disableButtonEdit[i]"
                       >
                         <v-icon>mdi-square-edit-outline</v-icon>
                       </v-btn>
@@ -361,11 +361,7 @@ export default {
     modelo5: null,
     date1: new Date().toISOString().substr(0, 10),
 
-    itemIndexPrior: -1,
-    /* selected: [],
-    disabling: [], */
-    selected: [false,false,false,false],
-    disabling: [false,false,false,false],
+    itemIndexPrior: -1
   }),
   computed: {
     // mix this into the outer object with the object spread operator
@@ -376,34 +372,38 @@ export default {
         'selectedNews',
         'disableButtonEdit',
         'disableButtonLoadMore',
+        'newsHighlighterIndex',
+        'reRenderNews'
     ])
   },
   methods: {
      ...mapActions([
         'getnewsLoadMore',
+        'newsHighlighter'
     ]),
     ...mapMutations({
-      store: 'STORE_CREDENTIAL' // map `this.add()` to `this.$store.commit('increment')`
+      store: 'STORE_CREDENTIAL', // map `this.add()` to `this.$store.commit('increment')`
+      updateIndex: 'UPDATE_HIGHLIGHTER_INDEX'
     }),
 
     highlighter(index) {
       console.log(index);
-      if (this.selected[index] == false) {
-        this.$set(this.selected, index, true);
-        this.$set(this.disabling, index, true);
+      if (this.selectedNews[index] == false) {
+        this.$set(this.selectedNews, index, true);
+        this.$set(this.disableButtonEdit, index, true);
       }
-      console.log(this.itemIndexPrior);
-      if (index !== this.itemIndexPrior) {
-        this.$set(this.selected, this.itemIndexPrior, false);
-        this.$set(this.disabling, this.itemIndexPrior, false);
+      console.log(this.newsHighlighterIndex);
+      if (index !== this.newsHighlighterIndex && this.newsHighlighterIndex !== -1) {
+        this.$set(this.selectedNews, this.newsHighlighterIndex, false);
+        this.$set(this.disableButtonEdit, this.newsHighlighterIndex, false);
       }
-      this.itemIndexPrior = index
+      this.updateIndex(index)
     },
     openEdition(item, index) {
       console.log("abri la edicion");
-      this.$emit('open-edition',item)
-
-      this.highlighter(index);
+      this.$emit('open-edition',item)      
+      //this.newsHighlighter(index);
+      this.highlighter(index)
     },
   
     customFilter(item, queryText) {
@@ -464,40 +464,6 @@ export default {
       console.log(this.news);
       this.updateNews += 1;
     },
-    
-
-      
-
-
-      /*console.log(this.$store.state.credential)
-      this.disableButton = true;
-      if (this.next) {
-        this.endpoint = this.next;
-      }
-      await apiService(
-        this.endpoint,
-        "GET",
-        undefined,
-        this.credential
-      ).then(data => {
-        console.log(this.$store.state.credential)
-        this.news.push(...data.results);
-        for (let i = 0; i < this.news.length; i++) {
-          this.selected.push(false);
-          this.disabling.push(false);
-        }
-        if (data.next) {
-          this.next = data.next;
-          this.pageNumbers.push(
-            "/api/news/?page=" + this.getLastDigit(this.next)
-          );
-          this.disableButton = false;
-        } else if (data.count <= 4) {
-          this.pageNumbers.push("/api/news/?page=1");
-        } else {
-          this.next = null;
-        }
-      });*/
     
   },
   created() {

@@ -27,7 +27,11 @@ export default new Vuex.Store({
     disableButtonEdit:[],
     nextPageNews:'',
     disableButtonLoadMore:false,
-    lastPageNumber: 0
+    lastPageNumber: 0,
+
+    
+    newsHighlighterIndex: -1,
+    reRenderNews: 0
   },
   getters:{
     error_user_state(state){
@@ -35,14 +39,7 @@ export default new Vuex.Store({
     },
     username_user_state(state){
       return state.username
-    },
-    last_digit_news_page(payload) {
-      let regex = /=+\d*/.exec(payload);
-        let newPage = /\d+$/.exec(regex[0]);
-        return parseInt(newPage[0])-1
-      
-    },
-
+    }
   },
   mutations: {
     RESET_ALL(state){
@@ -90,6 +87,25 @@ export default new Vuex.Store({
     NEWS_PAGENUMBERS_ARRAY(state,payload) {
       state.pageNumbersNews.push(payload)
     },
+    SET_HIGHLIGHTER(state,payload){
+      console.log(payload)
+      console.log(state.selectedNews)
+      console.log(state.disableButtonEdit)
+
+      state.selectedNews[payload.index] = payload.truth
+      state.disableButtonEdit[payload.index] = payload.truth 
+      
+      console.log(state.selectedNews)
+      console.log(state.disableButtonEdit)
+
+      state.reRenderNews++
+      //this.$set(state.selectedNews, payload.index, payload.truth);
+      //this.$set(state.disableButtonEdit, payload.index, payload.truth);
+    },
+    UPDATE_HIGHLIGHTER_INDEX(state,payload){
+      state.newsHighlighterIndex = payload
+
+    }
   },
   actions: {
     async checkLogin ({state,dispatch},payload) {      
@@ -153,6 +169,16 @@ export default new Vuex.Store({
                 }
 
       });
+    },
+    newsHighlighter({state,commit},payload) {
+      console.log(payload);
+      if (state.selectedNews[payload] == false) {
+        commit('SET_HIGHLIGHTER',{index:payload, truth:true})
+      }
+      if (payload !== state.newsHighlighterIndex) {
+        commit('SET_HIGHLIGHTER',{index:state.newsHighlighterIndex, truth:false})
+      }
+      commit('UPDATE_HIGHLIGHTER_INDEX',payload)
     }
 
   },
