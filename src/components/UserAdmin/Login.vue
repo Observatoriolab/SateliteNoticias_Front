@@ -21,7 +21,7 @@
                 class="input-group--focused"
                 @click:append="showPassword = !showPassword"
             ></v-text-field>
-            <v-btn color="primary" type="submit" @click="checkLogin" >Login</v-btn>
+            <v-btn color="primary" type="submit" @click="login" >Login</v-btn>
 
       
         <br>
@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import { apiService } from "@/common/api.service.js";
+import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'Login',
@@ -61,31 +62,28 @@ export default {
     computed:{
     },
     methods:{
+        ...mapActions([
+            'checkLogin'
 
-         checkLogin(){
-             let endpoint = "http://satelite-de-noticias.herokuapp.com/api/rest-auth/login/ ";
-             apiService(endpoint, "POST", {
-                username: this.name,
-                password: this.pass
-            }).then(data => {
-                this.credential = data["key"];
-                if(this.credential !== undefined){
-                    alert('ola')
-                    window.localStorage.setItem("credential", this.credential);
-                    this.$router.push('/main-feed')
-                }
-                else{
-                    alert("error usuario")
-                }
-
-                //Lo deje en el local storage del browser para ser usado y corroborar que es el usuario
-                
-            });
-
-            
+        ]),
+        ...mapGetters({
+            userErrorState: 'error_user_state'
+        }),
+        async login(){
+            const userData = {
+              user: this.name,
+              pass: this.pass
+            }
+            await this.checkLogin(userData)
+            if(this.userErrorState){
+                alert('alert1')
+                this.$router.push('/main-feed')
+            }
+            else{
+                alert('El nombre de usuario y/o contraseña no se corresponden')
+            }
         }
     }
-
 }
 </script>
 <style lang="scss">

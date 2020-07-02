@@ -20,6 +20,7 @@ function apiService(endpoint, method, data, credentials) {
       Authorization: credentials !== undefined ? "Token " + credentials : null
     }
   };
+  console.log(endpoint)
   console.log(config);
   return fetch(endpoint, config)
     .then(handleResponse)

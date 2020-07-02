@@ -9,7 +9,7 @@
         <v-card
           class="flex-column mx-auto mt-6 mb-6 elevation-12"
           width="60%"
-          v-for="(item, i) in news"
+          v-for="(item, i) in newsFeedNews"
           :key="i"
         >
           <v-container :class="{ highlight: selected[i] }">
@@ -200,20 +200,23 @@
           </v-container>
         </v-card>
         <div class="text-center">
-         <!--  <v-btn
+           <v-btn
             rounded
             color="primary"
             dark
             @click="getnewsLoadMore"
-            :disabled="disableButton"
+            :disabled="disableButtonLoadMore"
             >Cargar mas</v-btn
-          > -->
+          > 
         </div>
     </div>
 </template>
 
 <script>
 import { apiService } from "@/common/api.service.js";
+import { mapState } from 'vuex'
+import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 
 export default {
   name: "NewsFeed",
@@ -364,8 +367,25 @@ export default {
     selected: [false,false,false,false],
     disabling: [false,false,false,false],
   }),
-
+  computed: {
+    // mix this into the outer object with the object spread operator
+    ...mapState([
+        'credential',
+        'pageNumbersNews',
+        'newsFeedNews',
+        'selectedNews',
+        'disableButtonEdit',
+        'disableButtonLoadMore',
+    ])
+  },
   methods: {
+     ...mapActions([
+        'getnewsLoadMore',
+    ]),
+    ...mapMutations({
+      store: 'STORE_CREDENTIAL' // map `this.add()` to `this.$store.commit('increment')`
+    }),
+
     highlighter(index) {
       console.log(index);
       if (this.selected[index] == false) {
@@ -432,13 +452,6 @@ export default {
         this.updatedNews.push(...data.results);
       });
     },
-    disableLoad() {},
-    actualContent(contentWithImage) {
-      console.log(contentWithImage);
-      let actualContent = contentWithImage.match(/<img src=".*">/);
-      let final = contentWithImage.replace(actualContent, "");
-      this.content = final;
-    },
     async getnews() {
       for (const [idx, url] of this.pageNumbers.entries()) {
         console.log(idx);
@@ -451,12 +464,12 @@ export default {
       console.log(this.news);
       this.updateNews += 1;
     },
-    getLastDigit(pageString) {
-      let regex = /=+\d*/.exec(pageString);
-      var nuevo = /\d+$/.exec(regex[0]);
-      return parseInt(nuevo[0]) - 1;
-    },
-    async getnewsLoadMore() {
+    
+
+      
+
+
+      /*console.log(this.$store.state.credential)
       this.disableButton = true;
       if (this.next) {
         this.endpoint = this.next;
@@ -465,8 +478,9 @@ export default {
         this.endpoint,
         "GET",
         undefined,
-        window.localStorage.getItem("credential")
+        this.credential
       ).then(data => {
+        console.log(this.$store.state.credential)
         this.news.push(...data.results);
         for (let i = 0; i < this.news.length; i++) {
           this.selected.push(false);
@@ -483,11 +497,15 @@ export default {
         } else {
           this.next = null;
         }
-      });
-    }
+      });*/
+    
   },
   created() {
-    this.getnewsLoadMore();
+    console.log
+    if(window.sessionStorage.getItem('credential') === null){
+      window.sessionStorage.setItem('credential',this.credential)     
+      this.getnewsLoadMore() 
+    }
     document.title = "Satelite de Noticias";
   }
 };

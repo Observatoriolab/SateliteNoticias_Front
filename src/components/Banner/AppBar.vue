@@ -55,12 +55,12 @@
             <template v-slot:activator="{ on, attrs }">
             <v-btn class="purple" color="primary" dark v-bind="attrs" v-on="on">
                 <v-icon>mdi-account</v-icon>
-                {{ requestUser }}
+                {{ requestUser  }}
             </v-btn>
             </template>
             <v-list>
             <v-list-item v-for="item in items" :key="item.title">
-                <v-btn @click="logout"
+                <v-btn @click="logouto"
                 ><v-icon> {{ item.icon }} </v-icon> {{ item.title }}
                 </v-btn>
             </v-list-item>
@@ -70,7 +70,10 @@
 </template>
 
 <script>
-import { apiService } from "@/common/api.service.js";
+
+import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: "App",
@@ -99,30 +102,28 @@ export default {
 
     //
   }),
+  computed: {
+      ...mapState([
+        'username'
+      ])
+  },
   methods: {
-    async logout() {
-      var endpoint ="http://satelite-de-noticias.herokuapp.com/api/rest-auth/logout/";
-      await apiService(endpoint, "POST", undefined, this.credential).then(
-          data => {
-            console.log("me sali", data);
-            this.$router.push('/')
-
-        }
-      );     
-    },
-    async setUserInfo() {
-      const data = await apiService(
-        "http://satelite-de-noticias.herokuapp.com/api/user/",
-        false,
-        undefined,
-        window.localStorage.getItem("credential")
-      );
-      this.requestUser = data["username"];
-      console.log("este es el username: ", this.requestUser);
+     ...mapActions([
+        'setUserInfo',
+        'logout'
+    ]),
+    ...mapGetters({
+        usernameUserState: 'username_user_state'
+    }),
+    logouto() {
+      this.logout()      
+      this.$router.push('/')
+        
     }
   },
-  created() {
-    this.setUserInfo();
+  
+  created(){
+    this.requestUser = window.sessionStorage.getItem('username')
   }
 };
 </script>

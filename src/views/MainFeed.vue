@@ -42,7 +42,7 @@
       >
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
-      <v-col v-show="drawer" :cols="newsFeedColumn" class="text-center mb-4">
+      <v-col v-if="drawer" :cols="newsFeedColumn" class="text-center mb-4">
      
            <NewsFeed :title="'TRENDING'" />
 
@@ -211,7 +211,7 @@ export default {
    
   },
   created() {
-    
+    alert('alert2')
     document.title = "Satelite de Noticias";
   }
  
