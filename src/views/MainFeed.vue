@@ -43,7 +43,7 @@
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
       <v-col v-if="drawer" :cols="newsFeedColumn" class="text-center mb-4">
-        <NewsFeed :title="'TRENDING'" />
+        <NewsFeed :title="'TRENDING'" v-on:open-edition="openEditionNews"/>
       </v-col>
 
       <v-col
@@ -208,11 +208,10 @@ export default {
     },
     trendingDrawerClose() {
       this.drawer = false;
-      this.closeEditionChild(true);
+      this.closeEditionChild(false);
     }
   },
   created() {
-    document.title = "Satelite de Noticias";
   }
 };
 </script>

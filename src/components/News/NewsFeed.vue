@@ -476,7 +476,6 @@ export default {
       window.sessionStorage.setItem("credential", this.credential);
       this.getnewsLoadMore();
     }
-    document.title = "Satelite de Noticias";
   }
 };
 </script>

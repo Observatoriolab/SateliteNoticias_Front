@@ -23,6 +23,7 @@ export default new Vuex.Store({
     username: "",
     pageNumbersNews: [],
     newsFeedNews: [],
+    trendingNewsFeedNews:[],
     selectedNews: [],
     disableButtonEdit: [],
     nextPageNews: "",
@@ -43,17 +44,19 @@ export default new Vuex.Store({
   mutations: {
     RESET_ALL(state) {
       (state.credential = null),
-        (state.errorUser = false),
-        (state.username = ""),
-        (state.pageNumbersNews = []),
-        (state.newsFeedNews = []),
-        (state.selectedNews = []),
-        (state.disableButtonEdit = []),
-        (state.nextPageNews = ""),
-        (state.disableButtonLoadMore = false),
-        (state.lastPageNumber = 0),
-        (state.endpointNews =
-          "http://satelite-de-noticias.herokuapp.com/api/news/");
+      (state.errorUser = false),
+      (state.username = ""),
+      (state.pageNumbersNews = []),
+      (state.newsFeedNews = []),
+      (state.selectedNews = []),
+      (state.disableButtonEdit = []),
+      (state.nextPageNews = ""),
+      (state.disableButtonLoadMore = false),
+      (state.lastPageNumber = 0),
+      (state.endpointNews = "http://satelite-de-noticias.herokuapp.com/api/news/"),
+      (state.newsHighlighterIndex= -1),
+      (state.reRenderNews= 0);
+      
       sessionStorage.clear();
     },
     STORE_CREDENTIAL(state, payload) {
@@ -70,6 +73,9 @@ export default new Vuex.Store({
     },
     NEWS_SET(state, payload) {
       state.newsFeedNews.push(...payload);
+    },
+    TRENDING_NEWS_SET(state, payload) {
+      state.trendingNewsFeedNews.push(...payload);
     },
     NEWS_PAGE_SET(state, payload) {
       state.nextPageNews = payload;
