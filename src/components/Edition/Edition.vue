@@ -66,165 +66,7 @@
 
                 <v-col cols="12">
                   <v-divider></v-divider>
-                  <v-row class="pa-4" justify="center" align="center">
-                    <v-col cols="12">
-                      <v-row justify="space-between">
-                        <v-col cols="12">
-                          <h6>Primarias</h6>
-                        </v-col>
-                        <v-col cols="6">
-                          <v-autocomplete
-                            v-model="modelo3"
-                            :items="ejes"
-                            :filter="customFilter"
-                            item-text="name"
-                            label="Eje"
-                          ></v-autocomplete>
-                          <v-autocomplete
-                            v-model="modelo4"
-                            :items="regiones"
-                            :filter="customFilter"
-                            item-text="name"
-                            label="Pais/Region"
-                          ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="6">
-                          <v-autocomplete
-                            v-model="modelo5"
-                            :items="organismos"
-                            :filter="customFilter"
-                            item-text="name"
-                            label="Organismo"
-                          ></v-autocomplete>
-                          <v-menu
-                            v-model="menu2"
-                            :close-on-content-click="false"
-                            :nudge-right="40"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                v-model="date1"
-                                label="Fecha"
-                                prepend-icon="event"
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                              ></v-text-field>
-                            </template>
-                            <v-date-picker
-                              v-model="date1"
-                              @input="menu2 = false"
-                            ></v-date-picker>
-                          </v-menu>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                    <v-col align-self="start" cols="12">
-                      <h6>Secundarias</h6>
-
-                      <v-combobox
-                        v-model="modelo"
-                        :filter="filter"
-                        :hide-no-data="!search"
-                        :items="comboItems"
-                        :search-input.sync="search"
-                        hide-selected
-                        label="Search for an option"
-                        multiple
-                        small-chips
-                        solo
-                      >
-                        <template v-slot:no-data>
-                          <v-list-item>
-                            <span class="subheading">Create</span>
-                            <v-chip
-                              :color="`${colors[nonce - 1]} lighten-3`"
-                              label
-                              small
-                            >
-                              {{ search }}
-                            </v-chip>
-                          </v-list-item>
-                        </template>
-                        <template
-                          v-slot:selection="{
-                            attrs,
-                            item,
-                            parent,
-                            selected
-                          }"
-                        >
-                          <v-chip
-                            v-if="item === Object(item)"
-                            v-bind="attrs"
-                            :color="`${item.color} lighten-3`"
-                            :input-value="selected"
-                            label
-                            small
-                          >
-                            <span class="pr-2">
-                              {{ item.text }}
-                            </span>
-                            <v-icon small @click="parent.selectItem(item)"
-                              >close</v-icon
-                            >
-                          </v-chip>
-                        </template>
-                        <template v-slot:item="{ index, item }">
-                          <v-text-field
-                            v-if="editing === item"
-                            v-model="editing.text"
-                            autofocus
-                            flat
-                            background-color="transparent"
-                            hide-details
-                            solo
-                            @keyup.enter="edit(index, item)"
-                          ></v-text-field>
-                          <v-chip
-                            v-else
-                            :color="`${item.color} lighten-3`"
-                            dark
-                            label
-                            small
-                          >
-                            {{ item.text }}
-                          </v-chip>
-                          <v-spacer></v-spacer>
-                          <v-list-item-action @click.stop>
-                            <v-btn icon @click.stop.prevent="edit(index, item)">
-                              <v-icon>{{
-                                editing !== item ? "mdi-pencil" : "mdi-check"
-                              }}</v-icon>
-                            </v-btn>
-                          </v-list-item-action>
-                        </template>
-                      </v-combobox>
-                    </v-col>
-                    <v-col class="text-center" cols="12">
-                      <h5>Bibliografia</h5>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-autocomplete
-                        v-model="modelo2"
-                        :items="states"
-                        :filter="customFilter"
-                        item-text="name"
-                        label="Nombre"
-                      ></v-autocomplete>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-text-field label="Link"></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-row justify="center">
-                        <v-btn large color="primary">Publicar</v-btn>
-                      </v-row>
-                    </v-col>
-                  </v-row>
+                  <Metadata/>
                 </v-col>
               </v-row>
             </v-col>
@@ -236,10 +78,15 @@
 </template>
 
 <script>
+import Metadata from "@/components/News/NewsPiece/Metadata.vue";
+
 export default {
   name: "Edition",
   props: {
     editionInfo: Object
+  },
+  components:{
+    Metadata
   },
   watch: {
     search() {
@@ -284,8 +131,6 @@ export default {
       });
     }
   },
-
-  components: {},
   data() {
     return {
       colors: ["green", "purple", "indigo", "cyan", "teal", "orange"],
