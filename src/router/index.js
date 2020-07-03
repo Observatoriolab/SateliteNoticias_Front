@@ -1,13 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import MainFeed from '@/views/MainFeed.vue'
-import Login from '@/components/UserAdmin/Login.vue'
-import Registration from '@/components/UserAdmin/Registration.vue'
+import MainFeed from "@/views/MainFeed.vue";
+import Login from "@/components/UserAdmin/Login.vue";
+import Registration from "@/components/UserAdmin/Registration.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
-
   {
     path: "/",
     name: "Login",
@@ -22,9 +21,7 @@ const routes = [
     path: "/main-feed",
     name: "MainFeed",
     component: MainFeed
-  },
-
-
+  }
 ];
 
 const router = new VueRouter({

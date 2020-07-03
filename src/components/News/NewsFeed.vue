@@ -1,16 +1,14 @@
 <template>
-    <div>
+  <div>
+    <h1 class="display-2 font-weight-bold mb-7 acolor">
+      {{ title }}
+    </h1>
+    <!-- v-for="(item, i) in news" -->
+    <div v-for="(item, i) in newsFeedNews" v-bind:key="i">
+      <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+    </div>
 
-        <h1 class="display-2 font-weight-bold mb-7 acolor">
-          {{title}}
-        </h1>
-          <!-- v-for="(item, i) in news" -->
-        <div v-for="(item, i) in newsFeedNews" v-bind:key="i">
-            <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition"/>
-        </div>
-       
-
-      <!--  <v-card
+    <!--  <v-card
           class="flex-column mx-auto mt-6 mb-6 elevation-12"
           width="60%"
           v-for="(item, i) in newsFeedNews"
@@ -204,32 +202,31 @@
           </v-container>
       </v-card>
       -->
-      <div class="text-center">
-          <v-btn
-          rounded
-          color="primary"
-          dark
-          @click="getnewsLoadMore"
-          :disabled="disableButtonLoadMore"
-          >Cargar mas</v-btn
-        > 
-      </div>
+    <div class="text-center">
+      <v-btn
+        rounded
+        color="primary"
+        dark
+        @click="getnewsLoadMore"
+        :disabled="disableButtonLoadMore"
+        >Cargar mas</v-btn
+      >
     </div>
-    
+  </div>
 </template>
 
 <script>
 import { apiService } from "@/common/api.service.js";
-import { mapState } from 'vuex'
-import { mapActions } from 'vuex'
-import { mapMutations } from 'vuex'
-import NewsPiece from '@/components/News/NewsPiece/NewsPiece.vue'
+import { mapState } from "vuex";
+import { mapActions } from "vuex";
+import { mapMutations } from "vuex";
+import NewsPiece from "@/components/News/NewsPiece/NewsPiece.vue";
 export default {
   name: "NewsFeed",
-  props:{
-    title: String,
+  props: {
+    title: String
   },
-  components:{
+  components: {
     NewsPiece
   },
   watch: {
@@ -278,23 +275,22 @@ export default {
 
   data: () => ({
     localNews: [
-        {
-            title:"1",
-            content:"content1"
-        },
-        {
-            title:"2",
-            content:"content2"
-        },
-         {
-            title:"3",
-            content:"content3"
-        },
-         {
-            title:"4",
-            content:"content4"
-        }
-        
+      {
+        title: "1",
+        content: "content1"
+      },
+      {
+        title: "2",
+        content: "content2"
+      },
+      {
+        title: "3",
+        content: "content3"
+      },
+      {
+        title: "4",
+        content: "content4"
+      }
     ],
     search: null,
     show: [],
@@ -375,24 +371,21 @@ export default {
   computed: {
     // mix this into the outer object with the object spread operator
     ...mapState([
-        'credential',
-        'pageNumbersNews',
-        'newsFeedNews',
-        'selectedNews',
-        'disableButtonEdit',
-        'disableButtonLoadMore',
-        'newsHighlighterIndex',
-        'reRenderNews'
+      "credential",
+      "pageNumbersNews",
+      "newsFeedNews",
+      "selectedNews",
+      "disableButtonEdit",
+      "disableButtonLoadMore",
+      "newsHighlighterIndex",
+      "reRenderNews"
     ])
   },
   methods: {
-     ...mapActions([
-        'getnewsLoadMore',
-        'newsHighlighter'
-    ]),
+    ...mapActions(["getnewsLoadMore", "newsHighlighter"]),
     ...mapMutations({
-      store: 'STORE_CREDENTIAL', // map `this.add()` to `this.$store.commit('increment')`
-      updateIndex: 'UPDATE_HIGHLIGHTER_INDEX'
+      store: "STORE_CREDENTIAL", // map `this.add()` to `this.$store.commit('increment')`
+      updateIndex: "UPDATE_HIGHLIGHTER_INDEX"
     }),
 
     highlighter(index) {
@@ -402,19 +395,22 @@ export default {
         this.$set(this.disableButtonEdit, index, true);
       }
       console.log(this.newsHighlighterIndex);
-      if (index !== this.newsHighlighterIndex && this.newsHighlighterIndex !== -1) {
+      if (
+        index !== this.newsHighlighterIndex &&
+        this.newsHighlighterIndex !== -1
+      ) {
         this.$set(this.selectedNews, this.newsHighlighterIndex, false);
         this.$set(this.disableButtonEdit, this.newsHighlighterIndex, false);
       }
-      this.updateIndex(index)
+      this.updateIndex(index);
     },
     openEdition(item, index) {
       console.log("abri la edicion");
-      this.$emit('open-edition',item)      
+      this.$emit("open-edition", item);
       //this.newsHighlighter(index);
-      this.highlighter(index)
+      this.highlighter(index);
     },
-  
+
     customFilter(item, queryText) {
       const textOne = item.name.toLowerCase();
       const textTwo = item.abbr.toLowerCase();
@@ -472,14 +468,13 @@ export default {
       this.updatedNews.splice(0);
       console.log(this.news);
       this.updateNews += 1;
-    },
-    
+    }
   },
   created() {
-    console.log(window.sessionStorage.getItem('credential'))
-    if(window.sessionStorage.getItem('credential') === null){
-      window.sessionStorage.setItem('credential',this.credential)     
-      this.getnewsLoadMore() 
+    console.log(window.sessionStorage.getItem("credential"));
+    if (window.sessionStorage.getItem("credential") === null) {
+      window.sessionStorage.setItem("credential", this.credential);
+      this.getnewsLoadMore();
     }
     document.title = "Satelite de Noticias";
   }

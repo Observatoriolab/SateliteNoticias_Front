@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid >
+  <v-container fluid>
     <v-row fluid class="mt-3">
       <div v-show="!drawer && !edition">
         <v-btn
@@ -43,9 +43,7 @@
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
       <v-col v-if="drawer" :cols="newsFeedColumn" class="text-center mb-4">
-     
-           <NewsFeed :title="'TRENDING'" />
-
+        <NewsFeed :title="'TRENDING'" />
       </v-col>
 
       <v-col
@@ -53,26 +51,27 @@
         :cols="newsFeedColumn"
         class="text-center mb-4"
       >
-      
-           <NewsFeed :title="'NEWS FEED'" v-on:open-edition="openEditionNews" />
-        
+        <NewsFeed :title="'NEWS FEED'" v-on:open-edition="openEditionNews" />
       </v-col>
       <v-col v-if="edition" class="text-center" cols="6">
-          <Edition :editionInfo="item"  v-on:close-edition-child="closeEditionChild" />      
+        <Edition
+          :editionInfo="item"
+          v-on:close-edition-child="closeEditionChild"
+        />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import NewsFeed from '@/components/News/NewsFeed.vue'
-import Edition from '@/components/Edition/Edition.vue'
-import {mapState, mapMutations} from 'vuex'
+import NewsFeed from "@/components/News/NewsFeed.vue";
+import Edition from "@/components/Edition/Edition.vue";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "MainFeed",
-  components:{
-        NewsFeed,
-        Edition
+  components: {
+    NewsFeed,
+    Edition
   },
 
   data: () => ({
@@ -98,7 +97,7 @@ export default {
     colors: ["green", "purple", "indigo", "cyan", "teal", "orange"],
     editing: null,
     index: -1,
-    item: {title: '', content:''},
+    item: { title: "", content: "" },
     item2: null,
     comboItems: [
       { header: "Select an option or create one" },
@@ -172,38 +171,34 @@ export default {
 
     itemIndexPrior2: -1,
     itemIndexActual2: 0,
-    actualIndex: -1,
+    actualIndex: -1
   }),
-  computed:{
-      ...mapState([
-        'newsHighlighterIndex'
-      ])
-    
+  computed: {
+    ...mapState(["newsHighlighterIndex"])
   },
 
   methods: {
     ...mapMutations({
-        unhighlightNews: 'SET_HIGHLIGHTER'
+      unhighlightNews: "SET_HIGHLIGHTER"
     }),
-    openEditionNews: function(itemData){
-        console.log("paso por aqui")
-        console.log(itemData)
-        
-        this.item = itemData
-        this.newsFeedColumn = 6
-        this.edition = true
-        console.log(this.edition)
+    openEditionNews: function(itemData) {
+      console.log("paso por aqui");
+      console.log(itemData);
+
+      this.item = itemData;
+      this.newsFeedColumn = 6;
+      this.edition = true;
+      console.log(this.edition);
     },
     closeEditionChild(closingDrawer) {
-        console.log(closingDrawer)
-        this.edition = closingDrawer;
-        console.log(closingDrawer)
-        console.log(this.actualIndex);
-        this.newsFeedColumn = 12;
-        this.unhighlightNews({index:this.newsHighlighterIndex,truth:false})
-        //this.$set(this.selected, this.actualIndex, false);
-        //this.$set(this.disabling, this.actualIndex, false);
-      
+      console.log(closingDrawer);
+      this.edition = closingDrawer;
+      console.log(closingDrawer);
+      console.log(this.actualIndex);
+      this.newsFeedColumn = 12;
+      this.unhighlightNews({ index: this.newsHighlighterIndex, truth: false });
+      //this.$set(this.selected, this.actualIndex, false);
+      //this.$set(this.disabling, this.actualIndex, false);
     },
     trendingDrawerOpen() {
       this.drawer = true;
@@ -215,14 +210,10 @@ export default {
       this.drawer = false;
       this.closeEditionChild(true);
     }
-    
-   
   },
   created() {
-   
     document.title = "Satelite de Noticias";
   }
- 
 };
 </script>
 <style lang="scss">
