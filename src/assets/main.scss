@@ -1,10 +1,9 @@
 .content{
-    padding:1em;
-    font-size:1.2em;
-    display:flex; 
-    flex-flow:column; 
-    justify-content:center; 
-    align-items:center;
+  font-size:1.0em;
+  display:flex; 
+  flex-flow:column; 
+  align-content:center;
+  justify-content: center;
 }
 .overflowForY{
   overflow-y:auto;
@@ -15,11 +14,15 @@
 }
 .acolor{
     color:black;
-  }
+}
+//ESTE ORDEN ES IMPORTANTE
+.noHighlight{
+  box-shadow:none;
+}
 .highlight{
   box-shadow: -3px 3px 32px 20px rgba(8,2,181,1);
-
 }
+//ESTE ORDEN ES IMPORTANTE
 
 .auth-box {
   border: 3px solid lightgrey;

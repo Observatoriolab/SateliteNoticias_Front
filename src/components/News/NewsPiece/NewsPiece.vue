@@ -2,8 +2,7 @@
   <div>
     <v-card class="flex-column mx-auto mt-6 mb-6 elevation-12" width="60%">
       <v-container
-        :class="{ highlight: selectedNews[indice] }"
-        :key="reRenderNews"
+        :class="{ highlight: selectedNews[indice], noHighlight: reRenderNews }"
       >
         <v-row>
           <v-col cols="12" class="text-center pl-0 px-0 py-0">
@@ -100,6 +99,9 @@ export default {
       editing: null,
       item: null,
       show: false,
+      isLoading:false,
+      count:0,
+      entries:null,
       comboItems: [
         { header: "Select an option or create one" },
         {

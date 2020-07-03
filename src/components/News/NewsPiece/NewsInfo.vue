@@ -32,6 +32,7 @@
           color="blue"
           @click="openEdition(news, indice)"
           :disabled="disableButtonEdit[indice]"
+          :key="reRender"
         >
           <v-icon>mdi-square-edit-outline</v-icon>
         </v-btn>
@@ -60,12 +61,18 @@ export default {
   data() {
     return {
       rating: null,
-      show: false
+      show: false,
+      reRender:0
     };
+  },
+  watch:{
+    reRenderNews() {
+      this.reRender++
+    }
   },
   computed: {
     // mix this into the outer object with the object spread operator
-    ...mapState(["disableButtonEdit"])
+    ...mapState(["disableButtonEdit",'reRenderNews'])
   },
   methods: {
     openEdition(news, indice) {

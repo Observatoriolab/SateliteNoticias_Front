@@ -4,213 +4,34 @@
       {{ title }}
     </h1>
     <!-- v-for="(item, i) in news" -->
-    <div v-for="(item, i) in newsFeedNews" v-bind:key="i">
+  
+    <div v-show="title !== 'TRENDING'" v-for="(item, i) in newsFeedNews" v-bind:key="i">
       <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
     </div>
-
-    <!--  <v-card
-          class="flex-column mx-auto mt-6 mb-6 elevation-12"
-          width="60%"
-          v-for="(item, i) in newsFeedNews"
-          :key="i"
-        >
-          <v-container :class="{ highlight: selectedNews[i] }" :key="reRenderNews">
-            <v-row>
-              <v-col cols="12" class="text-center pl-0 px-0 py-0">
-                <v-row
-                  class="flex-column ma-0 fill-height text-center"
-                  justify="center"
-                >
-                  <v-col class="px-0 py-0 text-center">
-                    <v-card-title style="display:flex; justify-content:center">
-                      {{ item.title }}
-                    </v-card-title>
-                  </v-col>
-
-                  <v-col class="px-0 py-0">
-                    <v-row justify="space-around">
-                      <font class="lighto">autor</font>
-                      <font>fecha</font>
-                    </v-row>
-                  </v-col>
-
-                  <v-col class="px-0 py-0 mb-0">
-                    <div class="content" v-html="item.content"></div>
-                  </v-col>
-
-                  <v-col class="px-0 py-0">
-                    <v-row justify="space-around" align="center">
-                      <div class="text-center">
-                        <v-rating
-                          half-increments
-                          hover
-                          ripple
-                          dense
-                          v-model="rating"
-                        ></v-rating>
-                      </div>
-                      <v-btn
-                        color="blue"
-                        @click="openEdition(item, i)"
-                        :disabled="disableButtonEdit[i]"
-                      >
-                        <v-icon>mdi-square-edit-outline</v-icon>
-                      </v-btn>
-                      <v-btn color="darkGray" @click="expand(i)">
-                        <v-icon>{{
-                          show[i] ? "mdi-chevron-up" : "mdi-chevron-down"
-                        }}</v-icon>
-                      </v-btn>
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-col>
-              <v-col cols="12" class="py-0">
-                <v-expand-transition>
-                  <div v-show="show[i]">
-                    <v-divider></v-divider>
-                    <v-row class="px-4 py-0" justify="center" align="center">
-                      <v-col cols="12" class="py-0">
-                        <v-row justify="space-between">
-                          <v-col cols="12">
-                            <h5>Etiquetas</h5>
-                          </v-col>
-                          <v-col cols="6">
-                            <v-text-field
-                              label="Eje"
-                              placeholder="Ej: Pagos digitales"
-                              outlined
-                            ></v-text-field>
-                            <v-text-field
-                              label="Pais/Region"
-                              placeholder="Ej: Rusia"
-                              outlined
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="6">
-                            <v-text-field
-                              label="Organismo"
-                              placeholder="Ej: FinTech"
-                              outlined
-                            ></v-text-field>
-                            <v-text-field
-                              label="Fecha"
-                              placeholder="Placeholder"
-                              outlined
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                      <v-col align-self="start" cols="12" class="py-0">
-                        <v-combobox
-                          v-model="modelo"
-                          :filter="filter"
-                          :hide-no-data="!search"
-                          :items="comboItems"
-                          :search-input.sync="search"
-                          hide-selected
-                          label="Search for an option"
-                          multiple
-                          small-chips
-                          solo
-                        >
-                          <template v-slot:no-data>
-                            <v-list-item>
-                              <span class="subheading">Create</span>
-                              <v-chip
-                                :color="`${colors[nonce - 1]} lighten-3`"
-                                label
-                                small
-                              >
-                                {{ search }}
-                              </v-chip>
-                            </v-list-item>
-                          </template>
-                          <template
-                            v-slot:selection="{ attrs, item, parent, selected }"
-                          >
-                            <v-chip
-                              v-if="item === Object(item)"
-                              v-bind="attrs"
-                              :color="`${item.color} lighten-3`"
-                              :input-value="selected"
-                              label
-                              small
-                            >
-                              <span class="pr-2">
-                                {{ item.text }}
-                              </span>
-                              <v-icon small @click="parent.selectItem(item)"
-                                >close</v-icon
-                              >
-                            </v-chip>
-                          </template>
-                          <template v-slot:item="{ index, item }">
-                            <v-text-field
-                              v-if="editing === item"
-                              v-model="editing.text"
-                              autofocus
-                              flat
-                              background-color="transparent"
-                              hide-details
-                              solo
-                              @keyup.enter="edit(index, item)"
-                            ></v-text-field>
-                            <v-chip
-                              v-else
-                              :color="`${item.color} lighten-3`"
-                              dark
-                              label
-                              small
-                            >
-                              {{ item.text }}
-                            </v-chip>
-                            <v-spacer></v-spacer>
-                            <v-list-item-action @click.stop>
-                              <v-btn
-                                icon
-                                @click.stop.prevent="edit(index, item)"
-                              >
-                                <v-icon>{{
-                                  editing !== item ? "mdi-pencil" : "mdi-check"
-                                }}</v-icon>
-                              </v-btn>
-                            </v-list-item-action>
-                          </template>
-                        </v-combobox>
-                      </v-col>
-                      <v-col class="text-center py-0" cols="12">
-                        <h5>Bibliografia</h5>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-autocomplete
-                          v-model="modelo2"
-                          :items="states"
-                          :filter="customFilter"
-                          item-text="name"
-                          label="Nombre"
-                        ></v-autocomplete>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field label="Link"></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </div>
-                </v-expand-transition>
-              </v-col>
-            </v-row>
-          </v-container>
-      </v-card>
-      -->
+    <div v-show="title === 'TRENDING'" v-for="(item, i) in trendingNewsFeedNews" v-bind:key="i">
+      <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+    </div>
+   
+    
     <div class="text-center">
       <v-btn
+        v-show="title !== 'TRENDING'"
         rounded
         color="primary"
         dark
         @click="getnewsLoadMore"
         :disabled="disableButtonLoadMore"
-        >Cargar mas</v-btn
-      >
+        >Cargar mas
+      </v-btn>
+      <v-btn
+        v-show="title === 'TRENDING'"
+        rounded
+        color="primary"
+        dark
+        @click="getTrendingNewsLoadMore"
+        :disabled="disableButtonLoadMoreTrending"
+        >Cargar mas
+      </v-btn>
     </div>
   </div>
 </template>
@@ -371,21 +192,26 @@ export default {
   computed: {
     // mix this into the outer object with the object spread operator
     ...mapState([
-      "credential",
-      "pageNumbersNews",
-      "newsFeedNews",
-      "selectedNews",
-      "disableButtonEdit",
-      "disableButtonLoadMore",
-      "newsHighlighterIndex",
-      "reRenderNews"
+        "credential",
+
+        "newsFeedNews",
+        "trendingNewsFeedNews",
+
+        "selectedNews",
+        "disableButtonEdit",
+
+        "disableButtonLoadMore",
+        "disableButtonLoadMoreTrending",
+
+        "newsHighlighterIndex",
+        "reRenderNews"
     ])
   },
   methods: {
-    ...mapActions(["getnewsLoadMore", "newsHighlighter"]),
+    ...mapActions(["getnewsLoadMore","getTrendingNewsLoadMore"]),
     ...mapMutations({
-      store: "STORE_CREDENTIAL", // map `this.add()` to `this.$store.commit('increment')`
-      updateIndex: "UPDATE_HIGHLIGHTER_INDEX"
+        store: "STORE_CREDENTIAL", // map `this.add()` to `this.$store.commit('increment')`
+        updateIndex: "UPDATE_HIGHLIGHTER_INDEX"
     }),
 
     highlighter(index) {
@@ -407,7 +233,6 @@ export default {
     openEdition(item, index) {
       console.log("abri la edicion");
       this.$emit("open-edition", item);
-      //this.newsHighlighter(index);
       this.highlighter(index);
     },
 
@@ -473,8 +298,12 @@ export default {
   created() {
     console.log(window.sessionStorage.getItem("credential"));
     if (window.sessionStorage.getItem("credential") === null) {
-      window.sessionStorage.setItem("credential", this.credential);
+      window.sessionStorage.setItem("credential", this.credential);   
+
       this.getnewsLoadMore();
+      this.getTrendingNewsLoadMore();
+      
+      
     }
   }
 };

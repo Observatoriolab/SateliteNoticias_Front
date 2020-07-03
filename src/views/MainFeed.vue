@@ -29,25 +29,12 @@
       >
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
-      <v-btn
-        v-show="drawer && edition"
-        contained
-        fab
-        fixed
-        left
-        color="pink"
-        dark
-        large
-        @click.stop="trendingDrawerClose"
-      >
-        <v-icon>mdi-window-minimize</v-icon>
-      </v-btn>
-      <v-col v-if="drawer" :cols="newsFeedColumn" class="text-center mb-4">
+      <v-col v-show="drawer" :cols="newsFeedColumn" class="text-center mb-4">
         <NewsFeed :title="'TRENDING'" v-on:open-edition="openEditionNews"/>
       </v-col>
 
       <v-col
-        v-if="(!drawer && !edition) || (!drawer && edition)"
+        v-show="(!drawer && !edition) || (!drawer && edition)"
         :cols="newsFeedColumn"
         class="text-center mb-4"
       >
@@ -179,7 +166,8 @@ export default {
 
   methods: {
     ...mapMutations({
-      unhighlightNews: "SET_HIGHLIGHTER"
+      unhighlightNews: "SET_HIGHLIGHTER",
+      reRender: "RERENDER_UPDATE"
     }),
     openEditionNews: function(itemData) {
       console.log("paso por aqui");
@@ -197,8 +185,7 @@ export default {
       console.log(this.actualIndex);
       this.newsFeedColumn = 12;
       this.unhighlightNews({ index: this.newsHighlighterIndex, truth: false });
-      //this.$set(this.selected, this.actualIndex, false);
-      //this.$set(this.disabling, this.actualIndex, false);
+      this.reRender()
     },
     trendingDrawerOpen() {
       this.drawer = true;
@@ -208,7 +195,8 @@ export default {
     },
     trendingDrawerClose() {
       this.drawer = false;
-      this.closeEditionChild(false);
+      this.newsFeedColumn = 12;
+
     }
   },
   created() {

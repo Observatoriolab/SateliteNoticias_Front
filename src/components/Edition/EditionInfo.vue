@@ -15,7 +15,7 @@
     <v-col class="px-0 mb-0">
       <div style="float:right">
         <v-btn color="pink" dark @click="allowEditing = !allowEditing">
-          <v-icon>mdi-pencil</v-icon>
+          <v-icon>{{ allowEditing ? "mdi-pencil" : "mdi-pencil-off" }}</v-icon>
         </v-btn>
       </div>
     </v-col>
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      allowEditing: false
+      allowEditing: true
     };
   }
 };

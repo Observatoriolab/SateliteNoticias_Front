@@ -17,21 +17,29 @@ export default new Vuex.Store({
       "https://satelite-de-noticias.herokuapp.com/api/rest-auth/registration/",
 
     endpointNews: "http://satelite-de-noticias.herokuapp.com/api/news/",
+    endpointTrendingNews: "http://satelite-de-noticias.herokuapp.com/api/news/",
 
     credential: null,
     errorUser: false,
     username: "",
+
     pageNumbersNews: [],
+    pageNumbersTrendingNews:[],
+
     newsFeedNews: [],
     trendingNewsFeedNews:[],
+
+    nextPageNews: "",
+    nextPageTrendingNews: "",
+
+    disableButtonLoadMore: false,
+    disableButtonLoadMoreTrending:false,
+
     selectedNews: [],
     disableButtonEdit: [],
-    nextPageNews: "",
-    disableButtonLoadMore: false,
-    lastPageNumber: 0,
 
     newsHighlighterIndex: -1,
-    reRenderNews: 0
+    reRenderNews: false
   },
   getters: {
     error_user_state(state) {
@@ -46,16 +54,26 @@ export default new Vuex.Store({
       (state.credential = null),
       (state.errorUser = false),
       (state.username = ""),
+
       (state.pageNumbersNews = []),
+      (state.pageNumbersTrendingNews = []),
+
       (state.newsFeedNews = []),
+      (state.trendingNewsFeedNews=[]),
+
       (state.selectedNews = []),
       (state.disableButtonEdit = []),
+
       (state.nextPageNews = ""),
+      (state.nextPageTrendingNews = ""),
+
       (state.disableButtonLoadMore = false),
-      (state.lastPageNumber = 0),
+      (state.disableButtonLoadMoreTrending = false),
+
       (state.endpointNews = "http://satelite-de-noticias.herokuapp.com/api/news/"),
+      (state.endpointTrendingNews = "http://satelite-de-noticias.herokuapp.com/api/news/"),
       (state.newsHighlighterIndex= -1),
-      (state.reRenderNews= 0);
+      (state.reRenderNews= false);
       
       sessionStorage.clear();
     },
@@ -71,6 +89,9 @@ export default new Vuex.Store({
     ENDPOINT_NEWS_SET(state, payload) {
       state.endpointNews = payload;
     },
+    ENDPOINT_TRENDING_NEWS_SET(state, payload) {
+      state.endpointTrendingNews = payload;
+    },
     NEWS_SET(state, payload) {
       state.newsFeedNews.push(...payload);
     },
@@ -80,8 +101,14 @@ export default new Vuex.Store({
     NEWS_PAGE_SET(state, payload) {
       state.nextPageNews = payload;
     },
+    TRENDING_NEWS_PAGE_SET(state, payload) {
+      state.nextPageTrendingNews = payload;
+    },
     DISABLE_LOAD_MORE_NEWS(state, payload) {
       state.disableButtonLoadMore = payload;
+    },
+    DISABLE_LOAD_MORE_TRENDING_NEWS(state, payload) {
+      state.disableButtonLoadMoreTrending = payload;
     },
     NEWS_SELECTED_STATES(state) {
       for (let i = 0; i < 4; i++) {
@@ -91,6 +118,9 @@ export default new Vuex.Store({
     },
     NEWS_PAGENUMBERS_ARRAY(state, payload) {
       state.pageNumbersNews.push(payload);
+    },
+    TRENDING_NEWS_PAGENUMBERS_ARRAY(state, payload) {
+      state.pageNumbersTrendingNews.push(payload);
     },
     SET_HIGHLIGHTER(state, payload) {
       console.log(payload);
@@ -103,9 +133,11 @@ export default new Vuex.Store({
       console.log(state.selectedNews);
       console.log(state.disableButtonEdit);
 
-      state.reRenderNews++;
-      //this.$set(state.selectedNews, payload.index, payload.truth);
-      //this.$set(state.disableButtonEdit, payload.index, payload.truth);
+      //state.reRenderNews = !state.reRenderNews
+      
+    },    
+    RERENDER_UPDATE(state) {
+      state.reRenderNews = !state.reRenderNews;
     },
     UPDATE_HIGHLIGHTER_INDEX(state, payload) {
       state.newsHighlighterIndex = payload;
@@ -154,6 +186,32 @@ export default new Vuex.Store({
         is_staff: false
       });
     },
+    async getTrendingNewsLoadMore({ commit, state }) {
+      console.log(state.credential);
+      commit("DISABLE_LOAD_MORE_TRENDING_NEWS", true);
+      if (state.nextPageTrendingNews) {
+        commit("ENDPOINT_TRENDING_NEWS_SET", state.nextPageTrendingNews);
+      }
+      await apiService(
+        state.endpointTrendingNews,
+        "GET",
+        undefined,
+        state.credential
+      ).then(data => {
+        commit("TRENDING_NEWS_SET", data.results);
+        commit("NEWS_SELECTED_STATES");
+        if (data.next) {
+          commit("TRENDING_NEWS_PAGE_SET", data.next);
+          commit("TRENDING_NEWS_PAGENUMBERS_ARRAY", data.next);
+          commit("DISABLE_LOAD_MORE_TRENDING_NEWS", false);
+        } else {
+          commit(
+            "TRENDING_NEWS_SET",
+            state.BASE_URL + state.NEWS_GENERAL_PAGE_URL + "1"
+          );
+        }
+      });
+    },
     async getnewsLoadMore({ commit, state }) {
       console.log(state.credential);
       commit("DISABLE_LOAD_MORE_NEWS", true);
@@ -179,20 +237,8 @@ export default new Vuex.Store({
           );
         }
       });
-    },
-    newsHighlighter({ state, commit }, payload) {
-      console.log(payload);
-      if (state.selectedNews[payload] == false) {
-        commit("SET_HIGHLIGHTER", { index: payload, truth: true });
-      }
-      if (payload !== state.newsHighlighterIndex) {
-        commit("SET_HIGHLIGHTER", {
-          index: state.newsHighlighterIndex,
-          truth: false
-        });
-      }
-      commit("UPDATE_HIGHLIGHTER_INDEX", payload);
     }
+    
   },
   modules: {},
   plugins: [createPersistedState({ storage: window.sessionStorage })]
