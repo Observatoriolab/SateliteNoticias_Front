@@ -27,46 +27,10 @@
           <v-row>
             <v-col cols="12" class="text-center pl-0">
               <v-row class="flex-column ma-0 " justify="center">
-                <v-col class="px-0 text-center">
-                  <v-card-title class="">
-                    {{ editionInfo.title }}
-                  </v-card-title>
-                </v-col>
-
-                <v-col style="margin:0; padding:0" class="px-0 mb-0 mt-0">
-                  <v-row class="px-0 mb-0 mt-0" justify="space-around">
-                    <font>autor</font>
-                    <font>fecha</font>
-                  </v-row>
-                </v-col>
-                <v-col class="px-0 mb-0">
-                  <div style="float:right">
-                    <v-btn
-                      color="pink"
-                      dark
-                      @click="allowEditing = !allowEditing"
-                    >
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                  </div>
-                </v-col>
-
-                <v-col>
-                  <v-textarea
-                    outlined
-                    name="input"
-                    label="Edicion"
-                    :disabled="allowEditing"
-                  ></v-textarea>
-                </v-col>
-
-                <v-col class="px-0 mb-0">
-                  <div class="content" v-html="editionInfo.content"></div>
-                </v-col>
-
+                <EditionInfo :editionInfo="editionInfo" />
                 <v-col cols="12">
                   <v-divider></v-divider>
-                  <Metadata/>
+                  <Metadata />
                 </v-col>
               </v-row>
             </v-col>
@@ -79,14 +43,16 @@
 
 <script>
 import Metadata from "@/components/News/NewsPiece/Metadata.vue";
+import EditionInfo from "./EditionInfo.vue";
 
 export default {
   name: "Edition",
   props: {
     editionInfo: Object
   },
-  components:{
-    Metadata
+  components: {
+    Metadata,
+    EditionInfo
   },
   watch: {
     search() {
