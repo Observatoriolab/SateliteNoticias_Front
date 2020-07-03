@@ -5,8 +5,12 @@
           {{title}}
         </h1>
           <!-- v-for="(item, i) in news" -->
+        <div v-for="(item, i) in newsFeedNews" v-bind:key="i">
+            <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition"/>
+        </div>
+       
 
-        <v-card
+      <!--  <v-card
           class="flex-column mx-auto mt-6 mb-6 elevation-12"
           width="60%"
           v-for="(item, i) in newsFeedNews"
@@ -198,18 +202,20 @@
               </v-col>
             </v-row>
           </v-container>
-        </v-card>
-        <div class="text-center">
-           <v-btn
-            rounded
-            color="primary"
-            dark
-            @click="getnewsLoadMore"
-            :disabled="disableButtonLoadMore"
-            >Cargar mas</v-btn
-          > 
-        </div>
+      </v-card>
+      -->
+      <div class="text-center">
+          <v-btn
+          rounded
+          color="primary"
+          dark
+          @click="getnewsLoadMore"
+          :disabled="disableButtonLoadMore"
+          >Cargar mas</v-btn
+        > 
+      </div>
     </div>
+    
 </template>
 
 <script>
@@ -217,11 +223,14 @@ import { apiService } from "@/common/api.service.js";
 import { mapState } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
-
+import NewsPiece from '@/components/News/NewsPiece/NewsPiece.vue'
 export default {
   name: "NewsFeed",
   props:{
     title: String,
+  },
+  components:{
+    NewsPiece
   },
   watch: {
     search() {
