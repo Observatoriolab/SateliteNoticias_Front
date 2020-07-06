@@ -1,16 +1,16 @@
 <template>
   <v-row class="flex-column ma-0 fill-height text-center" justify="center">
-    <v-col class="px-0 py-0 text-center">
-      <v-card-title style="display:flex; justify-content:center">
+    <v-col class="px-0 py-0 text-start">
+      <v-card-title class="title-font" style="color:blue" >
         {{ news.title }}
       </v-card-title>
     </v-col>
 
-    <v-col class="px-0 py-0">
-      <v-row justify="space-around">
-        <font class="lighto">autor</font>
-        <font>fecha</font>
-      </v-row>
+    <v-col  class="px-4 py-0 text-start">
+        autor
+    </v-col>
+     <v-col class="px-4 py-0 text-start">
+        fecha
     </v-col>
 
     <v-col class="px-0 py-0 mb-0">

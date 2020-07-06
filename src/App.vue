@@ -9,7 +9,6 @@
       app
       color="white"
       elevation="1"
-      height="80"
       width="100vw"
     >
       <AppBar />

@@ -8,8 +8,8 @@
 
     <v-col style="margin:0; padding:0" class="px-0 mb-0 mt-0">
       <v-row class="px-0 mb-0 mt-0" justify="space-around">
-        <font>autor</font>
-        <font>fecha</font>
+        autor
+        fecha
       </v-row>
     </v-col>
     <v-col class="px-0 mb-0">

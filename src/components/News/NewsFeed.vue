@@ -1,14 +1,15 @@
 <template>
   <div>
-    <h1 class="display-2 font-weight-bold mb-7 acolor">
+    <h1 style="color:blue" class="display-2 font-weight-bold mb-7">
       {{ title }}
     </h1>
+      
     <!-- v-for="(item, i) in news" -->
   
     <div v-show="title !== 'TRENDING'" v-for="(item, i) in newsFeedNews" v-bind:key="i">
       <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
     </div>
-    <div v-show="title === 'TRENDING'" v-for="(item, i) in trendingNewsFeedNews" v-bind:key="i">
+    <div v-show="title === 'TRENDING'" v-for="(item, i) in trendingNewsFeedNews" v-bind:key="i*-1-1">
       <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
     </div>
    

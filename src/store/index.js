@@ -184,6 +184,8 @@ export default new Vuex.Store({
         password1: payload.password,
         password2: payload.password2,
         is_staff: false
+      }).then(data => {
+          console.log(data['key'])
       });
     },
     async getTrendingNewsLoadMore({ commit, state }) {
