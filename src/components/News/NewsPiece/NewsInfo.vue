@@ -18,15 +18,22 @@
     </v-col>
 
     <v-col class="px-0 py-0">
+      
       <v-row justify="space-around" align="center">
-        <div class="text-center">
+        <div class="text-center ma-0">                   
           <v-rating
             half-increments
             hover
             ripple
             dense
             v-model="rating"
-          ></v-rating>
+            @input="setRating"
+            :readonly="disabling"
+          >
+          </v-rating>
+            <p v-if="news.relevance_count !== 0">
+              Basada en {{news.relevance_count}} usuarios
+          </p>
         </div>
         <v-btn
           color="blue"
@@ -44,7 +51,7 @@
   </v-row>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "NewsPiece",
@@ -60,9 +67,10 @@ export default {
   },
   data() {
     return {
-      rating: null,
+      rating: 0,
       show: false,
-      reRender:0
+      reRender:0,
+      disabling:false
     };
   },
   watch:{
@@ -75,12 +83,31 @@ export default {
     ...mapState(["disableButtonEdit",'reRenderNews'])
   },
   methods: {
+     ...mapActions(["ratingNews"]),
+  
+     setRating(){
+       
+       const newsInfo = {
+          id: this.news.id,
+          rating: this.rating,
+          truth:true
+       }
+       this.ratingNews(newsInfo)
+       this.disabling = true
+     },
     openEdition(news, indice) {
       this.$emit("edition-opened", news, indice);
     },
     expand() {
       this.show = !this.show;
       this.$emit("metadata-toggled");
+    }
+  },
+  created(){
+    this.rating = this.news.relevance_average
+    if(this.news.user_has_relevanced){
+       this.disabling = true
+
     }
   }
 };

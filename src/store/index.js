@@ -7,17 +7,18 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    BASE_URL: "http://satelite-de-noticias.herokuapp.com",
+    BASE_URL: "https://satelite-de-noticias.herokuapp.com",
     LOGIN_URL: "/api/rest-auth/login/",
     LOGOUT_URL: "/api/rest-auth/logout/",
     USER_NAME_URL: "/api/user/",
     NEWS_FIRST_PAGE_URL: "/api/news/",
     NEWS_GENERAL_PAGE_URL: "/api/news/?page=",
+    NEWS_RATING_URL:"/rating/",
     endpointRegister:
       "https://satelite-de-noticias.herokuapp.com/api/rest-auth/registration/",
 
-    endpointNews: "http://satelite-de-noticias.herokuapp.com/api/news/",
-    endpointTrendingNews: "http://satelite-de-noticias.herokuapp.com/api/news/",
+    endpointNews: "https://satelite-de-noticias.herokuapp.com/api/news/",
+    endpointTrendingNews: "https://satelite-de-noticias.herokuapp.com/api/news/",
 
     credential: null,
     errorUser: false,
@@ -70,8 +71,8 @@ export default new Vuex.Store({
       (state.disableButtonLoadMore = false),
       (state.disableButtonLoadMoreTrending = false),
 
-      (state.endpointNews = "http://satelite-de-noticias.herokuapp.com/api/news/"),
-      (state.endpointTrendingNews = "http://satelite-de-noticias.herokuapp.com/api/news/"),
+      (state.endpointNews = "https://satelite-de-noticias.herokuapp.com/api/news/"),
+      (state.endpointTrendingNews = "https://satelite-de-noticias.herokuapp.com/api/news/"),
       (state.newsHighlighterIndex= -1),
       (state.reRenderNews= false);
       
@@ -152,6 +153,20 @@ export default new Vuex.Store({
         dispatch("setUserInfo", data["key"]);
       });
     },
+    async ratingNews({ state}, payload) {
+      const datos = {
+        localRelevance: payload.rating,
+        type:payload.truth
+      }
+      await apiService(
+        state.BASE_URL + state.NEWS_FIRST_PAGE_URL+ payload.id +state.NEWS_RATING_URL ,
+        "POST",
+        datos,
+        state.credential
+      ).then(data => {
+        console.log(data)
+      });
+    },
     async setUserInfo({ commit, state }, payload) {
       if (payload !== undefined) {
         commit("STORE_CREDENTIAL", payload);
@@ -226,6 +241,7 @@ export default new Vuex.Store({
         undefined,
         state.credential
       ).then(data => {
+        console.log(data)
         commit("NEWS_SET", data.results);
         commit("NEWS_SELECTED_STATES");
         if (data.next) {

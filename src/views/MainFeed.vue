@@ -66,7 +66,7 @@ export default {
     show: [],
     show2: [],
     rating: null,
-    endpoint: "http://satelite-de-noticias.herokuapp.com/api/news/",
+    endpoint: "https://satelite-de-noticias.herokuapp.com/api/news/",
     news: [],
     updateNews: 0,
     updatedNews: [],
