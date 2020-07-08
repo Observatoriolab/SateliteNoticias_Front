@@ -122,47 +122,67 @@
         <v-text-field label="Link"></v-text-field>
       </v-col>
     </v-row>
-     <v-row v-else align="center"> 
-       <v-spacer/>
-      <v-col cols="3">
-                <v-text-field label="Nombre" ></v-text-field>
-
-        </v-col>
-        
-      <v-col cols="5">
-                <v-text-field label="Link" ></v-text-field>
-
-      </v-col>
-      <v-btn class="purple" color="primary" dark >
-                    Agregar
-      </v-btn>
+    <div style="width:100%" justify="center" v-else>
+        <v-row justify="center" align="center"> 
              <v-spacer/>
 
-    </v-row> 
-    <v-row style="overflow-y:auto; overflow-x:hidden; height:30vh">
-        <v-row  v-for="(item,i) in ejes" v-bind:key="i"  align="center"> 
-          <v-spacer/>
               <v-col cols="3">
-                        <v-text-field label="Nombre" ></v-text-field>
-
-                </v-col>
-                
+                  <v-text-field 
+                    label="Nombre"
+                    v-model="bioName"
+                      
+                  ></v-text-field>
+              </v-col>                
               <v-col cols="5">
-                        <v-text-field label="Link" ></v-text-field>
+                  <v-text-field 
+                    label="Link" 
+                    v-model="bioLink"
 
+                  >
+                  </v-text-field>
               </v-col>
-              <v-btn >
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-              <v-btn >
-                <v-icon>mdi-trash-can</v-icon>
-              </v-btn>
-                <v-spacer/>
 
-      </v-row>
+              <v-btn class="purple" color="primary" dark @click="addBibliography">
+                            Agregar
+              </v-btn>
+              <v-spacer/>
+
+        </v-row> 
+        <v-row v-if="bioArray.lenght !== 0"  :class="{ biodrawer: bioArray.lenght !== 0}">
+            <v-row  v-for="(item,i) in bioArray" v-bind:key="i"  align="center"> 
+              <v-spacer/>
+                  <v-col cols="3">
+                        <v-text-field 
+                          label="Nombre" 
+                          v-model="bioArray[i].name"
+                          :disabled="editBioEntry[i]"
+                        
+                        ></v-text-field>
+
+                  </v-col>                    
+                  <v-col cols="5">
+                        <v-text-field 
+                          label="Link" 
+                          v-model="bioArray[i].link"
+                          :disabled="editBioEntry[i]"
+                        ></v-text-field>
+                  </v-col>
+                  <v-btn @click="editItem(i)">
+                     <v-icon>{{
+                    editBioEntry[i] ? "mdi-pencil" : "mdi-check" 
+                      }}</v-icon>
+                  </v-btn>
+                  <v-btn @click="removeItem(i)">
+                    <v-icon>mdi-trash-can</v-icon>
+                  </v-btn>
+                  <v-spacer/>
+
+          </v-row>
+          
+        </v-row>
    
-    </v-row>
-   
+    </div>
+    
  
       
   </v-row>
@@ -225,6 +245,10 @@ export default {
   },
   data() {
     return {
+      editBioEntry:[],
+      bioArray: [],
+      bioName:"",
+      bioLink:'',
       search: null,
       activator: null,
       attach: null,
@@ -292,6 +316,24 @@ export default {
     };
   },
   methods: {
+    addBibliography(){
+      if(this.bioName.length !== 0 && this.bioLink.length !== 0){        
+          const bioEntry = {
+              "name": this.bioName,
+              "link": this.bioLink
+          }
+          this.bioArray.push(bioEntry)
+          this.editBioEntry.push(true)
+          this.bioLink = ""
+          this.bioName = ""
+      }
+    },
+    editItem(index){
+      this.$set(this.editBioEntry,index,!this.editBioEntry[index])
+    },
+    removeItem(index){
+      this.bioArray.splice(index,1)
+    },
     customFilter(item, queryText) {
       const textOne = item.name.toLowerCase();
       const textTwo = item.abbr.toLowerCase();
@@ -331,4 +373,12 @@ export default {
   }
 };
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.biodrawer{
+  overflow-y:auto; 
+  overflow-x:hidden; 
+  height:30vh
+}
+
+
+</style>
