@@ -10,11 +10,17 @@
             label="Eje"
             placeholder="Ej: Pagos digitales"
             outlined
+            v-model="news.axis"
+            :disabled="disableEdit"
+
           ></v-text-field>
           <v-text-field
             label="Pais/Region"
             placeholder="Ej: Rusia"
             outlined
+            v-model="news.country"
+            :disabled="disableEdit"
+
           ></v-text-field>
         </v-col>
         <v-col cols="6">
@@ -22,11 +28,16 @@
             label="Organismo"
             placeholder="Ej: FinTech"
             outlined
+            v-model="news.source"
+            :disabled="disableEdit"
+
           ></v-text-field>
           <v-text-field
             label="Fecha"
             placeholder="Placeholder"
             outlined
+            v-model="news.date"
+            :disabled="disableEdit"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -43,6 +54,8 @@
         multiple
         small-chips
         solo
+                    :disabled="disableEdit"
+
       >
         <template v-slot:no-data>
           <v-list-item>
@@ -95,24 +108,78 @@
     <v-col class="text-center py-0" cols="12">
       <h5>Bibliografia</h5>
     </v-col>
-    <v-col cols="6">
-      <v-autocomplete
-        v-model="modelo2"
-        :items="states"
-        :filter="customFilter"
-        item-text="name"
-        label="Nombre"
-      ></v-autocomplete>
-    </v-col>
-    <v-col cols="6">
-      <v-text-field label="Link"></v-text-field>
-    </v-col>
+    <v-row v-if="disableEdit">
+      <v-col cols="6">
+          <v-autocomplete
+            v-model="modelo2"
+            :items="states"
+            :filter="customFilter"
+            item-text="name"
+            label="Nombre"
+          ></v-autocomplete>
+        </v-col>
+      <v-col cols="6">
+        <v-text-field label="Link"></v-text-field>
+      </v-col>
+    </v-row>
+     <v-row v-else align="center"> 
+       <v-spacer/>
+      <v-col cols="3">
+                <v-text-field label="Nombre" ></v-text-field>
+
+        </v-col>
+        
+      <v-col cols="5">
+                <v-text-field label="Link" ></v-text-field>
+
+      </v-col>
+      <v-btn class="purple" color="primary" dark >
+                    Agregar
+      </v-btn>
+             <v-spacer/>
+
+    </v-row> 
+    <v-row style="overflow-y:auto; overflow-x:hidden; height:30vh">
+        <v-row  v-for="(item,i) in ejes" v-bind:key="i"  align="center"> 
+          <v-spacer/>
+              <v-col cols="3">
+                        <v-text-field label="Nombre" ></v-text-field>
+
+                </v-col>
+                
+              <v-col cols="5">
+                        <v-text-field label="Link" ></v-text-field>
+
+              </v-col>
+              <v-btn >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn >
+                <v-icon>mdi-trash-can</v-icon>
+              </v-btn>
+                <v-spacer/>
+
+      </v-row>
+   
+    </v-row>
+   
+ 
+      
   </v-row>
 </template>
 <script>
 export default {
   name: "Metadata",
-  props: {},
+  props: {
+     news: {
+      type: Object,
+      required: true
+    },
+    disableEdit: {
+      type: Boolean,
+      required: true
+    },
+  },
   watch: {
     search() {
       // Items have already been loaded

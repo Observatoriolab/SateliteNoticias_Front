@@ -6,11 +6,8 @@
       </v-card-title>
     </v-col>
 
-    <v-col  class="px-4 py-0 text-start">
-        autor
-    </v-col>
      <v-col class="px-4 py-0 text-start">
-        fecha
+        {{news.created_at}}
     </v-col>
 
     <v-col class="px-0 py-0 mb-0">

@@ -17,7 +17,7 @@
             <v-expand-transition>
               <div v-show="show">
                 <v-divider></v-divider>
-                <Metadata />
+                <Metadata  :news="news" :disableEdit="true"/>
               </div>
             </v-expand-transition>
           </v-col>

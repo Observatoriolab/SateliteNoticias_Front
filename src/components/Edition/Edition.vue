@@ -30,7 +30,10 @@
                 <EditionInfo :editionInfo="editionInfo" />
                 <v-col cols="12">
                   <v-divider></v-divider>
-                  <Metadata />
+                  <Metadata :news="editionInfo" :disableEdit="false"/>
+                  <v-btn class="purple" color="primary" dark >
+                        Publicar
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-col>
