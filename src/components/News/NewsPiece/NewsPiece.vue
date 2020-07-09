@@ -17,7 +17,7 @@
             <v-expand-transition>
               <div v-show="show">
                 <v-divider></v-divider>
-                <Metadata  :news="news" :disableEdit="true"/>
+                <Metadata :news="news" :disableEdit="true" />
               </div>
             </v-expand-transition>
           </v-col>
@@ -99,9 +99,9 @@ export default {
       editing: null,
       item: null,
       show: false,
-      isLoading:false,
-      count:0,
-      entries:null,
+      isLoading: false,
+      count: 0,
+      entries: null,
       comboItems: [
         { header: "Select an option or create one" },
         {

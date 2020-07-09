@@ -1,13 +1,13 @@
 <template>
   <v-row class="flex-column ma-0 fill-height text-center" justify="center">
     <v-col class="px-0 py-0 text-start">
-      <v-card-title class="title-font" style="color:blue" >
+      <v-card-title class="title-font" style="color:blue">
         {{ news.title }}
       </v-card-title>
     </v-col>
 
-     <v-col class="px-4 py-0 text-start">
-        {{news.created_at}}
+    <v-col class="px-4 py-0 text-start">
+      {{ news.created_at }}
     </v-col>
 
     <v-col class="px-0 py-0 mb-0">
@@ -15,9 +15,8 @@
     </v-col>
 
     <v-col class="px-0 py-0">
-      
       <v-row justify="space-around" align="center">
-        <div class="text-center ma-0">                   
+        <div class="text-center ma-0">
           <v-rating
             half-increments
             hover
@@ -28,8 +27,8 @@
             :readonly="disabling"
           >
           </v-rating>
-            <p v-if="news.relevance_count !== 0">
-              Basada en {{news.relevance_count}} usuarios
+          <p v-if="news.relevance_count !== 0">
+            Basada en {{ news.relevance_count }} usuarios
           </p>
         </div>
         <v-btn
@@ -66,32 +65,31 @@ export default {
     return {
       rating: 0,
       show: false,
-      reRender:0,
-      disabling:false
+      reRender: 0,
+      disabling: false
     };
   },
-  watch:{
+  watch: {
     reRenderNews() {
-      this.reRender++
+      this.reRender++;
     }
   },
   computed: {
     // mix this into the outer object with the object spread operator
-    ...mapState(["disableButtonEdit",'reRenderNews'])
+    ...mapState(["disableButtonEdit", "reRenderNews"])
   },
   methods: {
-     ...mapActions(["ratingNews"]),
-  
-     setRating(){
-       
-       const newsInfo = {
-          id: this.news.id,
-          rating: this.rating,
-          truth:true
-       }
-       this.ratingNews(newsInfo)
-       this.disabling = true
-     },
+    ...mapActions(["ratingNews"]),
+
+    setRating() {
+      const newsInfo = {
+        id: this.news.id,
+        rating: this.rating,
+        truth: true
+      };
+      this.ratingNews(newsInfo);
+      this.disabling = true;
+    },
     openEdition(news, indice) {
       this.$emit("edition-opened", news, indice);
     },
@@ -100,11 +98,10 @@ export default {
       this.$emit("metadata-toggled");
     }
   },
-  created(){
-    this.rating = this.news.relevance_average
-    if(this.news.user_has_relevanced){
-       this.disabling = true
-
+  created() {
+    this.rating = this.news.relevance_average;
+    if (this.news.user_has_relevanced) {
+      this.disabling = true;
     }
   }
 };

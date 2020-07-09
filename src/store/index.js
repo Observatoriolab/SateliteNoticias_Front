@@ -13,34 +13,41 @@ export default new Vuex.Store({
     USER_NAME_URL: "/api/user/",
     NEWS_FIRST_PAGE_URL: "/api/news/",
     NEWS_GENERAL_PAGE_URL: "/api/news/?page=",
-    NEWS_RATING_URL:"/rating/",
+    NEWS_RATING_URL: "/rating/",
     endpointRegister:
       "https://satelite-de-noticias.herokuapp.com/api/rest-auth/registration/",
 
     endpointNews: "https://satelite-de-noticias.herokuapp.com/api/news/",
-    endpointTrendingNews: "https://satelite-de-noticias.herokuapp.com/api/news/",
+    endpointTrendingNews:
+      "https://satelite-de-noticias.herokuapp.com/api/news/",
 
     credential: null,
     errorUser: false,
     username: "",
 
     pageNumbersNews: [],
-    pageNumbersTrendingNews:[],
+    pageNumbersTrendingNews: [],
 
     newsFeedNews: [],
-    trendingNewsFeedNews:[],
+    trendingNewsFeedNews: [],
 
     nextPageNews: "",
     nextPageTrendingNews: "",
 
     disableButtonLoadMore: false,
-    disableButtonLoadMoreTrending:false,
+    disableButtonLoadMoreTrending: false,
 
     selectedNews: [],
     disableButtonEdit: [],
 
     newsHighlighterIndex: -1,
-    reRenderNews: false
+    reRenderNews: false,
+
+    bioArray: [],
+    editionBody: "",
+    secondaryTags: null,
+    singleEdition: null,
+    loadingEdition:false
   },
   getters: {
     error_user_state(state) {
@@ -48,35 +55,37 @@ export default new Vuex.Store({
     },
     username_user_state(state) {
       return state.username;
+    },
+    secondary_tags_state(state) {
+      return state.secondaryTags;
+    },
+    edition_full_state(state) {
+      return state.singleEdition;
     }
   },
   mutations: {
     RESET_ALL(state) {
-      (state.credential = null),
-      (state.errorUser = false),
-      (state.username = ""),
-
-      (state.pageNumbersNews = []),
-      (state.pageNumbersTrendingNews = []),
-
-      (state.newsFeedNews = []),
-      (state.trendingNewsFeedNews=[]),
-
-      (state.selectedNews = []),
-      (state.disableButtonEdit = []),
-
-      (state.nextPageNews = ""),
-      (state.nextPageTrendingNews = ""),
-
-      (state.disableButtonLoadMore = false),
-      (state.disableButtonLoadMoreTrending = false),
-
-      (state.endpointNews = "https://satelite-de-noticias.herokuapp.com/api/news/"),
-      (state.endpointTrendingNews = "https://satelite-de-noticias.herokuapp.com/api/news/"),
-      (state.newsHighlighterIndex= -1),
-      (state.reRenderNews= false);
-      
-      sessionStorage.clear();
+      state.credential = null
+      state.errorUser = false
+      state.username = ""
+      state.pageNumbersNews = []
+      state.pageNumbersTrendingNews = []
+      state.newsFeedNews = []
+      state.trendingNewsFeedNews = []
+      state.selectedNews = []        
+      state.disableButtonEdit = []
+      state.nextPageNews = ""
+      state.nextPageTrendingNews = ""
+      state.disableButtonLoadMore = false
+      state.disableButtonLoadMoreTrending = false
+      state.endpointNews = "https://satelite-de-noticias.herokuapp.com/api/news/"
+      state.endpointTrendingNews = "https://satelite-de-noticias.herokuapp.com/api/news/"
+      state.newsHighlighterIndex = -1
+      state.reRenderNews = false
+      state.bioArray = []
+      state.secondaryTags = null
+      state.editionBody = ""     
+      sessionStorage.clear()
     },
     STORE_CREDENTIAL(state, payload) {
       state.credential = payload;
@@ -135,13 +144,28 @@ export default new Vuex.Store({
       console.log(state.disableButtonEdit);
 
       //state.reRenderNews = !state.reRenderNews
-      
-    },    
+    },
     RERENDER_UPDATE(state) {
       state.reRenderNews = !state.reRenderNews;
     },
     UPDATE_HIGHLIGHTER_INDEX(state, payload) {
       state.newsHighlighterIndex = payload;
+    },
+    SECONDARY_TAGS_SET(state, payload) {
+      state.secondaryTags = payload;
+    },
+    BIBLIOGRAPHY_ARRAY_SET(state, payload) {
+      state.bioArray = payload;
+    },
+    EDITION_BODY_SET(state, payload) {
+      state.editionBody = payload;
+    },
+    EDITION_FULL_SET(state, payload) {
+      state.singleEdition = payload;
+      console.log(state.singleEdition)
+    },
+    LOADING_EDITION_SET(state,payload) {
+      state.loadingEdition = payload;
     }
   },
   actions: {
@@ -153,18 +177,21 @@ export default new Vuex.Store({
         dispatch("setUserInfo", data["key"]);
       });
     },
-    async ratingNews({ state}, payload) {
+    async ratingNews({ state }, payload) {
       const datos = {
         localRelevance: payload.rating,
-        type:payload.truth
-      }
+        type: payload.truth
+      };
       await apiService(
-        state.BASE_URL + state.NEWS_FIRST_PAGE_URL+ payload.id +state.NEWS_RATING_URL ,
+        state.BASE_URL +
+          state.NEWS_FIRST_PAGE_URL +
+          payload.id +
+          state.NEWS_RATING_URL,
         "POST",
         datos,
         state.credential
       ).then(data => {
-        console.log(data)
+        console.log(data);
       });
     },
     async setUserInfo({ commit, state }, payload) {
@@ -200,7 +227,7 @@ export default new Vuex.Store({
         password2: payload.password2,
         is_staff: false
       }).then(data => {
-          console.log(data['key'])
+        console.log(data["key"]);
       });
     },
     async getTrendingNewsLoadMore({ commit, state }) {
@@ -241,7 +268,7 @@ export default new Vuex.Store({
         undefined,
         state.credential
       ).then(data => {
-        console.log(data)
+        console.log(data);
         commit("NEWS_SET", data.results);
         commit("NEWS_SELECTED_STATES");
         if (data.next) {
@@ -255,8 +282,40 @@ export default new Vuex.Store({
           );
         }
       });
+    },
+    async saveEdition({ state }, payload) {
+      console.log("aca va el payload ", payload);
+      await apiService(
+        state.BASE_URL +
+          state.NEWS_FIRST_PAGE_URL +
+          payload.newsSlug +
+          "/edition/",
+        "POST",
+        {
+          title: state.editionBody,
+          body: state.editionBody,
+          tags: payload.tags,
+          bibliography_name: payload.bibliographyNames,
+          bibliography_link: payload.bibliographyLink
+        },
+        state.credential
+      ).then(data => {
+        console.log(data);
+      });
+    },
+    async getEdition({ state, commit }, payload) {
+      console.log("aca va el payload ", payload);
+      await apiService(
+        state.BASE_URL + state.NEWS_FIRST_PAGE_URL + payload + "/editions/",
+        "GET",
+        undefined,
+        state.credential
+      ).then(data => {
+          console.log(data);
+          commit("EDITION_FULL_SET", data.results[0]);
+          commit("LOADING_EDITION_SET",true)
+      });
     }
-    
   },
   modules: {},
   plugins: [createPersistedState({ storage: window.sessionStorage })]

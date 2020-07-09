@@ -12,7 +12,6 @@
             outlined
             v-model="news.axis"
             :disabled="disableEdit"
-
           ></v-text-field>
           <v-text-field
             label="Pais/Region"
@@ -20,7 +19,6 @@
             outlined
             v-model="news.country"
             :disabled="disableEdit"
-
           ></v-text-field>
         </v-col>
         <v-col cols="6">
@@ -30,7 +28,6 @@
             outlined
             v-model="news.source"
             :disabled="disableEdit"
-
           ></v-text-field>
           <v-text-field
             label="Fecha"
@@ -54,8 +51,7 @@
         multiple
         small-chips
         solo
-                    :disabled="disableEdit"
-
+        :disabled="disableEdit"
       >
         <template v-slot:no-data>
           <v-list-item>
@@ -110,95 +106,80 @@
     </v-col>
     <v-row v-if="disableEdit">
       <v-col cols="6">
-          <v-autocomplete
-            v-model="modelo2"
-            :items="states"
-            :filter="customFilter"
-            item-text="name"
-            label="Nombre"
-          ></v-autocomplete>
-        </v-col>
+        <v-autocomplete
+          v-model="modelo2"
+          :items="states"
+          :filter="customFilter"
+          item-text="name"
+          label="Nombre"
+        ></v-autocomplete>
+      </v-col>
       <v-col cols="6">
         <v-text-field label="Link"></v-text-field>
       </v-col>
     </v-row>
     <div style="width:100%" justify="center" v-else>
-        <v-row justify="center" align="center"> 
-             <v-spacer/>
+      <v-row justify="center" align="center">
+        <v-spacer />
 
-              <v-col cols="3">
-                  <v-text-field 
-                    label="Nombre"
-                    v-model="bioName"
-                      
-                  ></v-text-field>
-              </v-col>                
-              <v-col cols="5">
-                  <v-text-field 
-                    label="Link" 
-                    v-model="bioLink"
+        <v-col cols="3">
+          <v-text-field label="Nombre" v-model="bioName"></v-text-field>
+        </v-col>
+        <v-col cols="5">
+          <v-text-field label="Link" v-model="bioLink"> </v-text-field>
+        </v-col>
 
-                  >
-                  </v-text-field>
-              </v-col>
-
-              <v-btn class="purple" color="primary" dark @click="addBibliography">
-                            Agregar
-              </v-btn>
-              <v-spacer/>
-
-        </v-row> 
-        <v-row v-if="bioArray.lenght !== 0"  :class="{ biodrawer: bioArray.lenght !== 0}">
-            <v-row  v-for="(item,i) in bioArray" v-bind:key="i"  align="center"> 
-              <v-spacer/>
-                  <v-col cols="3">
-                        <v-text-field 
-                          label="Nombre" 
-                          v-model="bioArray[i].name"
-                          :disabled="editBioEntry[i]"
-                        
-                        ></v-text-field>
-
-                  </v-col>                    
-                  <v-col cols="5">
-                        <v-text-field 
-                          label="Link" 
-                          v-model="bioArray[i].link"
-                          :disabled="editBioEntry[i]"
-                        ></v-text-field>
-                  </v-col>
-                  <v-btn @click="editItem(i)">
-                     <v-icon>{{
-                    editBioEntry[i] ? "mdi-pencil" : "mdi-check" 
-                      }}</v-icon>
-                  </v-btn>
-                  <v-btn @click="removeItem(i)">
-                    <v-icon>mdi-trash-can</v-icon>
-                  </v-btn>
-                  <v-spacer/>
-
-          </v-row>
-          
+        <v-btn class="purple" color="primary" dark @click="addBibliography">
+          Agregar
+        </v-btn>
+        <v-spacer />
+      </v-row>
+      <v-row
+        v-if="bioArray.lenght !== 0"
+        :class="{ biodrawer: bioArray.lenght !== 0 }"
+      >
+        <v-row v-for="(item, i) in bioArray" v-bind:key="i" align="center">
+          <v-spacer />
+          <v-col cols="3">
+            <v-text-field
+              label="Nombre"
+              v-model="bioArray[i].name"
+              :disabled="editBioEntry[i]"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="5">
+            <v-text-field
+              label="Link"
+              v-model="bioArray[i].link"
+              :disabled="editBioEntry[i]"
+            ></v-text-field>
+          </v-col>
+          <v-btn @click="editItem(i)">
+            <v-icon>{{ editBioEntry[i] ? "mdi-pencil" : "mdi-check" }}</v-icon>
+          </v-btn>
+          <v-btn @click="removeItem(i)">
+            <v-icon>mdi-trash-can</v-icon>
+          </v-btn>
+          <v-spacer />
         </v-row>
-   
+      </v-row>
     </div>
-    
- 
-      
   </v-row>
 </template>
 <script>
+import { mapState, mapMutations, mapGetters } from "vuex";
+
 export default {
   name: "Metadata",
   props: {
-     news: {
+    news: {
       type: Object,
       required: true
     },
     disableEdit: {
       type: Boolean,
       required: true
-    },
+    }
   },
   watch: {
     search() {
@@ -241,14 +222,14 @@ export default {
 
         return v;
       });
+      this.setTags(this.modelo);
     }
   },
   data() {
     return {
-      editBioEntry:[],
-      bioArray: [],
-      bioName:"",
-      bioLink:'',
+      editBioEntry: [],
+      bioName: "",
+      bioLink: "",
       search: null,
       activator: null,
       attach: null,
@@ -256,6 +237,10 @@ export default {
       editing: null,
       item: null,
       show: false,
+      isLoading: false,
+      count: 0,
+      items: [],
+      entries: [],
       comboItems: [
         { header: "Select an option or create one" },
         {
@@ -270,12 +255,7 @@ export default {
       nonce: 1,
       menu: false,
       colors: ["green", "purple", "indigo", "cyan", "teal", "orange"],
-      modelo: [
-        {
-          text: "Foo",
-          color: "blue"
-        }
-      ],
+      modelo: [],
       model: null,
       states: [
         { name: "Florida", abbr: "FL", id: 1 },
@@ -315,24 +295,36 @@ export default {
       date1: new Date().toISOString().substr(0, 10)
     };
   },
+
+  computed: {
+    ...mapState(["bioArray"]),
+    ...mapGetters({
+         editionGet: 'edition_full_state'
+    })
+  },
   methods: {
-    addBibliography(){
-      if(this.bioName.length !== 0 && this.bioLink.length !== 0){        
-          const bioEntry = {
-              "name": this.bioName,
-              "link": this.bioLink
-          }
-          this.bioArray.push(bioEntry)
-          this.editBioEntry.push(true)
-          this.bioLink = ""
-          this.bioName = ""
+    ...mapMutations({
+      setTags: "SECONDARY_TAGS_SET" // map `this.add()` to `this.$store.commit('increment')`
+    }),
+    addBibliography() {
+      console.log(this.modelo);
+      if (this.bioName.length !== 0 && this.bioLink.length !== 0) {
+        const bioEntry = {
+          name: this.bioName,
+          link: this.bioLink
+        };
+        this.bioArray.push(bioEntry);
+        this.editBioEntry.push(true);
+        this.bioLink = "";
+        this.bioName = "";
       }
     },
-    editItem(index){
-      this.$set(this.editBioEntry,index,!this.editBioEntry[index])
+    editItem(index) {
+      this.$set(this.editBioEntry, index, !this.editBioEntry[index]);
     },
-    removeItem(index){
-      this.bioArray.splice(index,1)
+    removeItem(index) {
+      this.bioArray.splice(index, 1);
+      console.log(this.bioArray);
     },
     customFilter(item, queryText) {
       const textOne = item.name.toLowerCase();
@@ -369,16 +361,53 @@ export default {
           .toLowerCase()
           .indexOf(query.toString().toLowerCase()) > -1
       );
+    },
+    tagsFormat() {
+      console.log(Math.random() * this.colors.length)
+      console.log(this.colors[Math.random() * 4])
+      for(let i = 0; i<this.localEdition.tags.length; i++){
+        this.modelo.push({
+          text: this.localEdition.tags[i],
+          color: this.colors[Math.ceil(Math.random() * this.colors.length)]
+        });
+      }
+      this.setTags(this.modelo)
+    },
+    
+    bioFormat() {
+      if (this.localEdition.bibliography_name.length !== 0) {
+        var nameArray = this.localEdition.bibliography_name.split(";");
+        var linkArray = this.localEdition.bibliography_link.split(";");
+ 
+        for (var i = 0; i < nameArray.length - 1; i++) {
+          let bioEntry = {
+            name: nameArray[i],
+            link: linkArray[i]
+          };
+          this.bioArray.push(bioEntry)
+          this.editBioEntry.push(true);
+        }
+      }
+    },
+  },
+  created() {
+     
+    if(!this.disableEdit){        
+      this.localEdition = this.editionGet
+      if(this.localEdition !== undefined){
+            this.tagsFormat()   
+            this.bioFormat()
+            console.log(this.localEdition.tags)
+      }
     }
+    
   }
 };
 </script>
 <style lang="scss">
-.biodrawer{
-  overflow-y:auto; 
-  overflow-x:hidden; 
-  height:30vh
+.biodrawer {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 30vh;
 }
-
-
 </style>

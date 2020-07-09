@@ -55,12 +55,9 @@ export default {
       credential: null
     };
   },
-  methods: {
-    
-  },
-  created(){
+  methods: {},
+  created() {
     document.title = "Satelite de Noticias";
-
   }
 };
 </script>

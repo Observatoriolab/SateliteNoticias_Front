@@ -3,17 +3,24 @@
     <h1 style="color:blue" class="display-2 font-weight-bold mb-7">
       {{ title }}
     </h1>
-      
+
     <!-- v-for="(item, i) in news" -->
-  
-    <div v-show="title !== 'TRENDING'" v-for="(item, i) in newsFeedNews" v-bind:key="i">
+
+    <div
+      v-show="title !== 'TRENDING'"
+      v-for="(item, i) in newsFeedNews"
+      v-bind:key="i"
+    >
       <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
     </div>
-    <div v-show="title === 'TRENDING'" v-for="(item, i) in trendingNewsFeedNews" v-bind:key="i*-1-1">
+    <div
+      v-show="title === 'TRENDING'"
+      v-for="(item, i) in trendingNewsFeedNews"
+      v-bind:key="i * -1 - 1"
+    >
       <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
     </div>
-   
-    
+
     <div class="text-center">
       <v-btn
         v-show="title !== 'TRENDING'"
@@ -193,26 +200,26 @@ export default {
   computed: {
     // mix this into the outer object with the object spread operator
     ...mapState([
-        "credential",
+      "credential",
 
-        "newsFeedNews",
-        "trendingNewsFeedNews",
+      "newsFeedNews",
+      "trendingNewsFeedNews",
 
-        "selectedNews",
-        "disableButtonEdit",
+      "selectedNews",
+      "disableButtonEdit",
 
-        "disableButtonLoadMore",
-        "disableButtonLoadMoreTrending",
+      "disableButtonLoadMore",
+      "disableButtonLoadMoreTrending",
 
-        "newsHighlighterIndex",
-        "reRenderNews"
+      "newsHighlighterIndex",
+      "reRenderNews"
     ])
   },
   methods: {
-    ...mapActions(["getnewsLoadMore","getTrendingNewsLoadMore"]),
+    ...mapActions(["getnewsLoadMore", "getTrendingNewsLoadMore"]),
     ...mapMutations({
-        store: "STORE_CREDENTIAL", // map `this.add()` to `this.$store.commit('increment')`
-        updateIndex: "UPDATE_HIGHLIGHTER_INDEX"
+      store: "STORE_CREDENTIAL", // map `this.add()` to `this.$store.commit('increment')`
+      updateIndex: "UPDATE_HIGHLIGHTER_INDEX"
     }),
 
     highlighter(index) {
@@ -299,12 +306,10 @@ export default {
   created() {
     console.log(window.sessionStorage.getItem("credential"));
     if (window.sessionStorage.getItem("credential") === null) {
-      window.sessionStorage.setItem("credential", this.credential);   
+      window.sessionStorage.setItem("credential", this.credential);
 
       this.getnewsLoadMore();
       this.getTrendingNewsLoadMore();
-      
-      
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div v-if="loadingEdition"
     style="display:flex; flex-flow:column; position:fixed;width:auto; height:85vh"
   >
     <h1 class="display-2 font-weight-bold mb-7">
@@ -27,12 +27,17 @@
           <v-row>
             <v-col cols="12" class="text-center pl-0">
               <v-row class="flex-column ma-0 " justify="center">
-                <EditionInfo :editionInfo="editionInfo" />
+                <EditionInfo :news="news"  />
                 <v-col cols="12">
                   <v-divider></v-divider>
-                  <Metadata :news="editionInfo" :disableEdit="false"/>
-                  <v-btn class="purple" color="primary" dark >
-                        Publicar
+                  <Metadata :news="news" :disableEdit="false"  />
+                  <v-btn
+                    class="purple"
+                    color="primary"
+                    dark
+                    @click="saveEditionPrep"
+                  >
+                    Publicar
                   </v-btn>
                 </v-col>
               </v-row>
@@ -47,11 +52,12 @@
 <script>
 import Metadata from "@/components/News/NewsPiece/Metadata.vue";
 import EditionInfo from "./EditionInfo.vue";
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "Edition",
   props: {
-    editionInfo: Object
+    news: Object
   },
   components: {
     Metadata,
@@ -161,12 +167,73 @@ export default {
         { name: "Nebraska", abbr: "NE", id: 3 },
         { name: "California", abbr: "CA", id: 4 },
         { name: "New York", abbr: "NY", id: 5 }
-      ]
+      ],
+      bibliographyNameInternal: "",
+      bibliographyLinkInternal: "",
+      singleEditionLocal: null
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(["bioArray", "secondaryTags", "singleEdition","loadingEdition"]),
+    ...mapGetters({
+         editionGet: 'edition_full_state'
+    })
+  },
   methods: {
+    ...mapMutations({
+        secondaryTagSet: 'SECONDARY_TAGS_SET',            
+        bioSet: 'BIBLIOGRAPHY_ARRAY_SET',
+        editionBodySet : 'EDITION_BODY_SET',
+        editionFullSet : 'EDITION_FULL_SET',
+        loadingEditionToggle : 'LOADING_EDITION_SET'
+      }
+    ),
+    ...mapActions(["saveEdition", "getEdition"]),
+
+    saveEditionPrep() {
+      //Formatear las bibliografias y tags
+      this.bibliographyNameInternal = "";
+      this.bibliographyLinkInternal = "";
+      this.createStrings();
+      //Se tienen las bibliografias reformateadas
+
+      console.log(this.bioArray);
+      console.log(this.secondaryTags);
+      var tagsAux = [];
+      for (var i = 0; i < this.secondaryTags.length; i++) {
+        this.$set(tagsAux, i, this.secondaryTags[i].text);
+      }
+      const editionData = {
+        newsSlug: this.news.slug,
+        tags: tagsAux,
+        bibliographyNames: this.bibliographyNameInternal,
+        bibliographyLink: this.bibliographyLinkInternal
+      };
+      this.saveEdition(editionData);
+      this.closeEdition();
+
+      console.log(this.bibliographyNameInternal);
+      console.log(this.bibliographyLinkInternal);
+    },
+
+    createStrings() {
+      for (var i = 0; i < this.bioArray.length; i++) {
+        this.bibliographyNameInternal =
+          this.bibliographyNameInternal + this.bioArray[i].name + ";";
+        this.bibliographyLinkInternal =
+          this.bibliographyLinkInternal + this.bioArray[i].link + ";";
+      }
+    },
+
     closeEdition() {
+      
+      this.bibliographyNameInternal = "";
+      this.bibliographyLinkInternal = "";
+      this.secondaryTagSet(null)
+      this.bioSet([])
+      this.editionBodySet("")
+      this.editionFullSet(null)
+      this.loadingEditionToggle(false)
       this.$emit("close-edition-child", false);
     },
     customFilter(item, queryText) {
@@ -194,6 +261,9 @@ export default {
       );
     }
   },
-  created() {}
+  created() {
+      this.getEdition(this.news.slug)
+      
+  }
 };
 </script>

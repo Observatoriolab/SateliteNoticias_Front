@@ -30,7 +30,7 @@
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
       <v-col v-show="drawer" :cols="newsFeedColumn" class="text-center mb-4">
-        <NewsFeed :title="'TRENDING'" v-on:open-edition="openEditionNews"/>
+        <NewsFeed :title="'TRENDING'" v-on:open-edition="openEditionNews" />
       </v-col>
 
       <v-col
@@ -42,7 +42,7 @@
       </v-col>
       <v-col v-if="edition" class="text-center" cols="6">
         <Edition
-          :editionInfo="item"
+          :news="item"
           v-on:close-edition-child="closeEditionChild"
         />
       </v-col>
@@ -161,7 +161,7 @@ export default {
     actualIndex: -1
   }),
   computed: {
-    ...mapState(["newsHighlighterIndex"])
+    ...mapState(["newsHighlighterIndex"]),
   },
 
   methods: {
@@ -176,6 +176,7 @@ export default {
       this.item = itemData;
       this.newsFeedColumn = 6;
       this.edition = true;
+
       console.log(this.edition);
     },
     closeEditionChild(closingDrawer) {
@@ -185,7 +186,7 @@ export default {
       console.log(this.actualIndex);
       this.newsFeedColumn = 12;
       this.unhighlightNews({ index: this.newsHighlighterIndex, truth: false });
-      this.reRender()
+      this.reRender();
     },
     trendingDrawerOpen() {
       this.drawer = true;
@@ -196,11 +197,9 @@ export default {
     trendingDrawerClose() {
       this.drawer = false;
       this.newsFeedColumn = 12;
-
     }
   },
-  created() {
-  }
+  created() {}
 };
 </script>
 <style lang="scss">
