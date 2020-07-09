@@ -106,16 +106,17 @@
     </v-col>
     <v-row v-if="disableEdit">
       <v-col cols="6">
-        <v-autocomplete
-          v-model="modelo2"
-          :items="states"
-          :filter="customFilter"
+        <v-combobox
+          v-model="bioNameSelected"
+          :items="localBioNamesArray"
           item-text="name"
           label="Nombre"
-        ></v-autocomplete>
+        ></v-combobox>
       </v-col>
       <v-col cols="6">
-        <v-text-field label="Link"></v-text-field>
+        <v-text-field label="Link" v-model="assignedLink">
+
+        </v-text-field>
       </v-col>
     </v-row>
     <div style="width:100%" justify="center" v-else>
@@ -223,10 +224,16 @@ export default {
         return v;
       });
       this.setTags(this.modelo);
+    },
+    bioNameSelected(val){
+      this.assignedLink = this.localBioLinksArray[this.localBioNamesArray.indexOf(val)]
     }
   },
   data() {
     return {
+      assignedLink: '',
+      localBioNamesArray:[],
+      localBioLinksArray:[],
       editBioEntry: [],
       bioName: "",
       bioLink: "",
@@ -288,7 +295,7 @@ export default {
         { name: "California", abbr: "CA", id: 4 },
         { name: "New York", abbr: "NY", id: 5 }
       ],
-      modelo2: null,
+      bioNameSelected: null,
       modelo3: null,
       modelo4: null,
       modelo5: null,
@@ -327,13 +334,15 @@ export default {
       console.log(this.bioArray);
     },
     customFilter(item, queryText) {
-      const textOne = item.name.toLowerCase();
-      const textTwo = item.abbr.toLowerCase();
-      const searchText = queryText.toLowerCase();
+      if( item.name !== undefined){
+          
+          const textOne = item.name.toLowerCase();
+          const searchText = queryText.toLowerCase();
 
-      return (
-        textOne.indexOf(searchText) > -1 || textTwo.indexOf(searchText) > -1
-      );
+          return (
+            textOne.indexOf(searchText) > -1 
+          );
+      }
     },
     save() {
       this.hasSaved = true;
@@ -362,43 +371,50 @@ export default {
           .indexOf(query.toString().toLowerCase()) > -1
       );
     },
-    tagsFormat() {
-      console.log(Math.random() * this.colors.length)
-      console.log(this.colors[Math.random() * 4])
-      for(let i = 0; i<this.localEdition.tags.length; i++){
+    tagsFormat(tagsToFormat) {
+      for(let i = 0; i<tagsToFormat.tags.length; i++){
         this.modelo.push({
-          text: this.localEdition.tags[i],
+          text: tagsToFormat.tags[i],
           color: this.colors[Math.ceil(Math.random() * this.colors.length)]
         });
       }
       this.setTags(this.modelo)
     },
     
-    bioFormat() {
-      if (this.localEdition.bibliography_name.length !== 0) {
-        var nameArray = this.localEdition.bibliography_name.split(";");
-        var linkArray = this.localEdition.bibliography_link.split(";");
- 
-        for (var i = 0; i < nameArray.length - 1; i++) {
-          let bioEntry = {
-            name: nameArray[i],
-            link: linkArray[i]
-          };
-          this.bioArray.push(bioEntry)
-          this.editBioEntry.push(true);
+    bioFormat(bioToFormat,conditional) {
+      var nameArray = bioToFormat.bibliography_name.split(";");
+      var linkArray = bioToFormat.bibliography_link.split(";");
+
+      for (var i = 0; i < nameArray.length - 1; i++) {
+        let bioEntry = {
+          name: nameArray[i],
+          link: linkArray[i]
+        };
+        if(!conditional){
+            this.localBioNamesArray.push(nameArray[i])
+            this.localBioLinksArray.push(linkArray[i])
+
         }
+        else{
+            this.bioArray.push(bioEntry)
+        }
+        this.editBioEntry.push(true);
       }
     },
   },
   created() {
-     
-    if(!this.disableEdit){        
-      this.localEdition = this.editionGet
-      if(this.localEdition !== undefined){
-            this.tagsFormat()   
-            this.bioFormat()
-            console.log(this.localEdition.tags)
-      }
+    this.localEdition = this.editionGet
+    console.log(this.disableEdit)
+    console.log(this.localEdition)
+    console.log(this.bioArray)
+
+    if(this.localEdition !== null){
+      this.tagsFormat(this.localEdition)   
+      this.bioFormat(this.localEdition,true)
+    }
+    else{
+      this.tagsFormat(this.news)   
+      this.bioFormat(this.news,false)
     }
     
   }

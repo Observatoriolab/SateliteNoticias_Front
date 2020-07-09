@@ -315,6 +315,24 @@ export default new Vuex.Store({
           commit("EDITION_FULL_SET", data.results[0]);
           commit("LOADING_EDITION_SET",true)
       });
+    },
+    async editNews({ state }, payload) {
+      console.log("aca va el payload ", payload);
+      
+      
+      await apiService(
+        state.BASE_URL + state.NEWS_FIRST_PAGE_URL + payload.newsSlug + "/",
+        "PUT",
+        {
+          tags: payload.tags,
+          bibliography_name: payload.bibliographyNames,
+          bibliography_link: payload.bibliographyLink
+        },
+        state.credential
+      ).then(data => {
+          console.log(data);
+         
+      });
     }
   },
   modules: {},

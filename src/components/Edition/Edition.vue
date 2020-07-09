@@ -188,7 +188,7 @@ export default {
         loadingEditionToggle : 'LOADING_EDITION_SET'
       }
     ),
-    ...mapActions(["saveEdition", "getEdition"]),
+    ...mapActions(["saveEdition", "getEdition","editNews"]),
 
     saveEditionPrep() {
       //Formatear las bibliografias y tags
@@ -210,6 +210,7 @@ export default {
         bibliographyLink: this.bibliographyLinkInternal
       };
       this.saveEdition(editionData);
+      this.editNews(editionData)
       this.closeEdition();
 
       console.log(this.bibliographyNameInternal);
