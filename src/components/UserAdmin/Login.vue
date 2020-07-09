@@ -52,23 +52,21 @@ export default {
   }),
   created() {},
   beforeUpdate() {},
-  computed: {},
-  methods: {
-    ...mapActions(["checkLogin"]),
+  computed: {
     ...mapGetters({
       userErrorState: "error_user_state"
     }),
+  },
+  methods: {
+    ...mapActions(["checkLogin"]),
+    
     async login() {
       const userData = {
         user: this.name,
         pass: this.pass
       };
       await this.checkLogin(userData);
-      if (this.userErrorState) {
-        this.$router.push("/main-feed");
-      } else {
-        alert("El nombre de usuario y/o contraseña no se corresponden");
-      }
+      
     }
   }
 };

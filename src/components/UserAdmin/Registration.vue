@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" justify="center" align="center" class="auth-box login-font">
     <h1>Crea tu propia cuenta en Satelite de Noticias</h1>
-    <v-form>
+    <div>
       <v-text-field
         v-model="name"
         label="Nombre"
@@ -43,13 +43,13 @@
         >Crear cuenta</v-btn
       >
       <p class="mt-2">O <a href="/">Devuelvete al login</a></p>
-    </v-form>
+    </div>
     <br />
   </v-col>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Registration",
@@ -80,7 +80,11 @@ export default {
   }),
   created() {},
   beforeUpdate() {},
-  computed: {},
+  computed: {
+     ...mapGetters({
+         userErrorState: "error_user_state"
+    }),
+  },
   methods: {
     ...mapActions(["registerAccount"]),
     registerAccountLocal() {
@@ -90,8 +94,13 @@ export default {
         password: this.pass,
         password2: this.pass2
       };
-      this.registerAccount(user);
-      this.$router.push({ path: "/" });
+      console.log(this.pass,this.pass2)
+      if(this.pass === this.pass2){
+        this.registerAccount(user);
+      }
+      else{
+        alert('Las contraseñas no corresponden')
+      }
     }
   }
 };

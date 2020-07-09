@@ -7,6 +7,11 @@
     </v-col>
 
     <v-col class="px-4 py-2 text-start">
+      <v-col>
+
+      Por: {{this.localEdition.author}}
+
+      </v-col>
       {{ news.created_at }}
       <div style="float:right">
         <v-btn color="pink" dark @click="allowEditing = !allowEditing">

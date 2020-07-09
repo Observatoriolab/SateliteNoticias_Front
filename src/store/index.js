@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { apiService } from "@/common/api.service.js";
 import createPersistedState from "vuex-persistedstate";
-
+import router from '@/router/index.js'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -84,7 +84,9 @@ export default new Vuex.Store({
       state.reRenderNews = false
       state.bioArray = []
       state.secondaryTags = null
-      state.editionBody = ""     
+      state.editionBody = "",      
+      state.singleEdition = null,
+      state.loadingEdition =false
       sessionStorage.clear()
     },
     STORE_CREDENTIAL(state, payload) {
@@ -197,17 +199,19 @@ export default new Vuex.Store({
     async setUserInfo({ commit, state }, payload) {
       if (payload !== undefined) {
         commit("STORE_CREDENTIAL", payload);
+        const data = await apiService(
+          state.BASE_URL + state.USER_NAME_URL,
+          false,
+          undefined,
+          payload
+        );
+        commit("USERNAME_USER_SET", data["username"]);
+        window.sessionStorage.setItem("username", data["username"]);
+        router.push('/main-feed')
       } else {
-        commit("ERROR_USER_SET");
+        alert('Nombre y/o contraseña incorrectas')
       }
-      const data = await apiService(
-        state.BASE_URL + state.USER_NAME_URL,
-        false,
-        undefined,
-        payload
-      );
-      commit("USERNAME_USER_SET", data["username"]);
-      window.sessionStorage.setItem("username", data["username"]);
+      
     },
     logout({ state, commit }) {
       apiService(
@@ -227,7 +231,14 @@ export default new Vuex.Store({
         password2: payload.password2,
         is_staff: false
       }).then(data => {
-        console.log(data["key"]);
+        console.log(data)
+        if(data["key"] === undefined){         
+           alert('Ya existe un usuario con ese nombre y/o mail')
+        }
+        else{
+           router.push("/");
+        }
+        
       });
     },
     async getTrendingNewsLoadMore({ commit, state }) {
