@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row fluid class="mt-3">
-      <div v-show="!drawer && !edition">
+      <div v-show="!trendingDrawer && !editionDrawer">
         <v-btn
           contained
           fab
@@ -17,7 +17,7 @@
         </v-btn>
       </div>
       <v-btn
-        v-show="drawer && !edition"
+        v-show="trendingDrawer && !editionDrawer"
         contained
         fab
         fixed
@@ -29,18 +29,18 @@
       >
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
-      <v-col v-show="drawer" :cols="newsFeedColumn" class="text-center mb-4">
+      <v-col v-show="trendingDrawer" :cols="mainfeedColumns" class="text-center mb-4">
         <NewsFeed :title="'TRENDING'" v-on:open-edition="openEditionNews" />
       </v-col>
 
       <v-col
-        v-show="(!drawer && !edition) || (!drawer && edition)"
-        :cols="newsFeedColumn"
+        v-show="(!trendingDrawer && !editionDrawer) || (!trendingDrawer && editionDrawer)"
+        :cols="mainfeedColumns"
         class="text-center mb-4"
       >
         <NewsFeed :title="'NEWS FEED'" v-on:open-edition="openEditionNews" />
       </v-col>
-      <v-col v-if="edition" class="text-center" cols="6">
+      <v-col v-if="editionDrawer" class="text-center" cols="6" :key="reRenderKey">
         <Edition
           :news="item"
           v-on:close-edition-child="closeEditionChild"
@@ -158,45 +158,65 @@ export default {
 
     itemIndexPrior2: -1,
     itemIndexActual2: 0,
-    actualIndex: -1
+    actualIndex: -1,
+    reRenderKey:0
   }),
   computed: {
-    ...mapState(["newsHighlighterIndex"]),
+    ...mapState(["newsHighlighterIndex","editionDrawer","trendingDrawer","mainfeedColumns"]),
   },
 
   methods: {
     ...mapMutations({
       unhighlightNews: "SET_HIGHLIGHTER",
-      reRender: "RERENDER_UPDATE"
+      reRender: "RERENDER_UPDATE",
+      editionToggle:"EDITION_TOGGLE_SET" ,
+      trendingToggle: "TRENDING_TOGGLE_SET",
+      columnsToggle:"MAINFEED_COLUMNS_SET",
+      alreadyOpened: "EDITION_ALREADY_OPENED_SET",
+      setNewsAtEdition: "PIECE_OF_NEWS_WHEN_EDITION_SET"
     }),
     openEditionNews: function(itemData) {
       console.log("paso por aqui");
       console.log(itemData);
 
       this.item = itemData;
-      this.newsFeedColumn = 6;
-      this.edition = true;
+      this.setNewsAtEdition(itemData)
+      //this.newsFeedColumn = 6;
+      this.columnsToggle(6)
+      console.log(this.editionDrawer)
+      if(this.editionDrawer){
+          this.reRenderKey++
+      }
+      this.editionToggle(true)
+      //this.editionDrawer = true;
 
-      console.log(this.edition);
+      console.log(this.editionDrawer);
     },
     closeEditionChild(closingDrawer) {
       console.log(closingDrawer);
-      this.edition = closingDrawer;
-      console.log(closingDrawer);
+      //this.editionDrawer = closingDrawer;
+      this.editionToggle(closingDrawer)
+
       console.log(this.actualIndex);
-      this.newsFeedColumn = 12;
+      //this.newsFeedColumn = 12;
+      this.columnsToggle(12)
       this.unhighlightNews({ index: this.newsHighlighterIndex, truth: false });
       this.reRender();
     },
     trendingDrawerOpen() {
-      this.drawer = true;
-      if (this.edition) {
-        this.edition = false;
+      this.trendingToggle(true)
+      //this.trendingDrawer = true;
+      if (this.editionDrawer) {
+        this.editionToggle(false)
+        //this.editionDrawer = false;
       }
     },
     trendingDrawerClose() {
-      this.drawer = false;
-      this.newsFeedColumn = 12;
+      this.trendingToggle(false)
+      //this.trendingDrawer = false;
+      //this.newsFeedColumn = 12;
+      this.columnsToggle(12)
+
     }
   },
   created() {}

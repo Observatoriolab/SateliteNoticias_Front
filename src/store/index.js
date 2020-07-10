@@ -42,12 +42,19 @@ export default new Vuex.Store({
 
     newsHighlighterIndex: -1,
     reRenderNews: false,
+    reRenderMetadata: false,
 
     bioArray: [],
     editionBody: "",
     secondaryTags: null,
     singleEdition: null,
-    loadingEdition:false
+    loadingEdition:false,
+
+    trendingDrawer: false,
+    editionDrawer:false,
+    mainfeedColumns: 12,
+    alreadyOpenedEdition: false,
+    openedNewsAtEdition: null
   },
   getters: {
     error_user_state(state) {
@@ -150,6 +157,9 @@ export default new Vuex.Store({
     RERENDER_UPDATE(state) {
       state.reRenderNews = !state.reRenderNews;
     },
+    RERENDER_METADATA_UPDATE(state) {
+      state.reRenderMetadata = !state.reRenderNews;
+    },
     UPDATE_HIGHLIGHTER_INDEX(state, payload) {
       state.newsHighlighterIndex = payload;
     },
@@ -168,7 +178,23 @@ export default new Vuex.Store({
     },
     LOADING_EDITION_SET(state,payload) {
       state.loadingEdition = payload;
+    },
+    TRENDING_TOGGLE_SET(state,payload) {
+      state.trendingDrawer = payload;
+    },
+    EDITION_TOGGLE_SET(state,payload) {
+      state.editionDrawer = payload;
+    },
+    EDITION_ALREADY_OPENED_SET(state,payload) {
+      state.alreadyOpenedEdition = payload;
+    },
+    MAINFEED_COLUMNS_SET(state,payload) {
+      state.mainfeedColumns = payload;
+    },
+    PIECE_OF_NEWS_WHEN_EDITION_SET(state,payload) {
+      state.openedNewsAtEdition = payload;
     }
+
   },
   actions: {
     async checkLogin({ state, dispatch }, payload) {

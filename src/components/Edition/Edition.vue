@@ -264,6 +264,8 @@ export default {
   },
   created() {
       this.getEdition(this.news.slug)
+      this.bioSet([])
+
       
   }
 };

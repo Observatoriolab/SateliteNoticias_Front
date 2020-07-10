@@ -39,7 +39,7 @@
         </v-col>
       </v-row>
     </v-col>
-    <v-col align-self="start" cols="12" class="py-0">
+    <v-col align-self="start" cols="12" class="py-0" >
       <v-combobox
         v-model="modelo"
         :filter="filter"
@@ -52,6 +52,7 @@
         small-chips
         solo
         :disabled="disableEdit"
+        
       >
         <template v-slot:no-data>
           <v-list-item>
@@ -119,7 +120,7 @@
         </v-text-field>
       </v-col>
     </v-row>
-    <div style="width:100%" justify="center" v-else>
+    <div style="width:100%" justify="center" v-else >
       <v-row justify="center" align="center">
         <v-spacer />
 
@@ -299,19 +300,21 @@ export default {
       modelo3: null,
       modelo4: null,
       modelo5: null,
-      date1: new Date().toISOString().substr(0, 10)
+      date1: new Date().toISOString().substr(0, 10),
     };
   },
 
   computed: {
-    ...mapState(["bioArray"]),
+    ...mapState(["bioArray","secondaryTags", "openedNewsAtEdition"]),
     ...mapGetters({
          editionGet: 'edition_full_state'
     })
   },
   methods: {
     ...mapMutations({
-      setTags: "SECONDARY_TAGS_SET" // map `this.add()` to `this.$store.commit('increment')`
+      setTags: "SECONDARY_TAGS_SET", // map `this.add()` to `this.$store.commit('increment')`      
+      secondaryTagSet: 'SECONDARY_TAGS_SET',            
+      bioSet: 'BIBLIOGRAPHY_ARRAY_SET',
     }),
     addBibliography() {
       console.log(this.modelo);
@@ -372,50 +375,101 @@ export default {
       );
     },
     tagsFormat(tagsToFormat) {
-      for(let i = 0; i<tagsToFormat.tags.length; i++){
-        this.modelo.push({
-          text: tagsToFormat.tags[i],
-          color: this.colors[Math.ceil(Math.random() * this.colors.length)]
-        });
+      console.log(tagsToFormat.slug)
+      console.log(this.secondaryTags)
+      if(tagsToFormat !== null && tagsToFormat.tags !== undefined){
+          console.log(tagsToFormat.tags)
+          for(let i = 0; i<tagsToFormat.tags.length; i++){
+            this.modelo.push({
+              text: tagsToFormat.tags[i],
+              color: this.colors[Math.ceil(Math.random() * this.colors.length)]
+            });
+          }
+          console.log(this.modelo)
+          this.setTags(this.modelo)
       }
-      this.setTags(this.modelo)
+      else{
+        console.log(this.editionGet.tags)
+        console.log(this.editionGet)
+          for(let i = 0; i<this.editionGet.tags.length; i++){
+            this.modelo.push({
+              text: this.editionGet.tags[i],
+              color: this.colors[Math.ceil(Math.random() * this.colors.length)]
+            });
+          }
+          console.log(this.modelo)
+          this.setTags(this.modelo)
+      }
+    
     },
     
-    bioFormat(bioToFormat,conditional) {
-      var nameArray = bioToFormat.bibliography_name.split(";");
-      var linkArray = bioToFormat.bibliography_link.split(";");
+    bioFormat(bioToFormat) {
+      if(bioToFormat !== null && bioToFormat.bibliography_name !== undefined){
+          let nameArray = bioToFormat.bibliography_name.split(";");
+          let linkArray = bioToFormat.bibliography_link.split(";");
 
-      for (var i = 0; i < nameArray.length - 1; i++) {
-        let bioEntry = {
-          name: nameArray[i],
-          link: linkArray[i]
-        };
-        if(!conditional){
-            this.localBioNamesArray.push(nameArray[i])
-            this.localBioLinksArray.push(linkArray[i])
+          for (let i = 0; i < nameArray.length - 1; i++) {
+            let bioEntry = {
+              name: nameArray[i],
+              link: linkArray[i]
+            };
+            if(this.disableEdit){
+                this.localBioNamesArray.push(nameArray[i])
+                this.localBioLinksArray.push(linkArray[i])
 
-        }
-        else{
-            this.bioArray.push(bioEntry)
-        }
-        this.editBioEntry.push(true);
+            }
+            else{
+                this.bioArray.push(bioEntry)
+            }
+            this.editBioEntry.push(true);
+          }
       }
+      else{
+          let nameArray = this.editionGet.bibliography_name.split(";");
+          let linkArray = this.editionGet.bibliography_link.split(";");
+
+          for (let i = 0; i < nameArray.length - 1; i++) {
+            let bioEntry = {
+              name: nameArray[i],
+              link: linkArray[i]
+            };
+            if(this.disableEdit){
+                this.localBioNamesArray.push(nameArray[i])
+                this.localBioLinksArray.push(linkArray[i])
+
+            }
+            else{
+                this.bioArray.push(bioEntry)
+            }
+            this.editBioEntry.push(true);
+          }
+
+      }
+     
     },
   },
   created() {
-    this.localEdition = this.editionGet
-    console.log(this.disableEdit)
-    console.log(this.localEdition)
-    console.log(this.bioArray)
-
-    if(this.localEdition !== null){
-      this.tagsFormat(this.localEdition)   
-      this.bioFormat(this.localEdition,true)
+    console.log(this.news)
+    console.log(this.editionGet)
+    console.log(this.openedNewsAtEdition)
+    console.log(this.editionGet)
+    if(this.editionGet !== undefined && !this.disableEdit){
+      this.tagsFormat(this.editionGet)   
+      this.bioFormat(this.editionGet)
+    }
+    else if(this.disableEdit){
+      this.tagsFormat(this.news)   
+      this.bioFormat(this.news)
     }
     else{
-      this.tagsFormat(this.news)   
-      this.bioFormat(this.news,false)
+
+      this.tagsFormat(this.openedNewsAtEdition)   
+      this.bioFormat(this.openedNewsAtEdition)
     }
+
+    
+
+    
     
   }
 };

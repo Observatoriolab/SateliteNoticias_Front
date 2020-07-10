@@ -212,7 +212,8 @@ export default {
       "disableButtonLoadMoreTrending",
 
       "newsHighlighterIndex",
-      "reRenderNews"
+      "reRenderNews",
+      "pageNumbersNews"
     ])
   },
   methods: {
@@ -304,6 +305,7 @@ export default {
     }
   },
   created() {
+    console.log(this.pageNumbersNews)
     console.log(window.sessionStorage.getItem("credential"));
     if (window.sessionStorage.getItem("credential") === null) {
       window.sessionStorage.setItem("credential", this.credential);

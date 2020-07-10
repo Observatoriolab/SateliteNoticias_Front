@@ -2,14 +2,14 @@
   <div class="">
     <v-col class="px-0 text-center">
       <v-card-title class="">
-        {{ news.title }}
+        {{ openedNewsAtEdition.title }}
       </v-card-title>
     </v-col>
 
     <v-col class="px-4 py-2 text-start">
       <v-col>
 
-      Por: {{this.localEdition.author}}
+      {{this.localEdition ===undefined ? '':'Por: '+ this.localEdition.author}}
 
       </v-col>
       {{ news.created_at }}
@@ -31,12 +31,12 @@
     </v-col>
 
     <v-col class="px-0 mb-0">
-      <div class="content" v-html="news.content"></div>
+      <div class="content" v-html="openedNewsAtEdition.content"></div>
     </v-col>
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters} from "vuex";
+import { mapMutations, mapGetters, mapState} from "vuex";
 export default {
   name: "EditionInfo",
   props: {
@@ -58,6 +58,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["openedNewsAtEdition"]),
     ...mapGetters({
          editionGet: 'edition_full_state'
     })
