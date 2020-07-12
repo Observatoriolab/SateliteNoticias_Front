@@ -2,7 +2,8 @@
   <v-row class="flex-column ma-0 fill-height text-center" justify="center">
     <v-col class="px-0 py-0 text-start">
       <v-card-title class="title-font" style="color:blue">
-        {{ news.title }}
+
+        <a   target="_blank" :href="news.fullContent">{{ news.title }}</a>
       </v-card-title>
     </v-col>
 
