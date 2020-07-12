@@ -5,14 +5,16 @@
     </h1>
 
     <!-- v-for="(item, i) in news" -->
-
-    <div
-      v-show="title !== 'TRENDING'"
-      v-for="(item, i) in newsFeedNews"
-      v-bind:key="i"
-    >
-      <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+    <div v-if="loadingNews"> 
+        <div      
+        v-show="title !== 'TRENDING'"
+        v-for="(item, i) in allNews"
+        v-bind:key="i"
+        >
+        <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+      </div>
     </div>
+    
     <div
       v-show="title === 'TRENDING'"
       v-for="(item, i) in trendingNewsFeedNews"
@@ -49,6 +51,8 @@ import { apiService } from "@/common/api.service.js";
 import { mapState } from "vuex";
 import { mapActions } from "vuex";
 import { mapMutations } from "vuex";
+import { mapGetters } from "vuex";
+
 import NewsPiece from "@/components/News/NewsPiece/NewsPiece.vue";
 export default {
   name: "NewsFeed",
@@ -202,7 +206,6 @@ export default {
     ...mapState([
       "credential",
 
-      "newsFeedNews",
       "trendingNewsFeedNews",
 
       "selectedNews",
@@ -213,11 +216,16 @@ export default {
 
       "newsHighlighterIndex",
       "reRenderNews",
-      "pageNumbersNews"
-    ])
+      "pageNumbersNews",
+      
+      "loadingNews"
+    ]),
+    ...mapGetters({
+        allNews: 'all_mainfeed_news'
+    })
   },
   methods: {
-    ...mapActions(["getnewsLoadMore", "getTrendingNewsLoadMore"]),
+    ...mapActions(["getnewsLoadMore", "getTrendingNewsLoadMore","getUpdatedNews"]),
     ...mapMutations({
       store: "STORE_CREDENTIAL", // map `this.add()` to `this.$store.commit('increment')`
       updateIndex: "UPDATE_HIGHLIGHTER_INDEX"
@@ -305,15 +313,21 @@ export default {
     }
   },
   created() {
+    window.sessionStorage.setItem("credential", this.credential);
+  },
+  beforeMount(){
     console.log(this.pageNumbersNews)
-    console.log(window.sessionStorage.getItem("credential"));
-    if (window.sessionStorage.getItem("credential") === null) {
+    this.getUpdatedNews()
+    /*if (window.sessionStorage.getItem("credential") === null) {
       window.sessionStorage.setItem("credential", this.credential);
 
       this.getnewsLoadMore();
       this.getTrendingNewsLoadMore();
-    }
-  }
+    }*/
+
+  },
+  destroyed(){
+  },
 };
 </script>
 <style lang="scss">

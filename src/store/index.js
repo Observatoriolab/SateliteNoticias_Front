@@ -25,10 +25,12 @@ export default new Vuex.Store({
     errorUser: false,
     username: "",
 
-    pageNumbersNews: [],
+    pageNumbersNews: ["https://satelite-de-noticias.herokuapp.com/api/news/"],
     pageNumbersTrendingNews: [],
 
     newsFeedNews: [],
+    updatedNews:[],
+    loadingNews: false,
     trendingNewsFeedNews: [],
 
     nextPageNews: "",
@@ -37,8 +39,8 @@ export default new Vuex.Store({
     disableButtonLoadMore: false,
     disableButtonLoadMoreTrending: false,
 
-    selectedNews: [],
-    disableButtonEdit: [],
+    selectedNews: [false,false,false,false],
+    disableButtonEdit: [false,false,false,false],
 
     newsHighlighterIndex: -1,
     reRenderNews: false,
@@ -68,6 +70,9 @@ export default new Vuex.Store({
     },
     edition_full_state(state) {
       return state.singleEdition;
+    },
+    all_mainfeed_news(state){
+      return state.newsFeedNews
     }
   },
   mutations: {
@@ -113,6 +118,17 @@ export default new Vuex.Store({
     },
     NEWS_SET(state, payload) {
       state.newsFeedNews.push(...payload);
+    },
+    UPDATED_NEWS_SET(state) {
+      state.updatedNews.splice(0);
+    },
+    UPDATED_NEWS_PUSH(state,payload){
+      state.updatedNews.push(...payload)
+    },
+    NEW_NEWS_SET(state) {
+      for (var i = 0; i < state.updatedNews.length; i++) {
+        Vue.set(state.newsFeedNews, i, state.updatedNews[i]);
+      }
     },
     TRENDING_NEWS_SET(state, payload) {
       state.trendingNewsFeedNews.push(...payload);
@@ -193,6 +209,9 @@ export default new Vuex.Store({
     },
     PIECE_OF_NEWS_WHEN_EDITION_SET(state,payload) {
       state.openedNewsAtEdition = payload;
+    },
+    LOADING_NEWS_TOGGLE(state,payload) {
+      state.loadingNews = payload;
     }
 
   },
@@ -298,6 +317,7 @@ export default new Vuex.Store({
       commit("DISABLE_LOAD_MORE_NEWS", true);
       if (state.nextPageNews) {
         commit("ENDPOINT_NEWS_SET", state.nextPageNews);
+        commit("NEWS_PAGENUMBERS_ARRAY",  state.nextPageNews);
       }
       await apiService(
         state.endpointNews,
@@ -310,7 +330,6 @@ export default new Vuex.Store({
         commit("NEWS_SELECTED_STATES");
         if (data.next) {
           commit("NEWS_PAGE_SET", data.next);
-          commit("NEWS_PAGENUMBERS_ARRAY", data.next);
           commit("DISABLE_LOAD_MORE_NEWS", false);
         } else {
           commit(
@@ -370,6 +389,33 @@ export default new Vuex.Store({
           console.log(data);
          
       });
+    },
+    async delayedNews({state,commit},payload) {
+      await apiService(payload, "GET", undefined, state.credential).then(data => {
+        commit('UPDATED_NEWS_PUSH',data.results)
+        if (data.next) {
+          commit("NEWS_PAGE_SET", data.next);
+        } else {
+          commit(
+            "NEWS_PAGE_SET",
+            state.BASE_URL + state.NEWS_GENERAL_PAGE_URL + "1"
+          );
+        }
+      });
+    },
+    async getUpdatedNews({state,dispatch,commit}) {
+      commit('LOADING_NEWS_TOGGLE',false)
+
+      for (const [idx, url] of state.pageNumbersNews.entries()) {
+        console.log(idx);
+        await dispatch("delayedNews",url);
+      }
+      //Se tienen las noticias nuevas y se debe ser cuales son las diferencias
+      //Podrian haber diferencias en cuanto al metadata (secondaryTags, bibliografia) y el rating
+      commit('NEW_NEWS_SET')
+      commit('LOADING_NEWS_TOGGLE',true)
+
+      commit('UPDATED_NEWS_SET')
     }
   },
   modules: {},
