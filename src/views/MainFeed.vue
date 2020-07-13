@@ -53,7 +53,7 @@
 <script>
 import NewsFeed from "@/components/News/NewsFeed.vue";
 import Edition from "@/components/Edition/Edition.vue";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "MainFeed",
   components: {
@@ -173,9 +173,14 @@ export default {
       trendingToggle: "TRENDING_TOGGLE_SET",
       columnsToggle:"MAINFEED_COLUMNS_SET",
       alreadyOpened: "EDITION_ALREADY_OPENED_SET",
-      setNewsAtEdition: "PIECE_OF_NEWS_WHEN_EDITION_SET"
+      setNewsAtEdition: "PIECE_OF_NEWS_WHEN_EDITION_SET",
     }),
+    ...mapActions(["getEdition"]),
     openEditionNews: function(itemData) {
+      if(this.editionDrawer){
+        this.getEdition(itemData.slug)
+        this.editionToggle(false)
+      }
       console.log("paso por aqui");
       console.log(itemData);
 
@@ -184,9 +189,7 @@ export default {
       //this.newsFeedColumn = 6;
       this.columnsToggle(6)
       console.log(this.editionDrawer)
-      if(this.editionDrawer){
-          this.reRenderKey++
-      }
+      
       this.editionToggle(true)
       //this.editionDrawer = true;
 

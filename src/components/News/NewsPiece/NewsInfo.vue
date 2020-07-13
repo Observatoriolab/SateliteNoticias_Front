@@ -99,7 +99,7 @@ export default {
       this.$emit("metadata-toggled");
     }
   },
-  created() {
+  beforeMount() {
     this.rating = this.news.relevance_average;
     if (this.news.user_has_relevanced) {
       this.disabling = true;

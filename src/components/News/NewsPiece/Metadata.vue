@@ -184,6 +184,17 @@ export default {
     }
   },
   watch: {
+
+    newMetadata(){
+      console.log("dfsdsffds")
+      if(this.disableEdit){
+        this.localBioNamesArray.splice(0)
+        this.localBioLinksArray.splice(0)
+        this.modelo.splice(0)
+        this.bioFormat(this.newMetadata.bibliography)
+        this.tagsFormat(this.newMetadata)
+      }
+    },    
     search() {
       // Items have already been loaded
       if (this.items.length > 0) return;
@@ -307,7 +318,9 @@ export default {
   computed: {
     ...mapState(["bioArray","secondaryTags", "openedNewsAtEdition"]),
     ...mapGetters({
-         editionGet: 'edition_full_state'
+        editionGet: 'edition_full_state',
+        newMetadata: 'metadata_news'
+
     })
   },
   methods: {
@@ -375,18 +388,19 @@ export default {
       );
     },
     tagsFormat(tagsToFormat) {
-      console.log(tagsToFormat.slug)
-      console.log(this.secondaryTags)
-      if(tagsToFormat !== null && tagsToFormat.tags !== undefined){
-          console.log(tagsToFormat.tags)
-          for(let i = 0; i<tagsToFormat.tags.length; i++){
-            this.modelo.push({
-              text: tagsToFormat.tags[i],
-              color: this.colors[Math.ceil(Math.random() * this.colors.length)]
-            });
+      if(tagsToFormat !== null ){
+          if( tagsToFormat.tags !== undefined){
+              console.log(tagsToFormat.tags)
+              for(let i = 0; i<tagsToFormat.tags.length; i++){
+                this.modelo.push({
+                  text: tagsToFormat.tags[i],
+                  color: this.colors[Math.ceil(Math.random() * this.colors.length)]
+                });
+              }
+              console.log(this.modelo)
+              this.setTags(this.modelo)
           }
-          console.log(this.modelo)
-          this.setTags(this.modelo)
+          
       }
       else{
         console.log(this.editionGet.tags)
@@ -420,8 +434,8 @@ export default {
             }
             else{
                 this.bioArray.push(bioEntry)
+                this.editBioEntry.push(true);
             }
-            this.editBioEntry.push(true);
           }
       }
       else{
@@ -463,8 +477,8 @@ export default {
     }
     else{
 
-      this.tagsFormat(this.openedNewsAtEdition)   
-      this.bioFormat(this.openedNewsAtEdition)
+      this.tagsFormat(this.news)   
+      this.bioFormat(this.news)
     }
 
     

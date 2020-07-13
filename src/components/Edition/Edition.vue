@@ -64,110 +64,10 @@ export default {
     EditionInfo
   },
   watch: {
-    search() {
-      // Items have already been loaded
-      if (this.items.length > 0) return;
-
-      // Items have already been requested
-      if (this.isLoading) return;
-
-      this.isLoading = true;
-
-      // Lazily load input items
-      fetch("https://api.publicapis.org/entries")
-        .then(res => res.json())
-        .then(res => {
-          const { count, entries } = res;
-          this.count = count;
-          this.entries = entries;
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => (this.isLoading = false));
-    },
-
-    modelo(val, prev) {
-      if (val.length === prev.length) return;
-
-      this.modelo = val.map(v => {
-        if (typeof v === "string") {
-          v = {
-            text: v,
-            color: this.colors[this.nonce - 1]
-          };
-
-          this.comboItems.push(v);
-
-          this.nonce++;
-        }
-
-        return v;
-      });
-    }
+    
   },
   data() {
     return {
-      colors: ["green", "purple", "indigo", "cyan", "teal", "orange"],
-
-      modelo: [
-        {
-          text: "Foo",
-          color: "blue"
-        }
-      ],
-      comboItems: [
-        { header: "Select an option or create one" },
-        {
-          text: "Foo",
-          color: "blue"
-        },
-        {
-          text: "Bar",
-          color: "red"
-        }
-      ],
-      nonce: 1,
-      search: null,
-      menu2: false,
-      allowEditing: false,
-      modelo2: null,
-      modelo3: null,
-      modelo4: null,
-      modelo5: null,
-      date1: new Date().toISOString().substr(0, 10),
-      showEdition: false,
-      states: [
-        { name: "Florida", abbr: "FL", id: 1 },
-        { name: "Georgia", abbr: "GA", id: 2 },
-        { name: "Nebraska", abbr: "NE", id: 3 },
-        { name: "California", abbr: "CA", id: 4 },
-        { name: "New York", abbr: "NY", id: 5 }
-      ],
-      ejes: [
-        { name: "Big Data", abbr: "BD", id: 1 },
-        { name: "Pagos Digitales", abbr: "PD", id: 2 },
-        { name: "CBCD", abbr: "CBCD", id: 3 },
-        { name: "Criptoactivos", abbr: "CA", id: 4 },
-        { name: "Banca abierta", abbr: "OB", id: 5 },
-        { name: "Ciberseguridad", abbr: "CS", id: 5 },
-        { name: "Monitoreo Tecnologico", abbr: "MT", id: 5 },
-        { name: "DLT", abbr: "DLT", id: 5 }
-      ],
-      regiones: [
-        { name: "Florida", abbr: "FL", id: 1 },
-        { name: "Georgia", abbr: "GA", id: 2 },
-        { name: "Nebraska", abbr: "NE", id: 3 },
-        { name: "California", abbr: "CA", id: 4 },
-        { name: "New York", abbr: "NY", id: 5 }
-      ],
-      organismos: [
-        { name: "Florida", abbr: "FL", id: 1 },
-        { name: "Georgia", abbr: "GA", id: 2 },
-        { name: "Nebraska", abbr: "NE", id: 3 },
-        { name: "California", abbr: "CA", id: 4 },
-        { name: "New York", abbr: "NY", id: 5 }
-      ],
       bibliographyNameInternal: "",
       bibliographyLinkInternal: "",
       singleEditionLocal: null
@@ -262,9 +162,10 @@ export default {
       );
     }
   },
-  created() {
-      this.getEdition(this.news.slug)
+  beforeMount() {
       this.bioSet([])
+      this.getEdition(this.news.slug)
+      
 
       
   }

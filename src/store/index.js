@@ -49,14 +49,15 @@ export default new Vuex.Store({
     bioArray: [],
     editionBody: "",
     secondaryTags: null,
-    singleEdition: null,
+    singleEdition: undefined,
     loadingEdition:false,
 
     trendingDrawer: false,
     editionDrawer:false,
     mainfeedColumns: 12,
     alreadyOpenedEdition: false,
-    openedNewsAtEdition: null
+    openedNewsAtEdition: null,
+    newMetadata:null
   },
   getters: {
     error_user_state(state) {
@@ -73,6 +74,9 @@ export default new Vuex.Store({
     },
     all_mainfeed_news(state){
       return state.newsFeedNews
+    },
+    metadata_news(state){
+      return state.newMetadata 
     }
   },
   mutations: {
@@ -212,6 +216,9 @@ export default new Vuex.Store({
     },
     LOADING_NEWS_TOGGLE(state,payload) {
       state.loadingNews = payload;
+    },
+    METADATA_NEWS_UPDATE(state,payload) {
+      state.newMetadata = payload
     }
 
   },
@@ -372,7 +379,7 @@ export default new Vuex.Store({
           commit("LOADING_EDITION_SET",true)
       });
     },
-    async editNews({ state }, payload) {
+    async editNews({ state,commit }, payload) {
       console.log("aca va el payload ", payload);
       
       
@@ -387,7 +394,10 @@ export default new Vuex.Store({
         state.credential
       ).then(data => {
           console.log(data);
-         
+          commit("METADATA_NEWS_UPDATE", {
+            tags: payload.tags,
+            bibliography: {bibliography_name: payload.bibliographyNames, bibliography_link: payload.bibliographyLink  },
+          })
       });
     },
     async delayedNews({state,commit},payload) {

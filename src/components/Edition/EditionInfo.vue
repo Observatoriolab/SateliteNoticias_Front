@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div v-if="loading" class="">
     <v-col class="px-0 text-center">
       <v-card-title class="">
         {{ openedNewsAtEdition.title }}
@@ -9,7 +9,7 @@
     <v-col class="px-4 py-2 text-start">
       <v-col>
 
-      {{this.localEdition ===undefined ? '':'Por: '+ this.localEdition.author}}
+      {{this.localEdition === undefined || this.localEdition === null ? '':'Por: '+ this.localEdition.author}}
 
       </v-col>
       {{ news.created_at }}
@@ -54,7 +54,8 @@ export default {
     return {
       allowEditing: true,
       editionText: "",
-      localEdition: null
+      localEdition: null,
+      loading: false
     };
   },
   computed: {
@@ -69,11 +70,14 @@ export default {
     })
   },
   created() {
+    console.log("Por aqui pasan las noticias")
+  
     this.localEdition = this.editionGet
-    if(this.localEdition !== undefined){
+    if(this.localEdition !== undefined && this.localEdition !== null){
          this.editionText = this.localEdition.body;
 
     }
+    this.loading = true
   }
 };
 </script>
