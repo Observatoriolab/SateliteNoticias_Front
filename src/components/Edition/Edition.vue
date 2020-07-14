@@ -74,7 +74,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["bioArray", "secondaryTags", "singleEdition","loadingEdition"]),
+    ...mapState(["bioArray", "secondaryTags", "singleEdition","loadingEdition","username"]),
     ...mapGetters({
          editionGet: 'edition_full_state'
     })
@@ -103,8 +103,13 @@ export default {
       for (var i = 0; i < this.secondaryTags.length; i++) {
         this.$set(tagsAux, i, this.secondaryTags[i].text);
       }
+      let newAuthor = this.news.authors + ';' + this.username
+      let newCounter = this.news.author_count + 1
+      console.log(newAuthor)
       const editionData = {
         newsSlug: this.news.slug,
+        accumulatedAuthors: newAuthor,
+        accumulatedAuthor_count: newCounter,
         tags: tagsAux,
         bibliographyNames: this.bibliographyNameInternal,
         bibliographyLink: this.bibliographyLinkInternal
@@ -112,6 +117,7 @@ export default {
       this.saveEdition(editionData);
       this.editNews(editionData)
       this.closeEdition();
+      console.log(newAuthor)
 
       console.log(this.bibliographyNameInternal);
       console.log(this.bibliographyLinkInternal);

@@ -7,22 +7,23 @@
     <!-- v-for="(item, i) in news" -->
     <div v-if="loadingNews"> 
         <div      
-        v-show="title !== 'TRENDING'"
-        v-for="(item, i) in allNews"
-        v-bind:key="i"
+          v-show="title !== 'TRENDING'"
+          v-for="(item, i) in allNews"
+          v-bind:key="i"
         >
-        <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
-      </div>
+           <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+        </div>
     </div>
-    
-    <div
-      v-show="title === 'TRENDING'"
-      v-for="(item, i) in trendingNewsFeedNews"
-      v-bind:key="i * -1 - 1"
-    >
-      <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+    <div v-if="loadingTrendingNews">
+        <div
+          v-show="title === 'TRENDING'"
+          v-for="(item, i) in trendingNewsFeedNews"
+          v-bind:key="i * -1 - 1"
+        >
+          <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+        </div>
     </div>
-
+   
     <div class="text-center">
       <v-btn
         v-show="title !== 'TRENDING'"
@@ -218,14 +219,15 @@ export default {
       "reRenderNews",
       "pageNumbersNews",
       
-      "loadingNews"
+      "loadingNews",
+      "loadingTrendingNews"
     ]),
     ...mapGetters({
         allNews: 'all_mainfeed_news'
     })
   },
   methods: {
-    ...mapActions(["getnewsLoadMore", "getTrendingNewsLoadMore","getUpdatedNews"]),
+    ...mapActions(["getnewsLoadMore", "getTrendingNewsLoadMore","getUpdatedNews","getUpdatedTrendingNews"]),
     ...mapMutations({
       store: "STORE_CREDENTIAL", // map `this.add()` to `this.$store.commit('increment')`
       updateIndex: "UPDATE_HIGHLIGHTER_INDEX"
@@ -314,10 +316,18 @@ export default {
   },
   created() {
     window.sessionStorage.setItem("credential", this.credential);
+    console.log(this.pageNumbersNews)
+    if(this.title === 'NEWS FEED'){
+        this.getUpdatedNews()
+
+    }
+    else{
+        this.getUpdatedTrendingNews()
+
+    }
   },
   beforeMount(){
-    console.log(this.pageNumbersNews)
-    this.getUpdatedNews()
+    
     /*if (window.sessionStorage.getItem("credential") === null) {
       window.sessionStorage.setItem("credential", this.credential);
 

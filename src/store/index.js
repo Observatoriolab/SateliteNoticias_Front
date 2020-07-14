@@ -13,25 +13,30 @@ export default new Vuex.Store({
     USER_NAME_URL: "/api/user/",
     NEWS_FIRST_PAGE_URL: "/api/news/",
     NEWS_GENERAL_PAGE_URL: "/api/news/?page=",
+    TRENDING_NEWS_GENERAL_PAGE_URL: "/api/news/trending/new/?page=",
+
     NEWS_RATING_URL: "/rating/",
     endpointRegister:
       "https://satelite-de-noticias.herokuapp.com/api/rest-auth/registration/",
 
     endpointNews: "https://satelite-de-noticias.herokuapp.com/api/news/",
     endpointTrendingNews:
-      "https://satelite-de-noticias.herokuapp.com/api/news/",
+      "https://satelite-de-noticias.herokuapp.com/api/news/trending/new/",
 
     credential: null,
     errorUser: false,
     username: "",
 
     pageNumbersNews: ["https://satelite-de-noticias.herokuapp.com/api/news/"],
-    pageNumbersTrendingNews: [],
+    pageNumbersTrendingNews: ["https://satelite-de-noticias.herokuapp.com/api/news/trending/new/"],
 
     newsFeedNews: [],
     updatedNews:[],
     loadingNews: false,
+
     trendingNewsFeedNews: [],
+    updatedTrendingNews:[],
+    loadingTrendingNews: false,
 
     nextPageNews: "",
     nextPageTrendingNews: "",
@@ -95,7 +100,7 @@ export default new Vuex.Store({
       state.disableButtonLoadMore = false
       state.disableButtonLoadMoreTrending = false
       state.endpointNews = "https://satelite-de-noticias.herokuapp.com/api/news/"
-      state.endpointTrendingNews = "https://satelite-de-noticias.herokuapp.com/api/news/"
+      state.endpointTrendingNews = "https://satelite-de-noticias.herokuapp.com/api/news/trending/new/"
       state.newsHighlighterIndex = -1
       state.reRenderNews = false
       state.bioArray = []
@@ -126,12 +131,23 @@ export default new Vuex.Store({
     UPDATED_NEWS_SET(state) {
       state.updatedNews.splice(0);
     },
+    UPDATED_TRENDING_NEWS_SET(state) {
+      state.updatedTrendingNews.splice(0);
+    },
     UPDATED_NEWS_PUSH(state,payload){
       state.updatedNews.push(...payload)
+    },
+    UPDATED_TRENDING_NEWS_PUSH(state,payload){
+      state.updatedTrendingNews.push(...payload)
     },
     NEW_NEWS_SET(state) {
       for (var i = 0; i < state.updatedNews.length; i++) {
         Vue.set(state.newsFeedNews, i, state.updatedNews[i]);
+      }
+    },
+    NEW_TRENDING_NEWS_SET(state) {
+      for (var i = 0; i < state.updatedTrendingNews.length; i++) {
+        Vue.set(state.trendingNewsFeedNews, i, state.updatedTrendingNews[i]);
       }
     },
     TRENDING_NEWS_SET(state, payload) {
@@ -216,6 +232,9 @@ export default new Vuex.Store({
     },
     LOADING_NEWS_TOGGLE(state,payload) {
       state.loadingNews = payload;
+    },
+    LOADING_TRENDING_NEWS_TOGGLE(state,payload) {
+      state.loadingTrendingNews = payload;
     },
     METADATA_NEWS_UPDATE(state,payload) {
       state.newMetadata = payload
@@ -387,6 +406,8 @@ export default new Vuex.Store({
         state.BASE_URL + state.NEWS_FIRST_PAGE_URL + payload.newsSlug + "/",
         "PUT",
         {
+          authors: payload.accumulatedAuthors,
+          author_count:payload.accumulatedAuthor_count,
           tags: payload.tags,
           bibliography_name: payload.bibliographyNames,
           bibliography_link: payload.bibliographyLink
@@ -413,6 +434,19 @@ export default new Vuex.Store({
         }
       });
     },
+    async delayedTrendingNews({state,commit},payload) {
+      await apiService(payload, "GET", undefined, state.credential).then(data => {
+        commit('UPDATED_TRENDING_NEWS_PUSH',data.results)
+        if (data.next) {
+          commit("TRENDING_NEWS_PAGE_SET", data.next);
+        } else {
+          commit(
+            "TRENDING_NEWS_PAGE_SET",
+            state.BASE_URL + state.TRENDING_NEWS_GENERAL_PAGE_URL + "1"
+          );
+        }
+      });
+    },
     async getUpdatedNews({state,dispatch,commit}) {
       commit('LOADING_NEWS_TOGGLE',false)
 
@@ -426,6 +460,19 @@ export default new Vuex.Store({
       commit('LOADING_NEWS_TOGGLE',true)
 
       commit('UPDATED_NEWS_SET')
+    },
+    async getUpdatedTrendingNews({state,dispatch,commit}){
+      commit('LOADING_TRENDING_NEWS_TOGGLE',false)
+      for (const [idx, url] of state.pageNumbersTrendingNews.entries()) {
+        console.log(idx);
+        await dispatch("delayedTrendingNews",url);
+      }
+      commit('NEW_TRENDING_NEWS_SET')
+      commit('LOADING_TRENDING_NEWS_TOGGLE',true)
+
+      commit('UPDATED_TRENDING_NEWS_SET')
+
+      
     }
   },
   modules: {},
