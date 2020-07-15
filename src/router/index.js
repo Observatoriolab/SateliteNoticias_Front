@@ -20,7 +20,16 @@ const routes = [
   {
     path: "/main-feed",
     name: "MainFeed",
-    component: MainFeed
+    component: MainFeed,
+    beforeEnter: (to, from, next) => {
+      if (window.sessionStorage.getItem('username')) {
+        next();
+        return;
+      }
+      else{
+        router.push("/")
+      }
+    }
   }
 ];
 

@@ -65,6 +65,9 @@ export default new Vuex.Store({
     newMetadata:null
   },
   getters: {
+    edition_toggle_state(state) {
+      return state.editionDrawer;
+    },
     error_user_state(state) {
       return state.errorUser;
     },
@@ -82,6 +85,9 @@ export default new Vuex.Store({
     },
     metadata_news(state){
       return state.newMetadata 
+    },
+    edition_body_state(state){
+      return state.editionBody
     }
   },
   mutations: {
@@ -382,7 +388,7 @@ export default new Vuex.Store({
         },
         state.credential
       ).then(data => {
-        console.log(data);
+        console.log(data.length);
       });
     },
     async getEdition({ state, commit }, payload) {

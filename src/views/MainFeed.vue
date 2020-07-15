@@ -40,7 +40,7 @@
       >
         <NewsFeed :title="'NEWS FEED'" v-on:open-edition="openEditionNews" />
       </v-col>
-      <v-col v-if="editionDrawer" class="text-center" cols="6" :key="reRenderKey">
+      <v-col v-if="editionStateToggle" class="text-center" cols="6" :key="reRenderKey">
         <Edition
           :news="item"
           v-on:close-edition-child="closeEditionChild"
@@ -53,7 +53,7 @@
 <script>
 import NewsFeed from "@/components/News/NewsFeed.vue";
 import Edition from "@/components/Edition/Edition.vue";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 export default {
   name: "MainFeed",
   components: {
@@ -163,6 +163,9 @@ export default {
   }),
   computed: {
     ...mapState(["newsHighlighterIndex","editionDrawer","trendingDrawer","mainfeedColumns"]),
+    ...mapGetters({
+        editionStateToggle : 'edition_toggle_state'
+    })
   },
 
   methods: {
@@ -176,10 +179,10 @@ export default {
       setNewsAtEdition: "PIECE_OF_NEWS_WHEN_EDITION_SET",
     }),
     ...mapActions(["getEdition"]),
-    openEditionNews: function(itemData) {
+    async openEditionNews(itemData) {
       if(this.editionDrawer){
-        this.getEdition(itemData.slug)
-        this.editionToggle(false)
+        await this.getEdition(itemData.slug)
+        await this.editionToggle(false)
       }
       console.log("paso por aqui");
       console.log(itemData);

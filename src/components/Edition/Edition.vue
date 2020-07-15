@@ -76,7 +76,8 @@ export default {
   computed: {
     ...mapState(["bioArray", "secondaryTags", "singleEdition","loadingEdition","username"]),
     ...mapGetters({
-         editionGet: 'edition_full_state'
+         editionGet: 'edition_full_state',
+         editionBody: 'edition_body_state'
     })
   },
   methods: {
@@ -100,27 +101,33 @@ export default {
       console.log(this.bioArray);
       console.log(this.secondaryTags);
       var tagsAux = [];
-      for (var i = 0; i < this.secondaryTags.length; i++) {
-        this.$set(tagsAux, i, this.secondaryTags[i].text);
-      }
-      let newAuthor = this.news.authors + ';' + this.username
-      let newCounter = this.news.author_count + 1
-      console.log(newAuthor)
-      const editionData = {
-        newsSlug: this.news.slug,
-        accumulatedAuthors: newAuthor,
-        accumulatedAuthor_count: newCounter,
-        tags: tagsAux,
-        bibliographyNames: this.bibliographyNameInternal,
-        bibliographyLink: this.bibliographyLinkInternal
-      };
-      this.saveEdition(editionData);
-      this.editNews(editionData)
-      this.closeEdition();
-      console.log(newAuthor)
+      if(this.editionBody.length !== 0){
 
-      console.log(this.bibliographyNameInternal);
-      console.log(this.bibliographyLinkInternal);
+          for (var i = 0; i < this.secondaryTags.length; i++) {
+            this.$set(tagsAux, i, this.secondaryTags[i].text);
+          }
+          let newAuthor = this.news.authors + ';' + this.username
+          let newCounter = this.news.author_count + 1
+          console.log(newAuthor)
+          const editionData = {
+            newsSlug: this.news.slug,
+            accumulatedAuthors: newAuthor,
+            accumulatedAuthor_count: newCounter,
+            tags: tagsAux,
+            bibliographyNames: this.bibliographyNameInternal,
+            bibliographyLink: this.bibliographyLinkInternal
+          };
+          this.saveEdition(editionData);
+          this.editNews(editionData)
+          this.closeEdition();
+          console.log(newAuthor)
+
+          console.log(this.bibliographyNameInternal);
+          console.log(this.bibliographyLinkInternal);
+      }
+      else{
+        alert('No puedes publicar una edicion sin haber escrito el cuerpo de esta')
+      }
     },
 
     createStrings() {

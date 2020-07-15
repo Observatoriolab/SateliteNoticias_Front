@@ -391,14 +391,16 @@ export default {
       if(tagsToFormat !== null ){
           if( tagsToFormat.tags !== undefined){
               console.log(tagsToFormat.tags)
-              for(let i = 0; i<tagsToFormat.tags.length; i++){
-                this.modelo.push({
-                  text: tagsToFormat.tags[i],
-                  color: this.colors[Math.ceil(Math.random() * this.colors.length)]
-                });
+              if(tagsToFormat.tags[0] !== "[]"){
+                  for(let i = 0; i<tagsToFormat.tags.length; i++){
+                    this.modelo.push({
+                      text: tagsToFormat.tags[i],
+                      color: this.colors[Math.ceil(Math.random() * this.colors.length)]
+                    });
+                  }
+                  console.log(this.modelo)
+                  this.setTags(this.modelo)
               }
-              console.log(this.modelo)
-              this.setTags(this.modelo)
           }
           
       }
