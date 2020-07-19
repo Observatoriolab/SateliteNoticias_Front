@@ -95,12 +95,16 @@ export default new Vuex.Store({
       state.credential = null
       state.errorUser = false
       state.username = ""
-      state.pageNumbersNews = []
-      state.pageNumbersTrendingNews = []
-      state.newsFeedNews = []
-      state.trendingNewsFeedNews = []
-      state.selectedNews = []        
-      state.disableButtonEdit = []
+      state.pageNumbersNews = ["https://satelite-de-noticias.herokuapp.com/api/news/"]
+      state.pageNumbersTrendingNews = ["https://satelite-de-noticias.herokuapp.com/api/news/trending/new/"]
+      state.newsFeedNews.splice(0)
+      state.trendingNewsFeedNews.splice(0)
+      state.updatedNews.splice(0)
+      state.selectedNews = [false,false,false,false]   
+      state.disableButtonEdit = [false,false,false,false]
+      state.updatedTrendingNews.splice(0)
+
+      state.disableButtonEdit.splice(0)
       state.nextPageNews = ""
       state.nextPageTrendingNews = ""
       state.disableButtonLoadMore = false
@@ -108,12 +112,20 @@ export default new Vuex.Store({
       state.endpointNews = "https://satelite-de-noticias.herokuapp.com/api/news/"
       state.endpointTrendingNews = "https://satelite-de-noticias.herokuapp.com/api/news/trending/new/"
       state.newsHighlighterIndex = -1
-      state.reRenderNews = false
-      state.bioArray = []
+      state.reRenderNews = false      
+      state.reRenderMetadata = false
+      state.bioArray.splice(0)
       state.secondaryTags = null
       state.editionBody = "",      
       state.singleEdition = null,
-      state.loadingEdition =false
+      state.loadingEdition = false
+      
+      state.trendingDrawer = false,
+      state.editionDrawer = false,
+      state.mainfeedColumn = 12,
+      state.alreadyOpenedEdition = false,
+      state.openedNewsAtEdition = null,
+      state.newMetadata = null
       sessionStorage.clear()
     },
     STORE_CREDENTIAL(state, payload) {

@@ -29,7 +29,7 @@
       >
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
-      <v-col v-if="trendingDrawer" :cols="mainfeedColumns" class="text-center mb-4">
+      <v-col v-show="trendingDrawer" :cols="mainfeedColumns" class="text-center mb-4">
         <NewsFeed :title="'TRENDING'" v-on:open-edition="openEditionNews" />
       </v-col>
 
