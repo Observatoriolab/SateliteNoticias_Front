@@ -3,7 +3,7 @@
     <v-col cols="12" class="py-0">
       <v-row justify="space-between">
         <v-col cols="12">
-          <h5>Etiquetas</h5>
+          <h3>Etiquetas</h3>
         </v-col>
         <v-col cols="6">
           <v-text-field
@@ -102,10 +102,33 @@
         </template>
       </v-combobox>
     </v-col>
-    <v-col class="text-center py-0" cols="12">
-      <h5>Bibliografia</h5>
+    <v-col class="text-center py-2" cols="12">
+      <h3>Bibliografia</h3>
     </v-col>
-    <v-row v-if="disableEdit">
+    <div
+      v-if="disableEdit && localBioNamesArray.lenght !== 0"
+      :class="{ biodrawer: localBioNamesArray.lenght !== 0, biodrawerNewsPiece:true}"
+    >
+    <v-row  v-for="(item, i) in localBioNamesArray" v-bind:key="i" align="center">
+      <v-col cols="6">
+        <v-text-field
+          label="Nombre"
+          v-model="localBioNamesArray[i]"
+          class="disable-events"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="6">
+        <v-text-field
+          label="Link"
+          v-model="localBioLinksArray[i]"
+          class="disable-events"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+  </div>
+
+
+    <!-- <v-row v-if="disableEdit">
       <v-col cols="6">
         <v-combobox
           v-model="bioNameSelected"
@@ -120,6 +143,7 @@
         </v-text-field>
       </v-col>
     </v-row>
+    -->
     <div style="width:100%" justify="center" v-else >
       <v-row justify="center" align="center">
         <v-spacer />
@@ -492,8 +516,12 @@ export default {
 </script>
 <style lang="scss">
 .biodrawer {
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
-  height: 30vh;
+  height: 20vh;
+}
+.biodrawerNewsPiece{
+  
+  width:46vw;
 }
 </style>

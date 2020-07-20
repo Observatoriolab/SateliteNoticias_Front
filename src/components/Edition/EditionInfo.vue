@@ -5,22 +5,32 @@
         {{ openedNewsAtEdition.title }}
       </v-card-title>
     </v-col>
-
-    <v-col class="px-4 py-2 text-start">
-      <v-col>
-
-      {{this.localEdition === undefined || this.localEdition === null ? '':'Por: '+ this.localEdition.author}}
-
-      </v-col>
+     <v-col class="px-4 py-0 text-start">
       {{ news.created_at }}
-      <div style="float:right">
-        <v-btn color="pink" dark @click="allowEditing = !allowEditing">
-          <v-icon>{{ allowEditing ? "mdi-pencil" : "mdi-pencil-off" }}</v-icon>
-        </v-btn>
-      </div>
     </v-col>
 
+
     <v-col class="px-0 mb-0">
+      <div class="content" v-html="openedNewsAtEdition.content"></div>
+    </v-col>
+
+    <v-row class="px-4 py-0 text-start">
+      <v-col cols="6">
+
+          {{this.localEdition === undefined || this.localEdition === null ? '':'Ultimo editor: '+ this.localEdition.author}}
+
+      </v-col>
+      <v-col cols="6">
+        <div style="float:right">
+            <v-btn color="pink" dark @click="allowEditing = !allowEditing">
+              <v-icon>{{ allowEditing ? "mdi-pencil" : "mdi-pencil-off" }}</v-icon>
+            </v-btn>
+        </div>
+        
+      </v-col>
+    </v-row>
+
+    <v-col cols="12" class="px-0 mb-0">
       <v-textarea
         outlined
         name="input"
@@ -30,9 +40,7 @@
       ></v-textarea>
     </v-col>
 
-    <v-col class="px-0 mb-0">
-      <div class="content" v-html="openedNewsAtEdition.content"></div>
-    </v-col>
+    
   </div>
 </template>
 <script>
