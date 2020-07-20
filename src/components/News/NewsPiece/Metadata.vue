@@ -119,9 +119,11 @@
       </v-col>
       <v-col cols="6">
         <v-text-field
+          
           label="Link"
           v-model="localBioLinksArray[i]"
-          class="disable-events"
+          prepend-inner-icon="link"
+          @click:prepend-inner="goToPage(localBioLinksArray[i])"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -441,6 +443,10 @@ export default {
           this.setTags(this.modelo)
       }
     
+    },
+    goToPage(link){
+      console.log(link)
+      window.open('http://www.'+link, '_blank');
     },
     
     bioFormat(bioToFormat) {
