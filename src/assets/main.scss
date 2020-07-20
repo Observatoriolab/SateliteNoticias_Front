@@ -16,7 +16,9 @@
 .overflowForY{
   overflow-y:auto;
 }
-
+.disable-events {
+  pointer-events: none
+}
 .cancelOverflow{
   overflow:hidden;
 }

@@ -14,7 +14,25 @@
     <v-col class="px-0 py-0 mb-0">
       <div class="content" v-html="news.content"></div>
     </v-col>
+    <v-col v-if="showEditionBody" class="px-4 mb-0">
+      <div style="float:left">
+          Ultimo editor: {{editionAuthor}} 
 
+      </div>
+      <div style="float:right">
+        Numero de ediciones : {{news.author_count}}
+      </div>
+    </v-col>
+    
+    <v-col v-if="showEditionBody" class="px-0 mb-0">
+        <v-textarea
+          outlined
+          name="input"
+          label="Edicion"
+          v-model="editionBody"
+          class="disable-events"
+        ></v-textarea>
+    </v-col>
     <v-col class="px-0 py-0">
       <v-row justify="space-around" align="center">
         <div class="text-center ma-0">
@@ -48,7 +66,7 @@
   </v-row>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   name: "NewsPiece",
@@ -67,7 +85,10 @@ export default {
       rating: 0,
       show: false,
       reRender: 0,
-      disabling: false
+      disabling: false,
+      editionBody: '',
+      editionAuthor: '',
+      showEditionBody: false
     };
   },
   watch: {
@@ -77,10 +98,13 @@ export default {
   },
   computed: {
     // mix this into the outer object with the object spread operator
-    ...mapState(["disableButtonEdit", "reRenderNews"])
+    ...mapState(["disableButtonEdit", "reRenderNews"]),
+    ...mapGetters({
+         editionGet: 'edition_full_state'
+    })
   },
   methods: {
-    ...mapActions(["ratingNews"]),
+    ...mapActions(["ratingNews","getEdition"]),
 
     setRating() {
       const newsInfo = {
@@ -97,13 +121,32 @@ export default {
     expand() {
       this.show = !this.show;
       this.$emit("metadata-toggled");
+    },
+   async getEditionAsync(){
+      await this.getEdition(this.news.slug)     
+      await this.settingInfo()
+      
+
+    },
+    async settingInfo(){
+      this.editionBody = this.editionGet
+      console.log(this.news)
+      console.log(this.editionBody)
+      if(this.editionBody !== null && this.editionBody !== undefined && this.editionBody.length !== 0){
+        this.editionAuthor = this.editionBody.author
+        this.editionBody = this.editionBody.body
+        this.showEditionBody = true
+      }
+      if (this.news.user_has_relevanced) {
+        this.disabling = true;
+      }
+
     }
   },
   beforeMount() {
-    this.rating = this.news.relevance_average;
-    if (this.news.user_has_relevanced) {
-      this.disabling = true;
-    }
+    this.rating = this.news.relevance_average    
+    this.getEditionAsync()
+    
   }
 };
 </script>
