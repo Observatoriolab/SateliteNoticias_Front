@@ -11,14 +11,14 @@
             placeholder="Ej: Pagos digitales"
             outlined
             v-model="news.axis"
-            :disabled="disableEdit"
+            :class="{'disable-events': disableEdit}"
           ></v-text-field>
           <v-text-field
             label="Pais/Region"
             placeholder="Ej: Rusia"
             outlined
             v-model="news.country"
-            :disabled="disableEdit"
+            :class="{'disable-events': disableEdit}"
           ></v-text-field>
         </v-col>
         <v-col cols="6">
@@ -27,14 +27,14 @@
             placeholder="Ej: FinTech"
             outlined
             v-model="news.source"
-            :disabled="disableEdit"
+            :class="{'disable-events': disableEdit}"
           ></v-text-field>
           <v-text-field
             label="Fecha"
             placeholder="Placeholder"
             outlined
             v-model="news.date"
-            :disabled="disableEdit"
+            :class="{'disable-events': disableEdit}"
           ></v-text-field>
         </v-col>
       </v-row>
