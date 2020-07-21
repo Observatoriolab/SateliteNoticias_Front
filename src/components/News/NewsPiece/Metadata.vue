@@ -223,7 +223,10 @@ export default {
     },    
     search() {
       // Items have already been loaded
-      if (this.items.length > 0) return;
+      if (this.items !== undefined){
+
+         if (this.items.length > 0) return;
+      }
 
       // Items have already been requested
       if (this.isLoading) return;
@@ -245,7 +248,9 @@ export default {
     },
 
     modelo(val, prev) {
-      if (val.length === prev.length) return;
+      if(val !== undefined && prev !== undefined){
+         if (val.length === prev.length) return;
+      }
 
       this.modelo = val.map(v => {
         if (typeof v === "string") {
@@ -357,16 +362,20 @@ export default {
     }),
     addBibliography() {
       console.log(this.modelo);
-      if (this.bioName.length !== 0 && this.bioLink.length !== 0) {
-        const bioEntry = {
-          name: this.bioName,
-          link: this.bioLink
-        };
-        this.bioArray.push(bioEntry);
-        this.editBioEntry.push(true);
-        this.bioLink = "";
-        this.bioName = "";
+      if(this.bioName !== undefined && this.bioLink !== undefined){
+         if (this.bioName.length !== 0 && this.bioLink.length !== 0) {
+            const bioEntry = {
+              name: this.bioName,
+              link: this.bioLink
+            };
+            this.bioArray.push(bioEntry);
+            this.editBioEntry.push(true);
+            this.bioLink = "";
+            this.bioName = "";
       }
+
+      }
+     
     },
     editItem(index) {
       this.$set(this.editBioEntry, index, !this.editBioEntry[index]);
@@ -433,14 +442,21 @@ export default {
       else{
         console.log(this.editionGet.tags)
         console.log(this.editionGet)
-          for(let i = 0; i<this.editionGet.tags.length; i++){
-            this.modelo.push({
-              text: this.editionGet.tags[i],
-              color: this.colors[Math.ceil(Math.random() * this.colors.length)]
-            });
-          }
-          console.log(this.modelo)
-          this.setTags(this.modelo)
+        if(this.editionGet !== undefined){
+          if(this.editionGet.tags !== undefined){
+              for(let i = 0; i<this.editionGet.tags.length; i++){
+                this.modelo.push({
+                  text: this.editionGet.tags[i],
+                  color: this.colors[Math.ceil(Math.random() * this.colors.length)]
+                });
+              }
+              console.log(this.modelo)
+              this.setTags(this.modelo)         
+            }
+
+        }
+        
+          
       }
     
     },
@@ -453,8 +469,8 @@ export default {
       if(bioToFormat !== null && bioToFormat.bibliography_name !== undefined){
           let nameArray = bioToFormat.bibliography_name.split(";");
           let linkArray = bioToFormat.bibliography_link.split(";");
-
-          for (let i = 0; i < nameArray.length - 1; i++) {
+          if( nameArray !== undefined){
+            for (let i = 0; i < nameArray.length - 1; i++) {
             let bioEntry = {
               name: nameArray[i],
               link: linkArray[i]
@@ -469,26 +485,31 @@ export default {
                 this.editBioEntry.push(true);
             }
           }
+
+          }
+          
       }
       else{
           let nameArray = this.editionGet.bibliography_name.split(";");
           let linkArray = this.editionGet.bibliography_link.split(";");
+          if(nameArray !== undefined){
+                for (let i = 0; i < nameArray.length - 1; i++) {
+                let bioEntry = {
+                  name: nameArray[i],
+                  link: linkArray[i]
+                };
+                if(this.disableEdit){
+                    this.localBioNamesArray.push(nameArray[i])
+                    this.localBioLinksArray.push(linkArray[i])
 
-          for (let i = 0; i < nameArray.length - 1; i++) {
-            let bioEntry = {
-              name: nameArray[i],
-              link: linkArray[i]
-            };
-            if(this.disableEdit){
-                this.localBioNamesArray.push(nameArray[i])
-                this.localBioLinksArray.push(linkArray[i])
-
-            }
-            else{
-                this.bioArray.push(bioEntry)
-            }
-            this.editBioEntry.push(true);
+                }
+                else{
+                    this.bioArray.push(bioEntry)
+                }
+                this.editBioEntry.push(true);
+              }
           }
+          
 
       }
      
