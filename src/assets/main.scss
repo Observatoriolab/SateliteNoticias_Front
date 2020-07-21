@@ -1,5 +1,5 @@
 .content{
-  font-size:1.0em;
+  font-size:1.2em;
   display:flex; 
   flex-flow:column; 
   align-content:center;
@@ -11,8 +11,16 @@
 }
 .title-font{
   
-  font-size: 1.5em;
+  font-size: 1.7em;
 }
+
+@font-face { 
+  font-family: "Neoteric";     
+  src: url(Lintel-Regular.ttf) format("font-truetype");
+  font-weight: normal;
+  
+}
+
 .overflowForY{
   overflow-y:auto;
 }
@@ -30,7 +38,7 @@
   box-shadow:none;
 }
 .highlight{
-  box-shadow: -3px 3px 32px 20px rgba(8,2,181,1);
+  box-shadow: -3px 3px 32px 20px blue;
 }
 //ESTE ORDEN ES IMPORTANTE
 

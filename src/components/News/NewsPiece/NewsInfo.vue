@@ -3,7 +3,7 @@
     <v-col class="px-0 py-0 text-start">
       <v-card-title class="title-font" style="color:blue">
 
-        <a   target="_blank" :href="news.fullContent">{{ news.title }}</a>
+        <a  style="text-decoration:none" target="_blank" :href="news.fullContent">{{ news.title }}</a>
       </v-card-title>
     </v-col>
 
@@ -15,11 +15,11 @@
       <div class="content" v-html="news.content"></div>
     </v-col>
     <v-col v-if="showEditionBody" class="px-4 mb-0">
-      <div style="float:left">
-          Ultimo editor: {{editionAuthor}} 
+      <div style="float:left; font-size:1.1em">
+          <p>Ultimo editor: {{editionAuthor}} </p>
 
       </div>
-      <div style="float:right">
+      <div style="float:right; font-size:1.1em">
         Numero de ediciones : {{news.author_count}}
       </div>
     </v-col>
@@ -31,6 +31,7 @@
           label="Edicion"
           v-model="editionBody"
           class="disable-events"
+          style="font-size:1.1em"
         ></v-textarea>
     </v-col>
     <v-col class="px-0 py-0">
@@ -46,7 +47,7 @@
             :readonly="disabling"
           >
           </v-rating>
-          <p v-if="news.relevance_count !== 0">
+          <p v-if="news.relevance_count !== 0" style="font-size:1.1em">
             Basada en {{ news.relevance_count }} usuarios
           </p>
         </div>

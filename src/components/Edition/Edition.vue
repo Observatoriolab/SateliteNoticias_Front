@@ -3,7 +3,7 @@
     style="display:flex; flex-flow:column; position:fixed;width:auto; height:85vh"
   >
     <h1 class="display-2 font-weight-bold mb-7">
-      EDITION
+      EDICION
       <v-btn
         icon
         style="float:right"

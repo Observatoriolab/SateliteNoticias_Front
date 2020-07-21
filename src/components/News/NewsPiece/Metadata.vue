@@ -23,7 +23,7 @@
         </v-col>
         <v-col cols="6">
           <v-text-field
-            label="Organismo"
+            label="Fuente"
             placeholder="Ej: FinTech"
             outlined
             v-model="news.source"
@@ -106,8 +106,8 @@
       <h3>Bibliografia</h3>
     </v-col>
     <div
-      v-if="disableEdit && localBioNamesArray.lenght !== 0"
-      :class="{ biodrawer: localBioNamesArray.lenght !== 0, biodrawerNewsPiece:true}"
+      v-if="disableEdit && localBioNamesArray[0].lenght !== 0"
+      :class="{ biodrawer: localBioNamesArray[0].lenght !== 0, biodrawerNewsPiece:true}"
     >
     <v-row  v-for="(item, i) in localBioNamesArray" v-bind:key="i" align="center">
       <v-col cols="6">
@@ -528,6 +528,6 @@ export default {
 }
 .biodrawerNewsPiece{
   
-  width:46vw;
+  width:60vw;
 }
 </style>

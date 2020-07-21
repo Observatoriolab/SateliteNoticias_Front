@@ -10,6 +10,7 @@
       color="white"
       elevation="1"
       width="100vw"
+      height="84vh"
     >
       <AppBar />
     </v-app-bar>
@@ -58,6 +59,12 @@ export default {
   methods: {},
   created() {
     document.title = "Satelite de Noticias";
-  }
+  },
+
 };
 </script>
+<style lang="scss">
+#app {
+  font-family: 'Neoteric', serif;
+}
+</style>

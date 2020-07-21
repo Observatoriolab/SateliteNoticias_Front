@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="flex-column mx-auto mt-6 mb-6" width="50%">
+    <v-card class="flex-column mx-auto mt-6 mb-6" width="65%">
       <v-container
         :class="{ highlight: selectedNews[indice], noHighlight: reRenderNews }"
       >

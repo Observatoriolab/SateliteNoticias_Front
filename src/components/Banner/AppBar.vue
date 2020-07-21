@@ -1,7 +1,10 @@
 <template>
-  <div style="display:flex ; justify-content:space-between; width:100%">
+  <div style="margin:0; padding:0;display:flex ; justify-content:space-between; width:100%; height:100%; align-items:center">
+    <v-img  :contain="true" src="https://zgot96v0sy7nu3esdgzyza-on.drv.tw/newsServer/imagenes/OT1.jpeg"  :max-height="'100%'"  :max-width="'8%'">
+
+    </v-img>
     <v-spacer />
-    <v-menu bottom :offset-y="true" :close-on-content-click="false">
+   <!-- <v-menu bottom :offset-y="true" :close-on-content-click="false">
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="primary" dark v-bind="attrs" v-on="on">
           Dropdowns
@@ -50,6 +53,7 @@
         </v-tab-item>
       </v-tabs>
     </v-menu>
+    -->
     <v-spacer />
     <v-menu transition="slide-y-transition" bottom :offset-y="true">
       <template v-slot:activator="{ on, attrs }">

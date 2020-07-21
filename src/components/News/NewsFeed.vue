@@ -317,7 +317,7 @@ export default {
   created() {
     window.sessionStorage.setItem("credential", this.credential);
     console.log(this.pageNumbersNews)
-    if(this.title === 'NEWS FEED'){
+    if(this.title === 'Radar de noticias'){
         this.getUpdatedNews()
 
     }

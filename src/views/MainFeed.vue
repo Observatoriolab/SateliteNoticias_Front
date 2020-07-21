@@ -6,7 +6,7 @@
           contained
           fab
           fixed
-          color="primary"
+          color="secondary"
           dark
           x-large
           width="8%"
@@ -22,15 +22,17 @@
         fab
         fixed
         right
-        color="pink"
+        color="primary"
         dark
-        large
+        x-large        
+        width="10%"
+        class="rounded-0"
         @click.stop="trendingDrawerClose"
       >
-        <v-icon>mdi-window-minimize</v-icon>
+        RADAR
       </v-btn>
       <v-col v-show="trendingDrawer" :cols="mainfeedColumns" class="text-center mb-4">
-        <NewsFeed :title="'TRENDING'" v-on:open-edition="openEditionNews" />
+        <NewsFeed :title="'Trending'" v-on:open-edition="openEditionNews" />
       </v-col>
 
       <v-col
@@ -38,7 +40,7 @@
         :cols="mainfeedColumns"
         class="text-center mb-4"
       >
-        <NewsFeed :title="'NEWS FEED'" v-on:open-edition="openEditionNews" />
+        <NewsFeed :title="'Radar de noticias'" v-on:open-edition="openEditionNews" />
       </v-col>
       <v-col v-if="editionStateToggle" class="text-center" cols="6" :key="reRenderKey">
         <Edition
