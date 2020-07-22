@@ -7,7 +7,7 @@
     <!-- v-for="(item, i) in news" -->
     <div v-if="loadingNews"> 
         <div      
-          v-show="title !== 'TRENDING'"
+          v-show="title !== 'Trending'"
           v-for="(item, i) in allNews"
           v-bind:key="i"
         >
@@ -16,8 +16,8 @@
     </div>
     <div v-if="loadingTrendingNews">
         <div
-          v-show="title === 'TRENDING'"
-          v-for="(item, i) in trendingNewsFeedNews"
+          v-show="title === 'Trending'"
+          v-for="(item, i) in trendingNews"
           v-bind:key="i * -1 - 1"
         >
           <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
@@ -26,7 +26,7 @@
    
     <div class="text-center">
       <v-btn
-        v-show="title !== 'TRENDING'"
+        v-show="title !== 'Trending'"
         rounded
         color="primary"
         dark
@@ -35,7 +35,7 @@
         >Cargar mas
       </v-btn>
       <v-btn
-        v-show="title === 'TRENDING'"
+        v-show="title === 'Trending'"
         rounded
         color="primary"
         dark
@@ -223,7 +223,8 @@ export default {
       "loadingTrendingNews"
     ]),
     ...mapGetters({
-        allNews: 'all_mainfeed_news'
+        allNews: 'all_mainfeed_news',
+        trendingNews: 'all_trendingfeed_news'
     })
   },
   methods: {

@@ -83,6 +83,9 @@ export default new Vuex.Store({
     all_mainfeed_news(state){
       return state.newsFeedNews
     },
+    all_trendingfeed_news(state){
+      return state.trendingNewsFeedNews
+    },
     metadata_news(state){
       return state.newMetadata 
     },
@@ -416,7 +419,7 @@ export default new Vuex.Store({
           commit("LOADING_EDITION_SET",true)
       });
     },
-    async editNews({ state,commit }, payload) {
+    async editNews({ state }, payload) {
       console.log("aca va el payload ", payload);
       
       
@@ -433,10 +436,6 @@ export default new Vuex.Store({
         state.credential
       ).then(data => {
           console.log(data);
-          commit("METADATA_NEWS_UPDATE", {
-            tags: payload.tags,
-            bibliography: {bibliography_name: payload.bibliographyNames, bibliography_link: payload.bibliographyLink  },
-          })
       });
     },
     async delayedNews({state,commit},payload) {

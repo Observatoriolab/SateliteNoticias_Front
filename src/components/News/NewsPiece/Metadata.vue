@@ -106,8 +106,8 @@
       <h3>Bibliografia</h3>
     </v-col>
     <div
-      v-if="disableEdit && localBioNamesArray[0].lenght !== 0"
-      :class="{ biodrawer: localBioNamesArray[0].lenght !== 0, biodrawerNewsPiece:true}"
+      v-if="disableEdit"
+      :class="{ biodrawer: localBioNamesArray[0].length !== 0, biodrawerNewsPiece:true}"
     >
     <v-row  v-for="(item, i) in localBioNamesArray" v-bind:key="i" align="center">
       <v-col cols="6">
@@ -146,7 +146,7 @@
       </v-col>
     </v-row>
     -->
-    <div style="width:100%" justify="center" v-else >
+    <div v-else style="width:100%" justify="center"  >
       <v-row justify="center" align="center">
         <v-spacer />
 
@@ -163,8 +163,8 @@
         <v-spacer />
       </v-row>
       <v-row
-        v-if="bioArray.lenght !== 0"
-        :class="{ biodrawer: bioArray.lenght !== 0 }"
+        v-if="bioArray.length !== 0"
+        :class="{ biodrawer: bioArray.length !== 0 }"
       >
         <v-row v-for="(item, i) in bioArray" v-bind:key="i" align="center">
           <v-spacer />
@@ -223,10 +223,9 @@ export default {
     },    
     search() {
       // Items have already been loaded
-      if (this.items !== undefined){
 
          if (this.items.length > 0) return;
-      }
+      
 
       // Items have already been requested
       if (this.isLoading) return;
@@ -248,9 +247,8 @@ export default {
     },
 
     modelo(val, prev) {
-      if(val !== undefined && prev !== undefined){
          if (val.length === prev.length) return;
-      }
+      
 
       this.modelo = val.map(v => {
         if (typeof v === "string") {
@@ -362,18 +360,15 @@ export default {
     }),
     addBibliography() {
       console.log(this.modelo);
-      if(this.bioName !== undefined && this.bioLink !== undefined){
-         if (this.bioName.length !== 0 && this.bioLink.length !== 0) {
-            const bioEntry = {
-              name: this.bioName,
-              link: this.bioLink
-            };
-            this.bioArray.push(bioEntry);
-            this.editBioEntry.push(true);
-            this.bioLink = "";
-            this.bioName = "";
-      }
-
+      if (this.bioName.length !== 0 && this.bioLink.length !== 0) {
+        const bioEntry = {
+          name: this.bioName,
+          link: this.bioLink
+        };
+        this.bioArray.push(bioEntry);
+        this.editBioEntry.push(true);
+        this.bioLink = "";
+        this.bioName = "";
       }
      
     },
@@ -385,15 +380,14 @@ export default {
       console.log(this.bioArray);
     },
     customFilter(item, queryText) {
-      if( item.name !== undefined){
           
-          const textOne = item.name.toLowerCase();
-          const searchText = queryText.toLowerCase();
+      const textOne = item.name.toLowerCase();
+      const searchText = queryText.toLowerCase();
 
-          return (
-            textOne.indexOf(searchText) > -1 
-          );
-      }
+      return (
+        textOne.indexOf(searchText) > -1 
+      );
+      
     },
     save() {
       this.hasSaved = true;
@@ -424,76 +418,70 @@ export default {
     },
     tagsFormat(tagsToFormat) {
       if(tagsToFormat !== null ){
-          if( tagsToFormat.tags !== undefined){
-              console.log(tagsToFormat.tags)
-              if(tagsToFormat.tags[0] !== "[]"){
-                  for(let i = 0; i<tagsToFormat.tags.length; i++){
-                    this.modelo.push({
-                      text: tagsToFormat.tags[i],
-                      color: this.colors[Math.ceil(Math.random() * this.colors.length)]
-                    });
-                  }
-                  console.log(this.modelo)
-                  this.setTags(this.modelo)
-              }
+          console.log(tagsToFormat.tags[0])
+          for(let i = 0; i<tagsToFormat.tags.length; i++){
+            this.modelo.push({
+              text: tagsToFormat.tags[i],
+              color: this.colors[Math.ceil(Math.random() * this.colors.length)]
+            });
           }
+          console.log(this.modelo)
+          this.setTags(this.modelo)
+          
+          
           
       }
       else{
         console.log(this.editionGet.tags)
         console.log(this.editionGet)
-        if(this.editionGet !== undefined){
-          if(this.editionGet.tags !== undefined){
-              for(let i = 0; i<this.editionGet.tags.length; i++){
-                this.modelo.push({
-                  text: this.editionGet.tags[i],
-                  color: this.colors[Math.ceil(Math.random() * this.colors.length)]
-                });
-              }
-              console.log(this.modelo)
-              this.setTags(this.modelo)         
+        if(this.editionGet.tags !== undefined){
+            for(let i = 0; i<this.editionGet.tags.length; i++){
+              this.modelo.push({
+                text: this.editionGet.tags[i],
+                color: this.colors[Math.ceil(Math.random() * this.colors.length)]
+              });
             }
+            console.log(this.modelo)
+            this.setTags(this.modelo)         
+          }
 
-        }
+        
         
           
       }
     
     },
     goToPage(link){
-      console.log(link)
-      window.open('http://www.'+link, '_blank');
+      console.log(link.length)
+      if (link !== undefined) window.open(link, '_blank');
     },
     
     bioFormat(bioToFormat) {
+            console.log(bioToFormat.bibliography_name.length)
+
+      if(bioToFormat.bibliography_name.length === 0){
+          console.log(bioToFormat.bibliography_name.length)
+          if(this.disableEdit){
+              this.localBioNamesArray.push('')
+              this.localBioLinksArray.push('')
+
+          }
+          else{
+              this.editBioEntry.push(true);
+          }
+        return;
+
+      }
+      console.log(bioToFormat)
       if(bioToFormat !== null && bioToFormat.bibliography_name !== undefined){
           let nameArray = bioToFormat.bibliography_name.split(";");
           let linkArray = bioToFormat.bibliography_link.split(";");
+          console.log(nameArray)
+          console.log(linkArray)
           if( nameArray !== undefined){
+            console.log(nameArray.length)
             for (let i = 0; i < nameArray.length - 1; i++) {
-            let bioEntry = {
-              name: nameArray[i],
-              link: linkArray[i]
-            };
-            if(this.disableEdit){
-                this.localBioNamesArray.push(nameArray[i])
-                this.localBioLinksArray.push(linkArray[i])
-
-            }
-            else{
-                this.bioArray.push(bioEntry)
-                this.editBioEntry.push(true);
-            }
-          }
-
-          }
-          
-      }
-      else{
-          let nameArray = this.editionGet.bibliography_name.split(";");
-          let linkArray = this.editionGet.bibliography_link.split(";");
-          if(nameArray !== undefined){
-                for (let i = 0; i < nameArray.length - 1; i++) {
+                console.log(nameArray[0])
                 let bioEntry = {
                   name: nameArray[i],
                   link: linkArray[i]
@@ -505,10 +493,32 @@ export default {
                 }
                 else{
                     this.bioArray.push(bioEntry)
+                    this.editBioEntry.push(true);
                 }
-                this.editBioEntry.push(true);
-              }
           }
+
+          }
+          
+      }
+      else{
+          let nameArray = this.editionGet.bibliography_name.split(";");
+          let linkArray = this.editionGet.bibliography_link.split(";");
+          for (let i = 0; i < nameArray.length - 1; i++) {
+              let bioEntry = {
+                name: nameArray[i],
+                link: linkArray[i]
+              };
+              if(this.disableEdit){
+                  this.localBioNamesArray.push(nameArray[i])
+                  this.localBioLinksArray.push(linkArray[i])
+
+              }
+              else{
+                  this.bioArray.push(bioEntry)
+              }
+              this.editBioEntry.push(true);
+          }
+          
           
 
       }

@@ -179,6 +179,8 @@ export default {
       this.$emit("edition-opened", news, indice);
     },
     toggleMetadata() {
+      console.log("asdsadsa")
+      console.log(this.show)
       this.show = !this.show;
     },
     customFilter(item, queryText) {
