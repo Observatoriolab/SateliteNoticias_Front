@@ -1,9 +1,44 @@
 <template>
-  <div style="margin:0; padding:0;display:flex ; justify-content:space-between; width:100%; height:100%; align-items:center">
-    <v-img  :contain="true" src="https://zgot96v0sy7nu3esdgzyza-on.drv.tw/newsServer/imagenes/OT1.jpeg"  :max-height="'100%'"  :max-width="'8%'">
+  <v-row >
+    <v-col cols="4">
+        <v-img  :contain="true" src="https://zgot96v0sy7nu3esdgzyza-on.drv.tw/newsServer/imagenes/OT1.jpeg"  :max-height="'100%'"  :max-width="'20%'">
 
-    </v-img>
-    <v-spacer />
+       </v-img>
+    </v-col>
+    <v-col cols="5" align-self="end">
+      <v-row align="center" justify="end" class="mr-3">
+        <h3 style="color:#005aa1" class="display-3 font-weight-bold mb-7 ">
+           SATELITE DE NOTICIAS
+         </h3>
+      </v-row>
+
+    </v-col>
+
+    <v-col cols="3" class="pb-0" align-self="center">
+      <v-row align="center" justify="end" class="mr-3 pt-3">
+            <h3 class="pr-3" style="color:#005aa1">Usuario:  </h3>
+          
+          <v-menu transition="slide-y-transition" bottom :offset-y="true">
+            <template v-slot:activator="{ on, attrs }">
+              
+              <v-btn class="purple" color="primary" dark v-bind="attrs" v-on="on">
+                <v-icon>mdi-account</v-icon>
+                {{ username }}
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item v-for="item in items" :key="item.title">
+                <v-btn @click="logouto"
+                  ><v-icon> {{ item.icon }} </v-icon> {{ item.title }}
+                </v-btn>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+
+      </v-row>
+
+    </v-col>
+    
    <!-- <v-menu bottom :offset-y="true" :close-on-content-click="false">
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="primary" dark v-bind="attrs" v-on="on">
@@ -54,23 +89,7 @@
       </v-tabs>
     </v-menu>
     -->
-    <v-spacer />
-    <v-menu transition="slide-y-transition" bottom :offset-y="true">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn class="purple" color="primary" dark v-bind="attrs" v-on="on">
-          <v-icon>mdi-account</v-icon>
-          {{ username }}
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item v-for="item in items" :key="item.title">
-          <v-btn @click="logouto"
-            ><v-icon> {{ item.icon }} </v-icon> {{ item.title }}
-          </v-btn>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-  </div>
+  </v-row>
 </template>
 
 <script>

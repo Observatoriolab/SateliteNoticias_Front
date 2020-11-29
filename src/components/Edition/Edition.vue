@@ -2,7 +2,7 @@
   <div v-if="loadingEdition"
     style="display:flex; flex-flow:column; position:fixed;width:auto; height:85vh"
   >
-    <h1 class="display-2 font-weight-bold mb-7">
+    <h1 style="color:#005aa1" class="display-2 font-weight-bold mb-7">
       EDICION
       <v-btn
         icon
@@ -30,7 +30,7 @@
                 <EditionInfo :news="news"  />
                 <v-col cols="12">
                   <v-divider></v-divider>
-                  <Metadata :news="news" :disableEdit="false"  />
+                  <MetadataEdition :news="news" />
                   <v-btn
                     class="purple"
                     color="primary"
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import Metadata from "@/components/News/NewsPiece/Metadata.vue";
+import MetadataEdition from "./MetadataEdition.vue";
 import EditionInfo from "./EditionInfo.vue";
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 
@@ -60,7 +60,7 @@ export default {
     news: Object
   },
   components: {
-    Metadata,
+    MetadataEdition,
     EditionInfo
   },
   watch: {

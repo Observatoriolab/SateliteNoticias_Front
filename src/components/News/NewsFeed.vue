@@ -1,13 +1,12 @@
 <template>
   <div>
-    <h1 style="color:blue" class="display-2 font-weight-bold mb-7">
+    <h3 style="color:#005aa1" class="display-2 font-weight-bold mb-7">
       {{ title }}
-    </h1>
+    </h3>
 
-    <!-- v-for="(item, i) in news" -->
     <div v-if="loadingNews"> 
         <div      
-          v-show="title !== 'Trending'"
+          v-show="title !== 'NOTICIAS EN TENDENCIA'"
           v-for="(item, i) in allNews"
           v-bind:key="i"
         >
@@ -16,7 +15,7 @@
     </div>
     <div v-if="loadingTrendingNews">
         <div
-          v-show="title === 'Trending'"
+          v-show="title === 'NOTICIAS EN TENDENCIA'"
           v-for="(item, i) in trendingNews"
           v-bind:key="i * -1 - 1"
         >
@@ -26,7 +25,7 @@
    
     <div class="text-center">
       <v-btn
-        v-show="title !== 'Trending'"
+        v-show="title === 'NOTICIAS DETECTADAS POR EL SATELITE'"
         rounded
         color="primary"
         dark
@@ -35,7 +34,7 @@
         >Cargar mas
       </v-btn>
       <v-btn
-        v-show="title === 'Trending'"
+        v-show="title === 'NOTICIAS EN TENDENCIA'"
         rounded
         color="primary"
         dark
@@ -318,7 +317,7 @@ export default {
   created() {
     window.sessionStorage.setItem("credential", this.credential);
     console.log(this.pageNumbersNews)
-    if(this.title === 'Radar de noticias'){
+    if(this.title === 'NOTICIAS DETECTADAS POR EL SATELITE'){
         this.getUpdatedNews()
 
     }

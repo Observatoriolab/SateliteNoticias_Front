@@ -1,5 +1,20 @@
 <template>
   <v-app>
+    <v-navigation-drawer    
+      v-model="drawer"
+       v-if="
+        this.$router.currentRoute.name !== 'Login' &&
+          this.$router.currentRoute.name !== 'Registration'
+      "
+      app
+      clipped
+      permanent
+      class="pt-4"
+      color="white"
+    >
+      <SidePanel />
+    </v-navigation-drawer>
+
     <v-app-bar
       v-show="
         this.$router.currentRoute.name !== 'Login' &&
@@ -10,10 +25,16 @@
       color="white"
       elevation="1"
       width="100vw"
-      height="84vh"
+      height="150vh"
+      clipped-left
     >
       <AppBar />
     </v-app-bar>
+
+    
+    
+      
+    
     <v-main>
       <router-view />
     </v-main>
@@ -22,12 +43,14 @@
 
 <script>
 import AppBar from "@/components/Banner/AppBar.vue";
+import SidePanel from "@/components/Banner/SidePanel.vue";
 
 export default {
   name: "App",
 
   components: {
-    AppBar
+    AppBar,
+    SidePanel
   },
 
   data() {
@@ -53,10 +76,15 @@ export default {
         { title: "Logout", icon: "mdi-logout-variant" }
       ],
       requestUser: null,
-      credential: null
+      credential: null,
+      drawer:null
     };
   },
-  methods: {},
+  methods: {
+    outOfDrawer(){
+
+    }
+  },
   created() {
     document.title = "Satelite de Noticias";
   },
@@ -64,7 +92,5 @@ export default {
 };
 </script>
 <style lang="scss">
-#app {
-  font-family: 'Neoteric', serif;
-}
+
 </style>

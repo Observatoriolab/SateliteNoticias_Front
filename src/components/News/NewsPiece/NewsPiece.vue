@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-card class="flex-column mx-auto mt-6 mb-6" width="65%">
+    <v-card class="flex-column mx-auto mt-6 mb-6" width="75%">
       <v-container
         :class="{ highlight: selectedNews[indice], noHighlight: reRenderNews }"
       >
         <v-row>
-          <v-col cols="12" class="text-center pl-0 px-0 py-0">
+          <v-col cols="12" class="text-center pl-0 px-0 py-0 mx-auto">
             <NewsInfo
               :news="news"
               :indice="indice"

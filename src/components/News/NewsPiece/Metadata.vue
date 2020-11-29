@@ -1,151 +1,93 @@
 <template>
-  <v-row class="px-4 py-0" justify="center" align="center">
+  <v-row class="py-0" >
     <v-col cols="12" class="py-0">
-      <v-row justify="space-between">
-        <v-col cols="12">
-          <h3>Etiquetas</h3>
+      <v-row >
+        <v-col  class="text-left pt-4 my-0" cols="12">
+           <div style="color:darkblue" class="text-left py-0">    
+                <h3>Fuente deteccion</h3>
+          </div>
         </v-col>
-        <v-col cols="6">
-          <v-text-field
-            label="Eje"
-            placeholder="Ej: Pagos digitales"
-            outlined
-            v-model="news.axis"
-            :class="{'disable-events': disableEdit}"
-          ></v-text-field>
-          <v-text-field
-            label="Pais/Region"
-            placeholder="Ej: Rusia"
-            outlined
-            v-model="news.country"
-            :class="{'disable-events': disableEdit}"
-          ></v-text-field>
+        <v-col class="text-left py-0 my-0" cols="12">
+          <v-row>
+              <v-col  class="text-left py-0 my-0" cols="3">
+                  <v-text-field
+                    label="Eje"
+                    placeholder="Ej: Pagos digitales"
+                    solo
+                    dense
+                    readonly
+                    v-model="news.source"
+                  ></v-text-field>          
+              </v-col>
+              <v-col class="d-flex flex-row justify-start px-0 pt-0 mr-5" cols="1">
+                <v-subheader style="font-size:1em"> Publicado en: </v-subheader>
+              </v-col>
+              <v-col class="px-0 pt-0"  cols="3">
+                  <v-text-field
+                    label="Eje"
+                    placeholder="Ej: Pagos digitales"
+                    solo
+                    dense
+                    readonly
+                    :value="changeDateFormat(news.date)"
+                  ></v-text-field>          
+              </v-col>
+
+          </v-row>
+          
         </v-col>
-        <v-col cols="6">
-          <v-text-field
-            label="Fuente"
-            placeholder="Ej: FinTech"
-            outlined
-            v-model="news.source"
-            :class="{'disable-events': disableEdit}"
-          ></v-text-field>
-          <v-text-field
-            label="Fecha"
-            placeholder="Placeholder"
-            outlined
-            v-model="news.date"
-            :class="{'disable-events': disableEdit}"
-          ></v-text-field>
-        </v-col>
+  
       </v-row>
     </v-col>
-    <v-col align-self="start" cols="12" class="py-0" >
-      <v-combobox
-        v-model="modelo"
-        :filter="filter"
-        :hide-no-data="!search"
-        :items="comboItems"
-        :search-input.sync="search"
-        hide-selected
-        label="Search for an option"
-        multiple
-        small-chips
-        solo
-        :disabled="disableEdit"
-        
-      >
-        <template v-slot:no-data>
-          <v-list-item>
-            <span class="subheading">Create</span>
-            <v-chip :color="`${colors[nonce - 1]} lighten-3`" label small>
-              {{ search }}
-            </v-chip>
-          </v-list-item>
-        </template>
-        <template v-slot:selection="{ attrs, item, parent, selected }">
+    
+    <v-col style="color:darkblue" class="text-left py-0" cols="12">
+      <h3>Otras Bibliografias</h3>
+    </v-col>
+
+    <v-col cols="10" class="py-0 px-3" > 
+          <v-chip-group
+          mandatory
+        >
           <v-chip
-            v-if="item === Object(item)"
-            v-bind="attrs"
-            :color="`${item.color} lighten-3`"
-            :input-value="selected"
-            label
-            small
+            v-for="bio in modelo2" v-bind:key="bio.id"
+            @click="goToPage(bio.link)"
           >
-            <span class="pr-2">
-              {{ item.text }}
-            </span>
-            <v-icon small @click="parent.selectItem(item)">close</v-icon>
+            {{ bio.text }}
           </v-chip>
-        </template>
-        <template v-slot:item="{ index, item }">
-          <v-text-field
-            v-if="editing === item"
-            v-model="editing.text"
-            autofocus
-            flat
-            background-color="transparent"
-            hide-details
-            solo
-            @keyup.enter="edit(index, item)"
-          ></v-text-field>
-          <v-chip v-else :color="`${item.color} lighten-3`" dark label small>
-            {{ item.text }}
-          </v-chip>
-          <v-spacer></v-spacer>
-          <v-list-item-action @click.stop>
-            <v-btn icon @click.stop.prevent="edit(index, item)">
-              <v-icon>{{
-                editing !== item ? "mdi-pencil" : "mdi-check"
-              }}</v-icon>
-            </v-btn>
-          </v-list-item-action>
-        </template>
-      </v-combobox>
-    </v-col>
-    <v-col class="text-center py-2" cols="12">
-      <h3>Bibliografia</h3>
-    </v-col>
-    <div
-      v-if="disableEdit"
-      :class="{ biodrawer: localBioNamesArray[0].length !== 0, biodrawerNewsPiece:true}"
-    >
-    <v-row  v-for="(item, i) in localBioNamesArray" v-bind:key="i" align="center">
-      <v-col cols="6">
-        <v-text-field
-          label="Nombre"
-          v-model="localBioNamesArray[i]"
-          class="disable-events"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="6">
-        <v-text-field
-          
-          label="Link"
-          v-model="localBioLinksArray[i]"
-          prepend-inner-icon="link"
-          @click:prepend-inner="goToPage(localBioLinksArray[i])"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-  </div>
+        </v-chip-group>
+    </v-col>    
+
+    <!--
 
 
-    <!-- <v-row v-if="disableEdit">
-      <v-col cols="6">
-        <v-combobox
-          v-model="bioNameSelected"
-          :items="localBioNamesArray"
-          item-text="name"
-          label="Nombre"
-        ></v-combobox>
-      </v-col>
-      <v-col cols="6">
-        <v-text-field label="Link" v-model="assignedLink">
+            <v-combobox
+                  v-model="modelo2"
+                  hide-selected
+                  label=""
+                  multiple
+                  solo
+                  readonly
+                >
+                  <template v-slot:selection="{ attrs, item, selected }">
+                    <v-chip
+                      v-if="item === Object(item)"
+                      v-bind="attrs"
+                      :color="`${item.color} lighten-5`"
+                      :input-value="selected"
+                      @click="goToPage(item.link)"
+                      label
+                    >
+                      <span style="color:darkblue" class="pr-2">
+                        {{ item.text }}
+                      </span>
+                      
+                    </v-chip>
+                  </template>
+                 
+            </v-combobox>
 
-        </v-text-field>
-      </v-col>
-    </v-row>
-    -->
+     -->
+    <!--
     <div v-else style="width:100%" justify="center"  >
       <v-row justify="center" align="center">
         <v-spacer />
@@ -192,6 +134,7 @@
         </v-row>
       </v-row>
     </div>
+    -->
   </v-row>
 </template>
 <script>
@@ -337,7 +280,7 @@ export default {
         { name: "New York", abbr: "NY", id: 5 }
       ],
       bioNameSelected: null,
-      modelo3: null,
+      modelo2: [],
       modelo4: null,
       modelo5: null,
       date1: new Date().toISOString().substr(0, 10),
@@ -358,6 +301,55 @@ export default {
       secondaryTagSet: 'SECONDARY_TAGS_SET',            
       bioSet: 'BIBLIOGRAPHY_ARRAY_SET',
     }),
+    changeDateFormat(date){
+      console.log(date)
+      let monthPattern = /(?:[^\d]*)/g;
+      let month = date.match(monthPattern)[3]
+      let month2 = null
+      let digitsPatt = /-?\d(?:[,\d]*\.\d+|[\d]*)/g;
+      let digitsArray = date.match(digitsPatt)
+      console.log(month)     
+      console.log(digitsArray)
+      switch (month) {
+        case ' Jan ':
+          month2 = 'ENERO'          
+        break;
+        case ' Feb ':
+          month2 = 'FEBRERO'
+        break;
+        case ' Mar ':
+          month2 = 'MARZO'
+        break;
+        case ' Apr ':
+          month2 = 'ABRIL'
+        break;
+        case ' May ':
+          month2 = 'MAYO'
+        break;
+        case ' Jun ':
+          month2 = 'JUNIO '
+        break;
+        case ' Jul ':
+          month2 = 'JULIO'
+        break;
+        case ' Aug ':
+          month2 = 'AGOSTO'
+        break;
+        case ' Sep ':
+          month2 = 'SEPTIEMBRE'
+        break;
+        case ' Oct ':
+          month2 = 'OCTUBRE'
+        break;
+        case ' Nov ':
+          month2 = 'NOVIEMBRE'
+        break;
+        case ' Dic ':
+          month2 = 'DICIEMBRE'
+        break;
+      }
+      return digitsArray[0] + ' ' + month2 + ' ' + digitsArray[1]
+    },
     addBibliography() {
       console.log(this.modelo);
       if (this.bioName.length !== 0 && this.bioLink.length !== 0) {
@@ -453,7 +445,10 @@ export default {
     },
     goToPage(link){
       console.log(link.length)
-      if (link !== undefined) window.open(link, '_blank');
+      if (link !== undefined){ 
+        var win = window.open(link, '_blank')
+        win.focus()
+      };
     },
     
     bioFormat(bioToFormat) {
@@ -486,7 +481,13 @@ export default {
                   name: nameArray[i],
                   link: linkArray[i]
                 };
+                let bioEntry2 = {
+                  text: nameArray[i],
+                  color: 'lightgray',
+                  link: linkArray[i]
+                };
                 if(this.disableEdit){
+                    this.modelo2.push(bioEntry2)
                     this.localBioNamesArray.push(nameArray[i])
                     this.localBioLinksArray.push(linkArray[i])
 

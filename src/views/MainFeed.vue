@@ -1,38 +1,8 @@
 <template>
   <v-container fluid>
-    <v-row fluid class="mt-3">
-      <div v-show="!trendingDrawer && !editionDrawer">
-        <v-btn
-          contained
-          fab
-          fixed
-          color="secondary"
-          dark
-          x-large
-          width="8%"
-          class="rounded-0"
-          @click.stop="trendingDrawerOpen"
-        >
-          TRENDING
-        </v-btn>
-      </div>
-      <v-btn
-        v-show="trendingDrawer && !editionDrawer"
-        contained
-        fab
-        fixed
-        right
-        color="primary"
-        dark
-        x-large        
-        width="10%"
-        class="rounded-0"
-        @click.stop="trendingDrawerClose"
-      >
-        RADAR
-      </v-btn>
+    <v-row fluid class="mt-3">      
       <v-col v-show="trendingDrawer" :cols="mainfeedColumns" class="text-center mb-4">
-        <NewsFeed :title="'Trending'" v-on:open-edition="openEditionNews" />
+        <NewsFeed :title="'NOTICIAS EN TENDENCIA'" v-on:open-edition="openEditionNews" />
       </v-col>
 
       <v-col
@@ -40,7 +10,7 @@
         :cols="mainfeedColumns"
         class="text-center mb-4"
       >
-        <NewsFeed :title="'Radar de noticias'" v-on:open-edition="openEditionNews" />
+        <NewsFeed :title="'NOTICIAS DETECTADAS POR EL SATELITE'" v-on:open-edition="openEditionNews" />
       </v-col>
       <v-col v-if="editionStateToggle" class="text-center" cols="6" :key="reRenderKey">
         <Edition
@@ -55,6 +25,7 @@
 <script>
 import NewsFeed from "@/components/News/NewsFeed.vue";
 import Edition from "@/components/Edition/Edition.vue";
+
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 export default {
   name: "MainFeed",
@@ -161,7 +132,8 @@ export default {
     itemIndexPrior2: -1,
     itemIndexActual2: 0,
     actualIndex: -1,
-    reRenderKey:0
+    reRenderKey:0,
+    drawerMenu: false
   }),
   computed: {
     ...mapState(["newsHighlighterIndex","editionDrawer","trendingDrawer","mainfeedColumns"]),
@@ -200,6 +172,9 @@ export default {
 
       console.log(this.editionDrawer);
     },
+    outOfDrawer(value){
+      this.drawerMenu = value
+    },
     closeEditionChild(closingDrawer) {
       console.log(closingDrawer);
       //this.editionDrawer = closingDrawer;
@@ -218,6 +193,7 @@ export default {
         this.editionToggle(false)
         //this.editionDrawer = false;
       }
+      
     },
     trendingDrawerClose() {
       this.trendingToggle(false)
@@ -225,7 +201,12 @@ export default {
       //this.newsFeedColumn = 12;
       this.columnsToggle(12)
 
+    },
+    openSideMenu() {
+      this.drawerMenu = !this.drawerMenu
+
     }
+    
   },
   created() {}
 };
