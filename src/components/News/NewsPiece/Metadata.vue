@@ -344,7 +344,7 @@ export default {
         case ' Nov ':
           month2 = 'NOVIEMBRE'
         break;
-        case ' Dic ':
+        case ' Dec ':
           month2 = 'DICIEMBRE'
         break;
       }

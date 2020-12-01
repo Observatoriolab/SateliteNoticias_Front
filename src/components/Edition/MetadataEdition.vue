@@ -23,7 +23,7 @@
                 <v-col cols="4">
                     <v-text-field
                         label="Eje"
-                        placeholder="Ej: Pagos digitales"
+                        placeholder="11/12/20"
                         solo
                         dense
                         readonly
@@ -41,7 +41,7 @@
                                 placeholder="Ej: Pagos digitales"
                                 solo
                                 dense
-                                readonly
+                                
                                 v-model="news.axis"
                         ></v-text-field>   
                 </v-col>
@@ -54,7 +54,7 @@
                             placeholder="Ej: Rusia"
                             solo
                             dense
-                            readonly
+                            
                             v-model="news.country"
                         ></v-text-field>
                 </v-col>
@@ -69,7 +69,7 @@
                                     placeholder="Ej: Pagos digitales"
                                     solo
                                     dense
-                                    readonly
+                                    
                                     v-model="news.axis"
                         ></v-text-field>   
                 </v-col>
