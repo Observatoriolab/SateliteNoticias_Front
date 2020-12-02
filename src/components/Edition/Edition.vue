@@ -77,7 +77,10 @@ export default {
     ...mapState(["bioArray", "secondaryTags", "singleEdition","loadingEdition","username"]),
     ...mapGetters({
          editionGet: 'edition_full_state',
-         editionBody: 'edition_body_state'
+         editionBody: 'edition_body_state',
+         editionAxis:'edition_axis_state',
+         editionCountry:'edition_country_state',
+         editionSecondaryAxis: 'edition_secondaryAxis_state'
     })
   },
   methods: {
@@ -115,7 +118,10 @@ export default {
             accumulatedAuthor_count: newCounter,
             tags: tagsAux,
             bibliographyNames: this.bibliographyNameInternal,
-            bibliographyLink: this.bibliographyLinkInternal
+            bibliographyLink: this.bibliographyLinkInternal,
+            country: this.editionCountry,
+            axis: this.editionAxis,
+            secondaryAxis: this.editionSecondaryAxis
           };
           this.saveEdition(editionData);
           this.editNews(editionData)

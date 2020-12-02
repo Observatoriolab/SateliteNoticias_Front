@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters, mapState} from "vuex";
+import { mapMutations, mapGetters, mapState,mapActions} from "vuex";
 export default {
   name: "EditionInfo",
   props: {
@@ -63,7 +63,7 @@ export default {
       allowEditing: true,
       editionText: "",
       localEdition: null,
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -73,6 +73,7 @@ export default {
     })
   },
   methods: {
+    ...mapActions(["getEdition"]),
     ...mapMutations({
       editionSet: "EDITION_BODY_SET" // map `this.add()` to `this.$store.commit('increment')`
     }),
@@ -117,22 +118,33 @@ export default {
         case 'November':
           month2 = 'NOVIEMBRE'
         break;
-        case 'Dicember':
+        case 'December':
           month2 = 'DICIEMBRE'
         break;
       }
       return digitsArray[0] + ' ' + month2 + ' ' + digitsArray[1]
     },
-  },
-  created() {
-    console.log("Por aqui pasan las noticias")
-  
-    this.localEdition = this.editionGet
-    if(this.localEdition !== undefined && this.localEdition !== null){
-         this.editionText = this.localEdition.body;
+    async getEditionAsync(){
+      await this.getEdition(this.news.slug)     
+      await this.settingInfo()
+      
+
+    },
+    async settingInfo(){
+      this.localEdition = this.editionGet
+      console.log(this.news)
+      console.log(this.localEdition)
+      if(this.localEdition !== null && this.localEdition !== undefined && this.localEdition.length !== 0){        
+        this.editionText = this.localEdition.body
+      }
 
     }
-    this.loading = true
+  },
+  beforeMount() {
+    console.log("Por aqui pasan las noticias")
+  
+    this.localEdition = this.getEditionAsync()
+    this.loading=true
   }
 };
 </script>

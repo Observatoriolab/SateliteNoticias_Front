@@ -59,7 +59,7 @@
                                     solo
                                     dense
                                     readonly
-                                    v-model="news.axis"
+                                    v-model="news.secondaryAxis"
                         ></v-text-field>   
                 </v-col>
                 <v-spacer></v-spacer>

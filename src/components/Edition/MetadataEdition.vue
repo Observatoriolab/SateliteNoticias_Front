@@ -42,7 +42,7 @@
                                 solo
                                 dense
                                 
-                                v-model="news.axis"
+                                v-model="axis"
                         ></v-text-field>   
                 </v-col>
                 <v-col cols="2">
@@ -55,7 +55,7 @@
                             solo
                             dense
                             
-                            v-model="news.country"
+                            v-model="country"
                         ></v-text-field>
                 </v-col>
             </v-row>
@@ -70,7 +70,7 @@
                                     solo
                                     dense
                                     
-                                    v-model="news.axis"
+                                    v-model="secondaryAxis"
                         ></v-text-field>   
                 </v-col>
                 <v-spacer></v-spacer>
@@ -81,33 +81,46 @@
             <v-subheader style="font-size:1em"> Otros tags:</v-subheader>
           </v-col>
           <v-col cols="10" > 
-            <v-combobox
+             <v-combobox
                   v-model="modelo"
+                  :filter="filter"
+                  :hide-no-data="!search"
+                  :items="comboItems"
+                  :search-input.sync="search"
                   hide-selected
-                  label=""
+                  label="Agregar tags secundarios"
                   multiple
+                  small-chips
                   solo
-                  
                 >
                   <template v-slot:no-data>
                     <v-list-item>
-                      <span class="subheading">Create</span>
-                      <v-chip  label >
+                      <span class="subheading">Apreta enter para agregar : </span>
+                      <v-chip
+                        :color="`${colors[nonce - 1]} lighten-3`"
+                        label
+                        small
+                      >
+                        {{ search }}
                       </v-chip>
                     </v-list-item>
                   </template>
-                  <template v-slot:selection="{ attrs, item, selected }">
+                  <template v-slot:selection="{ attrs, item, parent, selected }">
                     <v-chip
                       v-if="item === Object(item)"
                       v-bind="attrs"
                       :color="`${item.color} lighten-3`"
                       :input-value="selected"
                       label
+                      small
                     >
                       <span class="pr-2">
                         {{ item.text }}
                       </span>
-                      
+                      <v-icon
+                        small
+                        @click="parent.selectItem(item)"
+                      >close</v-icon>
                     </v-chip>
                   </template>
                   <template v-slot:item="{ index, item }">
@@ -121,19 +134,26 @@
                       solo
                       @keyup.enter="edit(index, item)"
                     ></v-text-field>
-                    <v-chip v-else :color="`${item.color} lighten-3`" dark label >
+                    <v-chip
+                      v-else
+                      :color="`${item.color} lighten-3`"
+                      dark
+                      label
+                      small
+                    >
                       {{ item.text }}
                     </v-chip>
                     <v-spacer></v-spacer>
                     <v-list-item-action @click.stop>
-                      <v-btn icon @click.stop.prevent="edit(index, item)">
-                        <v-icon>{{
-                          editing !== item ? "mdi-pencil" : "mdi-check"
-                        }}</v-icon>
+                      <v-btn
+                        icon
+                        @click.stop.prevent="edit(index, item)"
+                      >
+                        <v-icon>{{ editing !== item ? 'mdi-pencil' : 'mdi-check' }}</v-icon>
                       </v-btn>
                     </v-list-item-action>
                   </template>
-            </v-combobox>
+                </v-combobox>
           </v-col>    
         
     </v-row>   
@@ -145,10 +165,10 @@
       <v-row justify="center" align="center">
         <v-spacer />
 
-        <v-col cols="3">
+        <v-col  cols="3">
           <v-text-field label="Nombre" v-model="bioName"></v-text-field>
         </v-col>
-        <v-col cols="5">
+        <v-col  cols="5">
           <v-text-field label="Link" v-model="bioLink"> </v-text-field>
         </v-col>
 
@@ -157,35 +177,40 @@
         </v-btn>
         <v-spacer />
       </v-row>
+      <v-card :elevation="3" raised class="mb-5">
       <v-row
         v-if="bioArray.length !== 0"
         :class="{ biodrawer: bioArray.length !== 0 }"
       >
         <v-row v-for="(item, i) in bioArray" v-bind:key="i" align="center">
-          <v-spacer />
-          <v-col cols="3">
-            <v-text-field
-              label="Nombre"
-              v-model="bioArray[i].name"
-              :disabled="editBioEntry[i]"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="5">
-            <v-text-field
-              label="Link"
-              v-model="bioArray[i].link"
-              :disabled="editBioEntry[i]"
-            ></v-text-field>
-          </v-col>
-          <v-btn @click="editItem(i)">
-            <v-icon>{{ editBioEntry[i] ? "mdi-pencil" : "mdi-check" }}</v-icon>
-          </v-btn>
-          <v-btn @click="removeItem(i)">
-            <v-icon>mdi-trash-can</v-icon>
-          </v-btn>
-          <v-spacer />
-        </v-row>
+                  <v-spacer />
+                  <v-col  cols="3">
+                    <v-text-field
+                      label="Nombre"
+                      v-model="bioArray[i].name"
+                      :disabled="editBioEntry[i]"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  cols="5">
+                    <v-text-field
+                      label="Link"
+                      v-model="bioArray[i].link"
+                      :disabled="editBioEntry[i]"
+                    ></v-text-field>
+                  </v-col>
+                  <v-btn @click="editItem(i)">
+                    <v-icon>{{ editBioEntry[i] ? "mdi-pencil" : "mdi-check" }}</v-icon>
+                  </v-btn>
+                  <v-btn @click="removeItem(i)">
+                    <v-icon>mdi-trash-can</v-icon>
+                  </v-btn>
+                  <v-spacer />
+                </v-row>
+
+       
       </v-row>
+
+      </v-card>
     </div> 
 
     </v-row>
@@ -214,30 +239,6 @@ export default {
         this.tagsFormat(this.newMetadata)
       }
     },    
-    search() {
-      // Items have already been loaded
-
-         if (this.items.length > 0) return;
-      
-
-      // Items have already been requested
-      if (this.isLoading) return;
-
-      this.isLoading = true;
-
-      // Lazily load input items
-      fetch("https://api.publicapis.org/entries")
-        .then(res => res.json())
-        .then(res => {
-          const { count, entries } = res;
-          this.count = count;
-          this.entries = entries;
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => (this.isLoading = false));
-    },
 
     modelo(val, prev) {
          if (val.length === prev.length) return;
@@ -261,6 +262,18 @@ export default {
     },
     bioNameSelected(val){
       this.assignedLink = this.localBioLinksArray[this.localBioNamesArray.indexOf(val)]
+    },
+    axis(val){
+      this.axisSet(val)
+
+    },
+    secondaryAxis(val){
+      this.secondaryAxisSet(val)
+
+    },
+    country(val){
+      this.countrySet(val)
+
     }
   },
   data() {
@@ -279,19 +292,13 @@ export default {
       item: null,
       show: false,
       isLoading: false,
+      index: -1,
       count: 0,
       items: [],
       entries: [],
       comboItems: [
-        { header: "Select an option or create one" },
-        {
-          text: "Foo",
-          color: "blue"
-        },
-        {
-          text: "Bar",
-          color: "red"
-        }
+        { header: "Selecciona un tag o crea uno" },
+       
       ],
       nonce: 1,
       menu: false,
@@ -334,11 +341,17 @@ export default {
       modelo4: null,
       modelo5: null,
       date1: new Date().toISOString().substr(0, 10),
+      x: 0,
+      y: 0,
+      axis: '',
+      secondaryAxis: '',
+      country: ''
     };
   },
 
   computed: {
     ...mapState(["bioArray","secondaryTags", "openedNewsAtEdition"]),
+    
     ...mapGetters({
         editionGet: 'edition_full_state',
         newMetadata: 'metadata_news'
@@ -350,6 +363,9 @@ export default {
       setTags: "SECONDARY_TAGS_SET", // map `this.add()` to `this.$store.commit('increment')`      
       secondaryTagSet: 'SECONDARY_TAGS_SET',            
       bioSet: 'BIBLIOGRAPHY_ARRAY_SET',
+      countrySet: 'EDITION_COUNTRY_SET',
+      axisSet: 'EDITION_AXIS_SET',
+      secondaryAxisSet: 'EDITION_SECONDARY_AXIS_SET'
     }),
     changeDateFormat(date){
       console.log(date)
@@ -394,7 +410,7 @@ export default {
         case ' Nov ':
           month2 = 'NOVIEMBRE'
         break;
-        case ' Dic ':
+        case ' Dec ':
           month2 = 'DICIEMBRE'
         break;
       }
@@ -461,14 +477,16 @@ export default {
     tagsFormat(tagsToFormat) {
       if(tagsToFormat !== null ){
           console.log(tagsToFormat.tags[0])
-          for(let i = 0; i<tagsToFormat.tags.length; i++){
-            this.modelo.push({
-              text: tagsToFormat.tags[i],
-              color: this.colors[Math.ceil(Math.random() * this.colors.length)]
-            });
+          if(tagsToFormat.tags[0] !== "[]"){
+            for(let i = 0; i<tagsToFormat.tags.length; i++){
+               this.modelo.push({
+                text: tagsToFormat.tags[i],
+                color: this.colour
+              });
+            }
+            this.setTags(this.modelo)
+            console.log(this.modelo)
           }
-          console.log(this.modelo)
-          this.setTags(this.modelo)
           
           
           
@@ -594,6 +612,10 @@ export default {
       this.tagsFormat(this.news)   
       this.bioFormat(this.news)
     }
+    
+    this.axis = this.news.axis
+    this.secondaryAxis = this.news.secondaryAxis
+    this.country = this.news.country
 
     
 

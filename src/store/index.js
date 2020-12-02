@@ -53,6 +53,9 @@ export default new Vuex.Store({
 
     bioArray: [],
     editionBody: "",
+    editionCountry: "",
+    editionAxis: "",
+    editionSecondaryAxis: "",
     secondaryTags: null,
     singleEdition: undefined,
     loadingEdition:false,
@@ -91,6 +94,15 @@ export default new Vuex.Store({
     },
     edition_body_state(state){
       return state.editionBody
+    },
+    edition_country_state(state){
+      return state.editionCountry
+    },
+    edition_axis_state(state){
+      return state.editionAxis
+    },
+    edition_secondaryAxis_state(state){
+      return state.editionSecondaryAxis
     }
   },
   mutations: {
@@ -259,6 +271,15 @@ export default new Vuex.Store({
     },
     METADATA_NEWS_UPDATE(state,payload) {
       state.newMetadata = payload
+    },
+    EDITION_COUNTRY_SET(state,payload) {
+      state.editionCountry = payload
+    },
+    EDITION_SECONDARY_AXIS_SET(state,payload) {
+      state.editionSecondaryAxis = payload
+    },
+    EDITION_AXIS_SET(state,payload) {
+      state.editionAxis = payload
     }
 
   },
@@ -431,7 +452,10 @@ export default new Vuex.Store({
           author_count:payload.accumulatedAuthor_count,
           tags: payload.tags,
           bibliography_name: payload.bibliographyNames,
-          bibliography_link: payload.bibliographyLink
+          bibliography_link: payload.bibliographyLink,
+          country: payload.country,
+          axis: payload.axis,
+          secondaryAxis: payload.secondaryAxis
         },
         state.credential
       ).then(data => {
