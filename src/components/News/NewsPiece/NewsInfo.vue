@@ -67,7 +67,7 @@
     </v-col>
     <v-row>
           <v-col  :lg="actualCols===12 ? 1: 2" :md="actualCols===12 ? 2: 3" > 
-            <v-subheader style="font-size:1em"> Otros tags: {{this.actualCols}}</v-subheader>
+            <v-subheader style="font-size:1em"> Otros tags</v-subheader>
           </v-col>
           <v-col :lg="actualCols===12 ? 10: 9" :md="actualCols===12 ? 9: 7"> 
             <v-combobox
@@ -150,10 +150,10 @@
     </v-col>
     <v-col cols="12" class="ml-2 my-0 py-0" >
       <v-row>
-        <v-col cols="1" class="px-0" style="color:#079df0">
-            <p style="font-size:1em"> Relevancia</p>
+        <v-col :lg="actualCols===12 ? 1: 2" :md="actualCols===12 ? 2: 4" style="color:#079df0">
+            <p style="font-size:0.9em"> Relevancia</p>
         </v-col>
-        <v-col cols="2" class="px-0">
+        <v-col :lg="actualCols===12 ? 2: 4" :md="actualCols===12 ? 3: 4" >
           <v-rating
               half-increments
               hover
@@ -166,7 +166,7 @@
             >
             </v-rating>
         </v-col>
-        <v-col cols="2" class="px-0">
+        <v-col class="ml-3" :lg="actualCols===12 ? 2: 4" :md="actualCols===12 ? 3: 12" >
             <div class="text-left">              
                 <p v-if="news.relevance_count !== 0" style="font-size:1em">
                   Basada en {{ news.relevance_count }} lectores
