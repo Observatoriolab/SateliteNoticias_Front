@@ -12,7 +12,9 @@
       class="pt-4"
       color="white"
     >
+    
       <SidePanel />
+
     </v-navigation-drawer>
 
     <v-app-bar

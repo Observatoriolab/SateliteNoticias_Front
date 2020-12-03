@@ -10,7 +10,7 @@
           v-for="(item, i) in allNews"
           v-bind:key="i"
         >
-           <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+           <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" :actualCols="actualCols" />
         </div>
     </div>
     <div v-if="loadingTrendingNews">
@@ -19,7 +19,7 @@
           v-for="(item, i) in trendingNews"
           v-bind:key="i * -1 - 1"
         >
-          <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" />
+          <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" :actualCols="actualCols"/>
         </div>
     </div>
    
@@ -57,7 +57,8 @@ import NewsPiece from "@/components/News/NewsPiece/NewsPiece.vue";
 export default {
   name: "NewsFeed",
   props: {
-    title: String
+    title: String,
+    actualCols: Number
   },
   components: {
     NewsPiece

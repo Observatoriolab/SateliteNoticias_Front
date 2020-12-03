@@ -11,6 +11,7 @@
               :indice="indice"
               v-on:edition-opened="openEdition"
               v-on:metadata-toggled="toggleMetadata"
+              :actualCols="actualCols"
             />
           </v-col>
           <v-col cols="12" class="py-0">
@@ -41,6 +42,10 @@ export default {
     indice: {
       type: Number,
       required: true
+    },
+    actualCols:{
+      type:Number,
+      required:true
     }
   },
   components: {

@@ -17,10 +17,10 @@
     </v-col>
     <v-col class="py-0" cols="12" >
       <v-row >
-        <v-col class="d-flex flex-row justify-end px-0" cols="1">
+        <v-col class="d-flex flex-row justify-center " :lg="actualCols===12 ? 1: 1" :md="actualCols===12 ? 1: 1" :sm="4">
           <v-subheader style="font-size:1em"> Eje</v-subheader>
         </v-col>
-        <v-col class="mr-0" cols="2">
+        <v-col class="" :lg="actualCols===12 ? 4: 5"  :md="actualCols===12 ? 4: 3" :sm="1">
           <v-text-field
             label="Eje"
             placeholder="Ej: Pagos digitales"
@@ -30,10 +30,10 @@
             v-model="news.axis"
           ></v-text-field>          
         </v-col>
-        <v-col class="d-flex flex-row justify-end px-0"  cols="2">
+        <v-col class="d-flex flex-row justify-center "  :lg="actualCols===12 ? 2: 3"  :md="3" :sm="4">
           <v-subheader style="font-size:1em"> Pais/Region</v-subheader>
         </v-col>
-        <v-col  cols="3">
+        <v-col  lg="3" :md="actualCols===12 ? 3: 4" :sm="4">
           <v-text-field
             label="Pais/Region"
             placeholder="Ej: Rusia"
@@ -44,15 +44,14 @@
           ></v-text-field>
         </v-col>
         
-        <v-spacer></v-spacer>
       </v-row>
     </v-col>
     <v-col class="py-0" cols="12">
           <v-row>
-                <v-col  cols="1">
-                    <v-subheader style="font-size:1em">Eje secundario:</v-subheader>
+                <v-col class="d-flex flex-row  px-0" :lg="actualCols===12 ? 1: 3" :md="actualCols===12 ? 3: 4" :sm="4">
+                    <v-subheader style="font-size:1em">Eje secundario</v-subheader>
                 </v-col>
-                <v-col cols="2">
+                <v-col  :lg="actualCols===12 ? 4: 7" :md="actualCols===12 ? 8: 7" :sm="1">
                     <v-text-field
                                     label="Eje"
                                     placeholder="Ej: Pagos digitales"
@@ -62,16 +61,15 @@
                                     v-model="news.secondaryAxis"
                         ></v-text-field>   
                 </v-col>
-                <v-spacer></v-spacer>
             </v-row>
 
 
     </v-col>
     <v-row>
-          <v-col  cols="1"  > 
-            <v-subheader style="font-size:1em"> Otros tags:</v-subheader>
+          <v-col  :lg="actualCols===12 ? 1: 2" :md="actualCols===12 ? 2: 3" > 
+            <v-subheader style="font-size:1em"> Otros tags: {{this.actualCols}}</v-subheader>
           </v-col>
-          <v-col cols="10" > 
+          <v-col :lg="actualCols===12 ? 10: 9" :md="actualCols===12 ? 9: 7"> 
             <v-combobox
                   v-model="modelo"
                   hide-selected
@@ -220,6 +218,10 @@ export default {
     indice: {
       type: Number,
       required: true
+    },
+    actualCols:{
+      type:Number,
+      required: true
     }
   },
   data() {
@@ -247,6 +249,10 @@ export default {
     ...mapGetters({
          editionGet: 'edition_full_state'
     }),
+    cols () {
+      const { lg, sm } = this.$vuetify.breakpoint
+      return lg ? [3, 9] : sm ? [9, 3] : [6, 6]
+    },
     
   },
   methods: {

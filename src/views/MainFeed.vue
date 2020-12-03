@@ -10,7 +10,7 @@
         :cols="mainfeedColumns"
         class="text-center mb-4"
       >
-        <NewsFeed :title="'NOTICIAS DETECTADAS POR EL SATELITE'" v-on:open-edition="openEditionNews" />
+        <NewsFeed :title="'NOTICIAS DETECTADAS POR EL SATELITE'" v-on:open-edition="openEditionNews" :actualCols="mainfeedColumns" />
       </v-col>
       <v-col v-if="editionStateToggle" class="text-center" cols="6" :key="reRenderKey">
         <Edition
@@ -150,7 +150,7 @@ export default {
       trendingToggle: "TRENDING_TOGGLE_SET",
       columnsToggle:"MAINFEED_COLUMNS_SET",
       alreadyOpened: "EDITION_ALREADY_OPENED_SET",
-      setNewsAtEdition: "PIECE_OF_NEWS_WHEN_EDITION_SET",
+      setNewsAtEdition: "PIECE_OF_NEWS_WHEN_EDITION_SET"
     }),
     ...mapActions(["getEdition"]),
     async openEditionNews(itemData) {
