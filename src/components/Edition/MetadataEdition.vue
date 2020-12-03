@@ -33,17 +33,16 @@
             </v-row>
             <v-row>
                 <v-col class="d-flex flex-row justify-center" cols="2">
-                                <v-subheader style="font-size:1em"> Eje:</v-subheader>
+                                <v-subheader style="font-size:1em"> Ejes:</v-subheader>
                 </v-col>
                 <v-col cols="4">
-                        <v-text-field
-                                label="Eje"
-                                placeholder="Ej: Pagos digitales"
-                                solo
-                                dense
-                                
-                                v-model="axis"
-                        ></v-text-field>   
+                  <v-combobox
+                      v-model="axis"
+                      :items="arrayAxis"
+                      
+                      outlined
+                      dense
+                    ></v-combobox>
                 </v-col>
                 <v-col cols="2">
                         <v-subheader style="font-size:1em"> Region/Pais: </v-subheader>
@@ -64,14 +63,13 @@
                     <v-subheader style="font-size:1em">  Eje secundario:</v-subheader>
                 </v-col>
                 <v-col cols="4">
-                    <v-text-field
-                                    label="Eje"
-                                    placeholder="Ej: Pagos digitales"
-                                    solo
-                                    dense
-                                    
-                                    v-model="secondaryAxis"
-                        ></v-text-field>   
+                   <v-combobox
+                      v-model="secondaryAxis"
+                      :items="arrayAxis"
+                      
+                      outlined
+                      dense
+                    ></v-combobox>
                 </v-col>
                 <v-spacer></v-spacer>
             </v-row>
@@ -278,6 +276,17 @@ export default {
   },
   data() {
     return {
+      arrayAxis: [
+        'Big Data y Economía Digital',
+        'Pagos Digitales',
+        'Dinero Digital de Bancos Centrales',
+        'Tecnología de Registros Distribuidos',
+        'Criptoactivos y Estabilidad Financiera',
+        'Banca Abierta',
+        'Ciberseguridad y Estabilidad Financiera',
+        'Monitoreo Tecnológico'
+      ],
+
       assignedLink: '',
       localBioNamesArray:[],
       localBioLinksArray:[],
