@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row fluid class="mt-3">      
       <v-col v-show="trendingDrawer" :cols="mainfeedColumns" class="text-center mb-4">
-        <NewsFeed :title="'NOTICIAS EN TENDENCIA'" v-on:open-edition="openEditionNews" />
+        <NewsFeed :title="'NOTICIAS EN TENDENCIA'" v-on:open-edition="openEditionNews" :actualCols="mainfeedColumns" />
       </v-col>
 
       <v-col
@@ -11,7 +11,7 @@
         class="text-center mb-4"
       >
         <NewsFeed :title="'NOTICIAS DETECTADAS POR EL SATELITE'" v-on:open-edition="openEditionNews" :actualCols="mainfeedColumns" />
-      </v-col>
+      </v-col>E
       <v-col v-if="editionStateToggle" class="text-center" cols="6" :key="reRenderKey">
         <Edition
           :news="item"
