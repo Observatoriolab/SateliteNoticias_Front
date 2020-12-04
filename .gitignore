@@ -23,3 +23,7 @@ pnpm-debug.log*
 
 #WSL
 wsl
+
+src/assets/interstate-bold.ttfZone.Identifier
+
+*.Identifier
