@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import MainFeed from "@/views/MainFeed.vue";
+import SentimentAnalysis from "@/views/SentimentAnalysis.vue";
+
 import Login from "@/components/UserAdmin/Login.vue";
 import Registration from "@/components/UserAdmin/Registration.vue";
 
@@ -16,6 +18,11 @@ const routes = [
     path: "/register",
     name: "Registration",
     component: Registration
+  },
+  {
+    path: "/sentiment-analysis",
+    name: "SentimentAnalysis",
+    component: SentimentAnalysis
   },
   {
     path: "/main-feed",

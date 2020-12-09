@@ -2,27 +2,56 @@
 
 <template>
   <div class="">
-      <v-list >
-        <v-list-item-group
-            v-model="selectedItem"
+      <v-list >            
+          <v-list-group
+            :value="true"
+            prepend-icon="mdi-access-point-network"
+            sub-group
             color="primary"
-        >
-            <v-list-item
-              v-for="item in items"
-              :key="item.title"
-              @click.stop="newsToggler(item.title)"
-
-              link
+            no-action
+            ripple
+          >
+            <template v-slot:activator>
+              <v-list-item-title>Noticias Fintech</v-list-item-title>
+            </template>
+            <v-list-item-group
+                    v-model="selectedItem"
+                    color="primary"
             >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
+                <v-list-item
+                    v-for="item in items"
+                    :key="item.title"
+                    @click.stop="newsToggler(item.title)"
+                    
+                >
+                      <v-list-item-icon>
+                        <v-icon>{{ item.icon }}</v-icon>
+                      </v-list-item-icon>
 
-              <v-list-item-content>
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-        </v-list-item-group>
+                      <v-list-item-content>
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                      </v-list-item-content>
+                </v-list-item>
+            
+                          
+
+            </v-list-item-group>
+             
+            
+        </v-list-group>
+        <v-list-item
+                :href="'/sentiment-analysis'"
+                :height="'300px'"
+              >
+                      <v-list-item-icon>
+                        <v-icon>{{ sentiment.icon }}</v-icon>
+                      </v-list-item-icon>
+
+                      <v-list-item-content>
+                        <v-list-item-title>{{ sentiment.title }}</v-list-item-title>
+                      </v-list-item-content>
+
+             </v-list-item>
       </v-list>
 
   </div>
@@ -57,11 +86,18 @@ export default {
             { title: 'Radar de noticias', icon: 'mdi-view-dashboard' },
             { title: 'Tendencias', icon: 'mdi-forum' },
         ],
+        sentiment:{
+          title:'Sistema colaborativo de diccionarios',
+          icon: 'mdi-checkbox-marked-circle-outline'
+        },
         selectedItem:0
     //
   }),
   computed: {
-    ...mapState(["username","editionDrawer","trendingDrawer","mainfeedColumns"])
+    ...mapState(["username","editionDrawer","trendingDrawer","mainfeedColumns"]),
+     currentRouteName() {
+        return this.$route.name;
+    }
   },
   methods: {
     ...mapActions(["setUserInfo", "logout"]),
@@ -77,6 +113,14 @@ export default {
     }),
     newsToggler(title){
       console.log(title)
+      console.log(this.selectedItem)
+      if(this.currentRouteName !== 'MainFeed'){
+        
+        this.$router.push({
+            path: `/main-feed`
+        })
+      }
+      
       switch (title) { 
         case "Radar de noticias":
             this.trendingDrawerClose()
@@ -108,6 +152,13 @@ export default {
       this.$router.push("/");
     }
   },
+  beforeMount() {
+    console.log(this.selectedItem)
+    console.log(this.currentRouteName)
+    if(this.currentRouteName !== 'MainFeed'){
+        this.selectedItem = undefined
+    }
 
+  },
 };
 </script>
