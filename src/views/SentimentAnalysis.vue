@@ -1,8 +1,6 @@
 <template>
 
-        <div >       
-      
-           <v-card class="flex-column mx-auto mt-6 mb-6" width="75%">
+           <div>
         
             <v-container>
                 <v-row >
@@ -16,7 +14,7 @@
                         cols="12"
                     >
                         <v-card
-                            
+                             class="flex-column mx-auto mt-6 mb-6" width="80%"
                             :id="item.id"      
                         >
                             <div class="d-flex flex-no-wrap justify-space-between">
@@ -30,21 +28,26 @@
                                 </div>
                                
                             </div>
+                            <div  class="d-flex flex-no-wrap justify-start px-4">
+                                    <v-radio-group v-model="radioGroup">
+                                        <v-radio
+                                            v-for="n in 3"
+                                            :key="n"
+                                            :label="`Radio ${n}`"
+                                            :value="n"
+                                        ></v-radio>
+                                    </v-radio-group>
+                            </div>
+                         
+
+                        
                         </v-card>
-                         <v-radio-group v-model="radioGroup">
-                                <v-radio
-                                    v-for="n in 3"
-                                    :key="n"
-                                    :label="`Radio ${n}`"
-                                    :value="n"
-                                ></v-radio>
-                        </v-radio-group>
+                        
                             
                     </v-col>
                 </v-row>
             </v-container>
-            </v-card>
-        </div>
+            </div>
 
 </template>
 <script>

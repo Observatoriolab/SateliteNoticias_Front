@@ -4,7 +4,7 @@
   <div class="">
       <v-list >            
           <v-list-group
-            :value="true"
+            
             prepend-icon="mdi-access-point-network"
             sub-group
             color="primary"
@@ -21,6 +21,7 @@
                 <v-list-item
                     v-for="item in items"
                     :key="item.title"
+                    
                     @click.stop="newsToggler(item.title)"
                     
                 >
@@ -42,6 +43,9 @@
         <v-list-item
                 :href="'/sentiment-analysis'"
                 :height="'300px'"
+                v-model="selectedItem2"
+                                    color="primary"
+
               >
                       <v-list-item-icon>
                         <v-icon>{{ sentiment.icon }}</v-icon>
@@ -90,7 +94,9 @@ export default {
           title:'Sistema colaborativo de diccionarios',
           icon: 'mdi-checkbox-marked-circle-outline'
         },
-        selectedItem:0
+        selectedItem:0,
+        selectedItem2:0
+
     //
   }),
   computed: {
@@ -157,8 +163,16 @@ export default {
     console.log(this.currentRouteName)
     if(this.currentRouteName !== 'MainFeed'){
         this.selectedItem = undefined
+        this.selectedItem2 = 1
+    }
+    else{
+      this.selectedItem2 = 0
     }
 
   },
+  beforeUpdate(){
+    console.log('me cambie')
+    this.selectedItem2 = undefined
+  }
 };
 </script>
