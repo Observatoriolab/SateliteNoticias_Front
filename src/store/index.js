@@ -285,12 +285,15 @@ export default new Vuex.Store({
   },
   actions: {
     async checkLogin({ state, dispatch }, payload) {
+      router.push("/main-feed")
+      /*
       await apiService(state.BASE_URL + state.LOGIN_URL, "POST", {
         username: payload.user,
         password: payload.pass
       }).then(data => {
         dispatch("setUserInfo", data["key"]);
       });
+      */
     },
     async ratingNews({ state }, payload) {
       const datos = {
