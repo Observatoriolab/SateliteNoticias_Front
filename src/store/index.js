@@ -284,7 +284,7 @@ export default new Vuex.Store({
 
   },
   actions: {
-    async checkLogin({ state, dispatch }, payload) {
+    async checkLogin() {
       router.push("/main-feed")
       /*
       await apiService(state.BASE_URL + state.LOGIN_URL, "POST", {
