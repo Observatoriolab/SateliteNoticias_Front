@@ -7,28 +7,28 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    BASE_URL: "https://satelite-de-noticias.herokuapp.com",
-    LOGIN_URL: "/api/rest-auth/login/",
-    LOGOUT_URL: "/api/rest-auth/logout/",
-    USER_NAME_URL: "/api/user/",
+    BASE_URL: "https://satelite-noticias-api.herokuapp.com",
+    LOGIN_URL: "/login",
+    LOGOUT_URL: "/logout",
+    USER_NAME_URL: "/user",
     NEWS_FIRST_PAGE_URL: "/api/news/",
     NEWS_GENERAL_PAGE_URL: "/api/news/?page=",
     TRENDING_NEWS_GENERAL_PAGE_URL: "/api/news/trending/new/?page=",
 
     NEWS_RATING_URL: "/rating/",
     endpointRegister:
-      "https://satelite-de-noticias.herokuapp.com/api/rest-auth/registration/",
+      "https://satelite-noticias-api.herokuapp.com/registration",
 
-    endpointNews: "https://satelite-de-noticias.herokuapp.com/api/news/",
+    endpointNews: "https://satelite-noticias-api.herokuapp.com/get_news",
     endpointTrendingNews:
-      "https://satelite-de-noticias.herokuapp.com/api/news/trending/new/",
+      "https://satelite-noticias-api.herokuapp.com/get_trending_news",
 
     credential: null,
     errorUser: false,
     username: "",
 
-    pageNumbersNews: ["https://satelite-de-noticias.herokuapp.com/api/news/"],
-    pageNumbersTrendingNews: ["https://satelite-de-noticias.herokuapp.com/api/news/trending/new/"],
+    pageNumbersNews: ["https://satelite-noticias-api.herokuapp.com/api/news/"],
+    pageNumbersTrendingNews: ["https://satelite-noticias-api.herokuapp.com/api/news/trending/new/"],
 
     newsFeedNews: [],
     updatedNews:[],
@@ -110,8 +110,8 @@ export default new Vuex.Store({
       state.credential = null
       state.errorUser = false
       state.username = ""
-      state.pageNumbersNews = ["https://satelite-de-noticias.herokuapp.com/api/news/"]
-      state.pageNumbersTrendingNews = ["https://satelite-de-noticias.herokuapp.com/api/news/trending/new/"]
+      state.pageNumbersNews = ["https://satelite-noticias-api.herokuapp.com/get_news/"]
+      state.pageNumbersTrendingNews = ["https://satelite-noticias-api.herokuapp.com/api/news/trending/new/"]
       state.newsFeedNews.splice(0)
       state.trendingNewsFeedNews.splice(0)
       state.updatedNews.splice(0)
@@ -124,8 +124,8 @@ export default new Vuex.Store({
       state.nextPageTrendingNews = ""
       state.disableButtonLoadMore = false
       state.disableButtonLoadMoreTrending = false
-      state.endpointNews = "https://satelite-de-noticias.herokuapp.com/api/news/"
-      state.endpointTrendingNews = "https://satelite-de-noticias.herokuapp.com/api/news/trending/new/"
+      state.endpointNews = "https://satelite-noticias-api.herokuapp.com/api/news/"
+      state.endpointTrendingNews = "https://satelite-noticias-api.herokuapp.com/api/news/trending/new/"
       state.newsHighlighterIndex = -1
       state.reRenderNews = false      
       state.reRenderMetadata = false
@@ -284,16 +284,33 @@ export default new Vuex.Store({
 
   },
   actions: {
-    async checkLogin() {
-      router.push("/main-feed")
-      /*
-      await apiService(state.BASE_URL + state.LOGIN_URL, "POST", {
-        username: payload.user,
+    async checkLogin({state,commit}, payload) {
+      console.log('hola')
+      
+      await apiService(state.BASE_URL + state.LOGIN_URL, "post", {
+        email: payload.user,
         password: payload.pass
-      }).then(data => {
-        dispatch("setUserInfo", data["key"]);
+      }).then(response => {
+        console.log(response)
+        if(response.confirmation){
+          
+          commit("USERNAME_USER_SET", response.username);
+          window.sessionStorage.setItem("username", response.username);
+          router.push('/main-feed')
+        }
+        else {
+          alert('Nombre y/o contraseña incorrectas')
+        }
       });
-      */
+      
+    },
+    logout({ state, commit }) {
+      apiService(
+        state.BASE_URL + state.LOGOUT_URL,
+        "POST",
+        undefined
+      );
+      commit("RESET_ALL");
     },
     async ratingNews({ state }, payload) {
       const datos = {
@@ -311,32 +328,6 @@ export default new Vuex.Store({
       ).then(data => {
         console.log(data);
       });
-    },
-    async setUserInfo({ commit, state }, payload) {
-      if (payload !== undefined) {
-        commit("STORE_CREDENTIAL", payload);
-        const data = await apiService(
-          state.BASE_URL + state.USER_NAME_URL,
-          false,
-          undefined,
-          payload
-        );
-        commit("USERNAME_USER_SET", data["username"]);
-        window.sessionStorage.setItem("username", data["username"]);
-        router.push('/main-feed')
-      } else {
-        alert('Nombre y/o contraseña incorrectas')
-      }
-      
-    },
-    logout({ state, commit }) {
-      apiService(
-        state.BASE_URL + state.LOGOUT_URL,
-        "POST",
-        undefined,
-        state.credential
-      );
-      commit("RESET_ALL");
     },
     async registerAccount({ state }, payload) {
       console.log(payload);
@@ -433,7 +424,7 @@ export default new Vuex.Store({
     async getEdition({ state, commit }, payload) {
       console.log("aca va el payload ", payload);
       await apiService(
-        state.BASE_URL + state.NEWS_FIRST_PAGE_URL + payload + "/editions/",
+        state.BASE_URL + state.NEWS_FIRST_PAGE_URL + payload + "/editions",
         "GET",
         undefined,
         state.credential

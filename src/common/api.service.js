@@ -1,5 +1,3 @@
-import { CSRF_TOKEN } from "./csrf_token.js";
-
 function handleResponse(response) {
   if (response.status === 204) {
     return "";
@@ -10,19 +8,18 @@ function handleResponse(response) {
   }
 }
 //SE PODRIA USAR EL PAQUETE AXIOS
-function apiService(endpoint, method, data, credentials) {
+function apiService(endpoint, method, data) {
   const config = {
     method: method || "GET",
     body: data !== undefined ? JSON.stringify(data) : null,
     headers: {
-      "content-type": "application/json",
-      "X-CSRFTOKEN": CSRF_TOKEN,
-      Authorization: credentials !== undefined ? "Token " + credentials : null
+      "Content-Type": "application/json",
+     
     }
   };
   console.log(endpoint);
   console.log(config);
-  return fetch(endpoint, config)
+  return fetch(endpoint,config)
     .then(handleResponse)
     .catch(error => console.log(error));
 }
