@@ -382,14 +382,13 @@ export default new Vuex.Store({
     async registerAccount({ state }, payload) {
       console.log(payload);
       await apiService(state.endpointRegister, "POST", {
-        username: payload.username,
+        name: payload.name,
         email: payload.email,
-        password1: payload.password,
-        password2: payload.password2,
+        password: payload.password,
         is_staff: false
       }).then(data => {
         console.log(data)
-        if(data["key"] === undefined){         
+        if(data.confirmation){         
            alert('Ya existe un usuario con ese nombre y/o mail')
         }
         else{

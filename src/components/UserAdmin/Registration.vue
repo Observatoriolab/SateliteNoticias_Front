@@ -89,10 +89,9 @@ export default {
     ...mapActions(["registerAccount"]),
     registerAccountLocal() {
       const user = {
-        username: this.name,
+        name: this.name,
         email: this.email,
-        password: this.pass,
-        password2: this.pass2
+        password: this.pass
       };
       console.log(this.pass,this.pass2)
       if(this.pass === this.pass2){
