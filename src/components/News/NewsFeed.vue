@@ -3,17 +3,28 @@
     <h3 style="color:#005aa1" class="display-2 font-weight-bold mb-7">
       {{ title }}
     </h3>
-
-    <div v-if="loadingNews"> 
+    <div v-if="loadingDailyNews"> 
         <div      
-          v-show="title !== 'NOTICIAS EN TENDENCIA'"
-          v-for="(item, i) in allNews"
+          v-show="title === 'INFORME DIARIO'"
+          v-for="(item, i) in dailyNews"
           v-bind:key="i"
         >
+        <!-- :actualCols='12' columnas significa que usa todo el espacio-->
            <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" :actualCols="actualCols" />
         </div>
     </div>
-    <div v-if="loadingTrendingNews">
+
+    <div v-else-if="loadingNews"> 
+        <div      
+          v-show="title === 'NOTICIAS DETECTADAS POR EL SATELITE'"
+          v-for="(item, i) in allNews"
+          v-bind:key="i"
+        >
+        <!-- :actualCols='12' columnas significa que usa todo el espacio-->
+           <NewsPiece :news="item" :indice="i" v-on:edition-opened="openEdition" :actualCols="actualCols" />
+        </div>
+    </div>
+    <div v-else-if="loadingTrendingNews">
         <div
           v-show="title === 'NOTICIAS EN TENDENCIA'"
           v-for="(item, i) in trendingNews"
@@ -31,6 +42,15 @@
         dark
         @click="getnewsLoadMore"
         :disabled="disableButtonLoadMore"
+        >Cargar mas
+      </v-btn>
+      <v-btn
+        v-show="title === 'INFORME DIARIO'"
+        rounded
+        color="primary"
+        dark
+        @click="getDailyNewsLoadMore('Informe Diario BC', 10)"
+        :disabled="disableButtonLoadMoreDaily"
         >Cargar mas
       </v-btn>
       <v-btn
@@ -180,20 +200,6 @@ export default {
       { name: "Monitoreo Tecnologico", abbr: "MT", id: 5 },
       { name: "DLT", abbr: "DLT", id: 5 }
     ],
-    regiones: [
-      { name: "Florida", abbr: "FL", id: 1 },
-      { name: "Georgia", abbr: "GA", id: 2 },
-      { name: "Nebraska", abbr: "NE", id: 3 },
-      { name: "California", abbr: "CA", id: 4 },
-      { name: "New York", abbr: "NY", id: 5 }
-    ],
-    organismos: [
-      { name: "Florida", abbr: "FL", id: 1 },
-      { name: "Georgia", abbr: "GA", id: 2 },
-      { name: "Nebraska", abbr: "NE", id: 3 },
-      { name: "California", abbr: "CA", id: 4 },
-      { name: "New York", abbr: "NY", id: 5 }
-    ],
     modelo2: null,
     modelo3: null,
     modelo4: null,
@@ -212,6 +218,7 @@ export default {
       "selectedNews",
       "disableButtonEdit",
 
+      "disableButtonLoadMoreDaily",
       "disableButtonLoadMore",
       "disableButtonLoadMoreTrending",
 
@@ -219,16 +226,25 @@ export default {
       "reRenderNews",
       "pageNumbersNews",
       
+      "loadingDailyNews",
       "loadingNews",
       "loadingTrendingNews"
     ]),
     ...mapGetters({
+        dailyNews:'all_daily_news',
         allNews: 'all_mainfeed_news',
         trendingNews: 'all_trendingfeed_news'
     })
   },
   methods: {
-    ...mapActions(["getnewsLoadMore", "getTrendingNewsLoadMore","getUpdatedNews","getUpdatedTrendingNews"]),
+    ...mapActions([
+        "getDailyNewsLoadMore", 
+        "getnewsLoadMore", 
+        "getTrendingNewsLoadMore",
+        "getUpdatedNews",
+        "getUpdatedTrendingNews",
+        "getUpdatedDailyNews"
+        ]),
     ...mapMutations({
       store: "STORE_CREDENTIAL", // map `this.add()` to `this.$store.commit('increment')`
       updateIndex: "UPDATE_HIGHLIGHTER_INDEX"
@@ -318,9 +334,13 @@ export default {
   created() {
     window.sessionStorage.setItem("credential", this.credential);
     console.log(this.pageNumbersNews)
+    console.log(this.title)
     if(this.title === 'NOTICIAS DETECTADAS POR EL SATELITE'){
         this.getUpdatedNews()
 
+    }
+    else if(this.title === 'INFORME DIARIO'){
+        this.getUpdatedDailyNews()
     }
     else{
         this.getUpdatedTrendingNews()

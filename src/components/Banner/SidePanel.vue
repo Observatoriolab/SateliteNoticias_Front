@@ -41,6 +41,23 @@
             
         </v-list-group>
         <v-list-item
+                :height="'300px'"
+                v-model="selectedItem2"
+                color="primary"
+                @click.stop="newsToggler(informeDiario.title)"
+
+              >
+                      <v-list-item-icon>
+                        <v-icon>{{ informeDiario.icon }}</v-icon>
+                      </v-list-item-icon>
+
+                      <v-list-item-content>
+                        <v-list-item-title>{{ informeDiario.title }}</v-list-item-title>
+                      </v-list-item-content>
+
+        </v-list-item>
+
+        <v-list-item
                 :href="'/sentiment-analysis'"
                 :height="'300px'"
                 v-model="selectedItem2"
@@ -87,12 +104,16 @@ export default {
   data: () => ({
         drawer: true,
         items: [
-            { title: 'Radar de noticias', icon: 'mdi-view-dashboard' },
-            { title: 'Tendencias', icon: 'mdi-forum' },
+          { title: 'Radar de noticias', icon: 'mdi-view-dashboard' },
+          { title: 'Tendencias', icon: 'mdi-forum' },
         ],
         sentiment:{
           title:'Sistema colaborativo de diccionarios',
           icon: 'mdi-checkbox-marked-circle-outline'
+        },
+        informeDiario: {
+           title: 'Informe diario noticias', 
+           icon: 'mdi-newspaper-variant-outline' 
         },
         selectedItem:0,
         selectedItem2:0
@@ -116,6 +137,7 @@ export default {
       columnsToggle:"MAINFEED_COLUMNS_SET",
       alreadyOpened: "EDITION_ALREADY_OPENED_SET",
       setNewsAtEdition: "PIECE_OF_NEWS_WHEN_EDITION_SET",
+      dailyNewsShowToggle: "DAILY_NEWS_SHOW_TOGGLE"
     }),
     newsToggler(title){
       console.log(title)
@@ -130,10 +152,15 @@ export default {
       switch (title) { 
         case "Radar de noticias":
             this.trendingDrawerClose()
+          this.dailyNewsShowToggle(false)
             break;        
+        case "Informe diario noticias":
+          this.dailyNewsShowToggle(true)
+          break;    
         case "Tendencias":
-            this.trendingDrawerOpen()
-            break;    
+          this.trendingDrawerOpen()
+          this.dailyNewsShowToggle(true)
+          break;    
       }
 
     },

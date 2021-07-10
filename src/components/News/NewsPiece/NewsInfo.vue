@@ -3,181 +3,185 @@
     <v-col class="px-0 py-0 text-start">
       <v-card-title class="title-font " style="color:blue">
 
-        <a  style="text-decoration:none;font-family: Interstate-Bold" target="_blank" :href="news.fullContent">{{ news.title }}</a>
+        <a  style="text-decoration:none;font-family: Interstate-Bold" target="_blank" :href="news.link">{{ news.title }}</a>
       </v-card-title>
     </v-col>
 
     <v-col style="color:#079df0" class="px-5 py-0 text-start">
-      {{ changeDateFormat(news.created_at) }}
+      Capturado el: {{ changeDateFormat(news.created_at) }}
     </v-col>
 
     <v-col class="px-0 py-0">
-          <div class="content" style="font-family: Interstate-Light-Condensed" v-html="news.content"></div>
+          <div class="content" style="font-family: Interstate-Light" v-html="news.content_summary"></div>
 
     </v-col>
-    <v-col class="py-0" cols="12" >
-      <v-row >
-        <v-col class="d-flex flex-row justify-center " :lg="actualCols===12 ? 1: 1" :md="actualCols===12 ? 1: 1" :sm="4">
-          <v-subheader style="font-size:1em"> Eje</v-subheader>
-        </v-col>
-        <v-col class="" :lg="actualCols===12 ? 4: 5"  :md="actualCols===12 ? 4: 3" :sm="1">
-          <v-text-field
-            label="Eje"
-            placeholder="Ej: Pagos digitales"
-            solo
-            dense
-            readonly
-            v-model="news.axis"
-          ></v-text-field>          
-        </v-col>
-        <v-col class="d-flex flex-row justify-center "  :lg="actualCols===12 ? 2: 3"  :md="3" :sm="4">
-          <v-subheader style="font-size:1em"> Pais/Region</v-subheader>
-        </v-col>
-        <v-col  lg="3" :md="actualCols===12 ? 3: 4" :sm="4">
-          <v-text-field
-            label="Pais/Region"
-            placeholder="Ej: Rusia"
-            solo
-            dense
-            readonly
-            v-model="news.country"
-          ></v-text-field>
-        </v-col>
-        
-      </v-row>
-    </v-col>
-    <v-col class="py-0" cols="12">
-          <v-row>
-                <v-col class="d-flex flex-row  px-0" :lg="actualCols===12 ? 1: 3" :md="actualCols===12 ? 3: 4" :sm="4">
-                    <v-subheader style="font-size:1em">Eje secundario</v-subheader>
+
+    <div v-if= "news.type !== 'Informe Diario BC'" class= "noticiasMasInfo">
+            <v-col class="py-0" cols="12" >
+              <v-row >
+                <v-col class="d-flex flex-row justify-center " :lg="actualCols===12 ? 1: 1" :md="actualCols===12 ? 1: 1" :sm="4">
+                  <v-subheader style="font-size:1em"> Eje</v-subheader>
                 </v-col>
-                <v-col  :lg="actualCols===12 ? 4: 7" :md="actualCols===12 ? 8: 7" :sm="1">
-                    <v-text-field
-                                    label="Eje"
-                                    placeholder="Ej: Pagos digitales"
-                                    solo
-                                    dense
-                                    readonly
-                                    v-model="news.secondaryAxis"
-                        ></v-text-field>   
+                <v-col class="" :lg="actualCols===12 ? 4: 5"  :md="actualCols===12 ? 4: 3" :sm="1">
+                  <v-text-field
+                    label="Eje"
+                    placeholder="Ej: Pagos digitales"
+                    solo
+                    dense
+                    readonly
+                    v-model="news.axis"
+                  ></v-text-field>          
                 </v-col>
-            </v-row>
+                <v-col class="d-flex flex-row justify-center "  :lg="actualCols===12 ? 2: 3"  :md="3" :sm="4">
+                  <v-subheader style="font-size:1em"> Pais/Region</v-subheader>
+                </v-col>
+                <v-col  lg="3" :md="actualCols===12 ? 3: 4" :sm="4">
+                  <v-text-field
+                    label="Pais/Region"
+                    placeholder="Ej: Rusia"
+                    solo
+                    dense
+                    readonly
+                    v-model="news.country"
+                  ></v-text-field>
+                </v-col>
+                
+              </v-row>
+            </v-col>
+            <v-col class="py-0" cols="12">
+                  <v-row>
+                        <v-col class="d-flex flex-row  px-0" :lg="actualCols===12 ? 1: 3" :md="actualCols===12 ? 3: 4" :sm="4">
+                            <v-subheader style="font-size:1em">Eje secundario</v-subheader>
+                        </v-col>
+                        <v-col  :lg="actualCols===12 ? 4: 7" :md="actualCols===12 ? 8: 7" :sm="1">
+                            <v-text-field
+                                            label="Eje"
+                                            placeholder="Ej: Pagos digitales"
+                                            solo
+                                            dense
+                                            readonly
+                                            v-model="news.secondaryAxis"
+                                ></v-text-field>   
+                        </v-col>
+                    </v-row>
 
 
-    </v-col>
-    <v-row>
-          <v-col  :lg="actualCols===12 ? 1: 2" :md="actualCols===12 ? 2: 3" > 
-            <v-subheader style="font-size:1em"> Otros tags</v-subheader>
-          </v-col>
-          <v-col :lg="actualCols===12 ? 10: 9" :md="actualCols===12 ? 9: 7"> 
-            <v-combobox
-                  v-model="modelo"
-                  hide-selected
-                  label=""
-                  multiple
-                  solo
-                  readonly
-                >
-                  <template v-slot:no-data>
-                    <v-list-item>
-                      <span class="subheading">Create</span>
-                      <v-chip  label >
-                      </v-chip>
-                    </v-list-item>
-                  </template>
-                  <template v-slot:selection="{ attrs, item, selected }">
-                    <v-chip
-                      v-if="item === Object(item)"
-                      v-bind="attrs"
-                      :color="`${item.color} lighten-3`"
-                      :input-value="selected"
-                      label
+            </v-col>
+            <v-row>
+                  <v-col  :lg="actualCols===12 ? 1: 2" :md="actualCols===12 ? 2: 3" > 
+                    <v-subheader style="font-size:1em"> Otros tags</v-subheader>
+                  </v-col>
+                  <v-col :lg="actualCols===12 ? 10: 9" :md="actualCols===12 ? 9: 7"> 
+                    <v-combobox
+                          v-model="modelo"
+                          hide-selected
+                          label=""
+                          multiple
+                          solo
+                          readonly
+                        >
+                          <template v-slot:no-data>
+                            <v-list-item>
+                              <span class="subheading">Create</span>
+                              <v-chip  label >
+                              </v-chip>
+                            </v-list-item>
+                          </template>
+                          <template v-slot:selection="{ attrs, item, selected }">
+                            <v-chip
+                              v-if="item === Object(item)"
+                              v-bind="attrs"
+                              :color="`${item.color} lighten-3`"
+                              :input-value="selected"
+                              label
+                            >
+                              <span class="pr-2">
+                                {{ item.text }}
+                              </span>
+                              
+                            </v-chip>
+                          </template>
+                          <template v-slot:item="{ index, item }">
+                            <v-text-field
+                              v-if="editing === item"
+                              v-model="editing.text"
+                              autofocus
+                              flat
+                              background-color="transparent"
+                              hide-details
+                              solo
+                              @keyup.enter="edit(index, item)"
+                            ></v-text-field>
+                            <v-chip v-else :color="`${item.color} lighten-3`" dark label >
+                              {{ item.text }}
+                            </v-chip>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action @click.stop>
+                              <v-btn icon @click.stop.prevent="edit(index, item)">
+                                <v-icon>{{
+                                  editing !== item ? "mdi-pencil" : "mdi-check"
+                                }}</v-icon>
+                              </v-btn>
+                            </v-list-item-action>
+                          </template>
+                    </v-combobox>
+                  </v-col>    
+                
+            </v-row>   
+              <v-col v-if="showEditionBody" class="py-0  my-0" >
+                <v-textarea
+                  outlined
+                  name="input"
+                  label="Edicion"
+                  v-model="editionBody"
+                  class="disable-events"
+                  style="font-size:1.1em"
+                ></v-textarea>
+            </v-col>
+              <v-col v-if="showEditionBody" class="px-4 mb-0">
+              <div  style="float:left;  font-size: 1.3em; font-family: Interstate-Light-Condensed" >
+                  Ultimo editor: {{editionAuthor}} 
+
+              </div>
+              <div  style="float:right;font-size: 1.3em;  font-family: Interstate-Light-Condensed">
+              
+                  Numero de ediciones : {{news.author_count}}
+              
+                  
+              </div>
+            </v-col>
+            <v-col cols="12" class="ml-2 my-0 py-0" >
+              <v-row>
+                <v-col :lg="actualCols===12 ? 1: 2" :md="actualCols===12 ? 2: 4" style="color:#079df0">
+                    <p style="font-size:0.9em"> Relevancia</p>
+                </v-col>
+                <v-col :lg="actualCols===12 ? 2: 4" :md="actualCols===12 ? 3: 4" >
+                  <v-rating
+                      half-increments
+                      hover
+                      ripple
+                      dense
+                      background-color='blue'
+                      v-model="rating"
+                      @input="setRating"
+                      :readonly="disabling"
                     >
-                      <span class="pr-2">
-                        {{ item.text }}
-                      </span>
-                      
-                    </v-chip>
-                  </template>
-                  <template v-slot:item="{ index, item }">
-                    <v-text-field
-                      v-if="editing === item"
-                      v-model="editing.text"
-                      autofocus
-                      flat
-                      background-color="transparent"
-                      hide-details
-                      solo
-                      @keyup.enter="edit(index, item)"
-                    ></v-text-field>
-                    <v-chip v-else :color="`${item.color} lighten-3`" dark label >
-                      {{ item.text }}
-                    </v-chip>
-                    <v-spacer></v-spacer>
-                    <v-list-item-action @click.stop>
-                      <v-btn icon @click.stop.prevent="edit(index, item)">
-                        <v-icon>{{
-                          editing !== item ? "mdi-pencil" : "mdi-check"
-                        }}</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </template>
-            </v-combobox>
-          </v-col>    
-        
-    </v-row>   
-      <v-col v-if="showEditionBody" class="py-0  my-0" >
-        <v-textarea
-          outlined
-          name="input"
-          label="Edicion"
-          v-model="editionBody"
-          class="disable-events"
-          style="font-size:1.1em"
-        ></v-textarea>
-    </v-col>
-      <v-col v-if="showEditionBody" class="px-4 mb-0">
-      <div  style="float:left;  font-size: 1.3em; font-family: Interstate-Light-Condensed" >
-          Ultimo editor: {{editionAuthor}} 
+                    </v-rating>
+                </v-col>
+                <v-col class="ml-3" :lg="actualCols===12 ? 2: 4" :md="actualCols===12 ? 3: 12" >
+                    <div class="text-left">              
+                        <p v-if="news.relevance_count !== 0" style="font-size:1em">
+                          Basada en {{ news.relevance_count }} lectores
+                        </p>
+                    </div>
 
-      </div>
-      <div  style="float:right;font-size: 1.3em;  font-family: Interstate-Light-Condensed">
-       
-          Numero de ediciones : {{news.author_count}}
-       
-          
-      </div>
-    </v-col>
-    <v-col cols="12" class="ml-2 my-0 py-0" >
-      <v-row>
-        <v-col :lg="actualCols===12 ? 1: 2" :md="actualCols===12 ? 2: 4" style="color:#079df0">
-            <p style="font-size:0.9em"> Relevancia</p>
-        </v-col>
-        <v-col :lg="actualCols===12 ? 2: 4" :md="actualCols===12 ? 3: 4" >
-          <v-rating
-              half-increments
-              hover
-              ripple
-              dense
-              background-color='blue'
-              v-model="rating"
-              @input="setRating"
-              :readonly="disabling"
-            >
-            </v-rating>
-        </v-col>
-        <v-col class="ml-3" :lg="actualCols===12 ? 2: 4" :md="actualCols===12 ? 3: 12" >
-            <div class="text-left">              
-                <p v-if="news.relevance_count !== 0" style="font-size:1em">
-                  Basada en {{ news.relevance_count }} lectores
-                </p>
-            </div>
-
-          </v-col>
-          <v-spacer></v-spacer>
-      </v-row>
-       
-    </v-col>
+                  </v-col>
+                  <v-spacer></v-spacer>
+              </v-row>
+              
+            </v-col>
+    
+    </div>
     <v-col cols="12" class="ml-0 my-0 py-0">
         <v-row class="mx-0" >
           <v-col cols="2">
@@ -186,7 +190,7 @@
               </v-btn>      
           </v-col>
           <v-spacer></v-spacer>
-          <v-col cols="2">
+          <v-col v-if= "news.type !== 'Informe Diario BC'" cols="2">
               <v-btn
                 color="primary" dark 
                 @click="openEdition(news, indice)"
@@ -261,51 +265,60 @@ export default {
       setTags: "SECONDARY_TAGS_SET", // map `this.add()` to `this.$store.commit('increment')`   
     }),
     changeDateFormat(date){
-      let monthPattern = /([A-Z])\w+/i;
+      console.log(date)
+      let newsDate = new Date(date)
+      let dia = newsDate.getDate() +1
+      let mes = newsDate.getMonth() 
+      let año = newsDate.getFullYear()
+      /*let monthPattern = /([A-Z])\w+/i;
       let month = date.match(monthPattern)[0]
-      let month2 = null
+      let monthString = null
       let digitsPatt = /-?\d(?:[,\d]*\.\d+|[\d]*)/g;
       let digitsArray = date.match(digitsPatt)
       console.log(month)
-      switch (month) {
-        case 'January':
-          month2 = 'ENERO'          
-        break;
-        case 'February':
-          month2 = 'FEBRERO'
-        break;
-        case 'March':
-          month2 = 'MARZO'
-        break;
-        case 'April':
-          month2 = 'ABRIL'
-        break;
-        case 'May':
-          month2 = 'MAYO'
-        break;
-        case 'June':
-          month2 = 'JUNIO '
-        break;
-        case 'July':
-          month2 = 'JULIO'
-        break;
-        case 'August':
-          month2 = 'AGOSTO'
-        break;
-        case 'September':
-          month2 = 'SEPTIEMBRE'
-        break;
-        case 'October':
-          month2 = 'OCTUBRE'
-        break;
-        case 'November':
-          month2 = 'NOVIEMBRE'
-        break;
-        case 'December':
-          month2 = 'DICIEMBRE'
-        break;
-      }
-      return digitsArray[0] + ' ' + month2 + ' ' + digitsArray[1]
+      */
+      let monthString = ' '
+ 
+      switch (mes) { 
+        case 0: 
+          monthString = ' ENERO '          
+        break; 
+        case 1: 
+          monthString = ' FEBRERO '
+        break; 
+        case 2: 
+          monthString = ' MARZO '
+        break; 
+        case 3: 
+          monthString = ' ABRIL '
+        break; 
+        case 4: 
+          monthString = ' MAYO '
+        break; 
+        case 5: 
+          monthString = ' JUNIO '
+        break; 
+        case 6: 
+          monthString = ' JULIO '
+        break; 
+        case 7: 
+          monthString = ' AGOSTO '
+        break; 
+        case 8: 
+          monthString = ' SEPTIEMBRE '
+        break; 
+        case 9: 
+          monthString = ' OCTUBRE '
+        break; 
+        case 10: 
+          monthString = ' NOVIEMBRE '
+        break; 
+        case 11: 
+          monthString = ' DICIEMBRE '
+        break; 
+      } 
+      return dia + monthString + año
+      
     },
     tagsFormat(tagsToFormat) {
       if(tagsToFormat !== undefined){

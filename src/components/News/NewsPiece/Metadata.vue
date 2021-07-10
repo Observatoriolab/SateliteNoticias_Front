@@ -20,7 +20,7 @@
                   ></v-text-field>          
               </v-col>
               <v-col class="d-flex flex-row justify-start px-0 pt-0 mr-5" cols="1">
-                <v-subheader style="font-size:1em"> Publicado en: </v-subheader>
+                <v-subheader style="font-size:1em"> Publicado originalmente en: </v-subheader>
               </v-col>
               <v-col class="px-0 pt-0"  cols="3">
                   <v-text-field
@@ -39,23 +39,27 @@
   
       </v-row>
     </v-col>
-    
-    <v-col style="color:darkblue" class="text-left py-0" cols="12">
-      <h3>Otras Bibliografias</h3>
-    </v-col>
 
-    <v-col cols="10" class="py-0 px-3" > 
-          <v-chip-group
-          mandatory
-        >
-          <v-chip
-            v-for="bio in modelo2" v-bind:key="bio.id"
-            @click="goToPage(bio.link)"
-          >
-            {{ bio.text }}
-          </v-chip>
-        </v-chip-group>
-    </v-col>    
+    <div  v-if= "news.type !== 'Informe Diario BC'">
+        <v-col style="color:darkblue" class="text-left py-0" cols="12">
+          <h3>Otras Bibliografias</h3>
+        </v-col>
+
+        <v-col cols="10" class="py-0 px-3" > 
+              <v-chip-group
+              mandatory
+            >
+              <v-chip
+                v-for="bio in modelo2" v-bind:key="bio.id"
+                @click="goToPage(bio.link)"
+              >
+                {{ bio.text }}
+              </v-chip>
+            </v-chip-group>
+        </v-col>    
+    
+    </div>    
+    
 
     <!--
 
@@ -301,6 +305,65 @@ export default {
       secondaryTagSet: 'SECONDARY_TAGS_SET',            
       bioSet: 'BIBLIOGRAPHY_ARRAY_SET',
     }),
+
+    changeDateFormat(date){
+      console.log(date)
+      let newsDate = new Date(date)
+      let dia = newsDate.getDate()+1
+      let mes = newsDate.getMonth() 
+      let año = newsDate.getFullYear()
+      /*let monthPattern = /([A-Z])\w+/i;
+      let month = date.match(monthPattern)[0]
+      let monthString = null
+      let digitsPatt = /-?\d(?:[,\d]*\.\d+|[\d]*)/g;
+      let digitsArray = date.match(digitsPatt)
+      console.log(month)
+      */
+      let monthString = ' '
+ 
+      switch (mes) { 
+        case 0: 
+          monthString = ' ENERO '          
+        break; 
+        case 1: 
+          monthString = ' FEBRERO '
+        break; 
+        case 2: 
+          monthString = ' MARZO '
+        break; 
+        case 3: 
+          monthString = ' ABRIL '
+        break; 
+        case 4: 
+          monthString = ' MAYO '
+        break; 
+        case 5: 
+          monthString = ' JUNIO '
+        break; 
+        case 6: 
+          monthString = ' JULIO '
+        break; 
+        case 7: 
+          monthString = ' AGOSTO '
+        break; 
+        case 8: 
+          monthString = ' SEPTIEMBRE '
+        break; 
+        case 9: 
+          monthString = ' OCTUBRE '
+        break; 
+        case 10: 
+          monthString = ' NOVIEMBRE '
+        break; 
+        case 11: 
+          monthString = ' DICIEMBRE '
+        break; 
+      } 
+      return dia + monthString + año
+      
+    },
+    /*
+      SOLO PARA NOTICIAS FINTECH
     changeDateFormat(date){
       console.log(date)
       let monthPattern = /(?:[^\d]*)/g;
@@ -349,7 +412,7 @@ export default {
         break;
       }
       return digitsArray[0] + ' ' + month2 + ' ' + digitsArray[1]
-    },
+    },*/
     addBibliography() {
       console.log(this.modelo);
       if (this.bioName.length !== 0 && this.bioLink.length !== 0) {

@@ -6,6 +6,13 @@
       </v-col>
 
       <v-col
+        v-show="dailyNewsShowToggle && (!trendingDrawer && !editionDrawer) || (!trendingDrawer && editionDrawer)"
+        :cols="mainfeedColumns"
+        class="text-center mb-4"
+      >
+        <NewsFeed :title="'INFORME DIARIO'" v-on:open-edition="openEditionNews" :actualCols="mainfeedColumns" />
+      </v-col>
+      <v-col
         v-show="(!trendingDrawer && !editionDrawer) || (!trendingDrawer && editionDrawer)"
         :cols="mainfeedColumns"
         class="text-center mb-4"
@@ -136,7 +143,7 @@ export default {
     drawerMenu: false
   }),
   computed: {
-    ...mapState(["newsHighlighterIndex","editionDrawer","trendingDrawer","mainfeedColumns"]),
+    ...mapState(["newsHighlighterIndex","editionDrawer","trendingDrawer","mainfeedColumns", "dailyNewsShowToggle"]),
     ...mapGetters({
         editionStateToggle : 'edition_toggle_state'
     })
