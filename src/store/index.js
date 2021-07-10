@@ -188,6 +188,9 @@ export default new Vuex.Store({
     NEWS_SET(state, payload) {
       state.newsFeedNews.push(...payload);
     },
+    UPDATED_DAILY_NEWS_SET(state) {
+      state.updatedDailyNews.splice(0);
+    },
     UPDATED_NEWS_SET(state) {
       state.updatedNews.splice(0);
     },
@@ -421,13 +424,14 @@ export default new Vuex.Store({
       });
     },
     async getDailyNewsLoadMore({ commit, state }, payload) {
-      console.log(state.credential);
+      console.log('Estoy pasando esta informacions')
+      console.log(payload);
       commit("DISABLE_LOAD_MORE_DAILY_NEWS", true);
       if (state.nextPageDailyNews) {
         commit("DAILY_NEWS_PAGENUMBERS_ARRAY",  state.nextPageDailyNews);
       }
       await apiService(
-        state.endpointNews,
+        state.nextPageDailyNews,
         "POST",
         {
           type: payload.type,
@@ -436,7 +440,7 @@ export default new Vuex.Store({
       ).then(data => {
         console.log('Linea 423')
         console.log(data);
-        commit("DAILY_NEWS_SET", data.results);
+        commit("DAILY_NEWS_SET", data.news);
         commit("NEWS_SELECTED_STATES");
         if (data.next !== -1) {
           commit("DAILY_NEWS_PAGE_SET", state.BASE_URL + state.NEWS_DAILY_PAGE_URL+ data.next);

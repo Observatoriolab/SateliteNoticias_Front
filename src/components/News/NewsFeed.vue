@@ -49,7 +49,7 @@
         rounded
         color="primary"
         dark
-        @click="getDailyNewsLoadMore('Informe Diario BC', 10)"
+        @click="getDailyNewsLoadMore(infoDailyNews)"
         :disabled="disableButtonLoadMoreDaily"
         >Cargar mas
       </v-btn>
@@ -128,6 +128,8 @@ export default {
   },
 
   data: () => ({
+
+    infoDailyNews:{type:'Informe Diario BC', newsPerPage:10},
     localNews: [
       {
         title: "1",

@@ -13,7 +13,7 @@
         <NewsFeed :title="'INFORME DIARIO'" v-on:open-edition="openEditionNews" :actualCols="mainfeedColumns" />
       </v-col>
       <v-col
-        v-show="(!trendingDrawer && !editionDrawer) || (!trendingDrawer && editionDrawer)"
+        v-show="!dailyNewsShowToggle && (!trendingDrawer && !editionDrawer) || (!trendingDrawer && editionDrawer)"
         :cols="mainfeedColumns"
         class="text-center mb-4"
       >
